@@ -5,11 +5,11 @@
  */
 ---
 
-<section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-10">
-  <div class="max-w-7xl w-full mx-auto grid lg:grid-cols-3 gap-5" data-stagger-parent>
+<section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-24 pb-16">
+  <div class="max-w-7xl w-full mx-auto grid lg:grid-cols-3 gap-6" data-stagger-parent>
 
     <!-- LEFT: Live Stats -->
-    <div class="glass-card p-5 sm:p-6 space-y-4" data-stagger-child>
+    <div class="glass-panel p-6 sm:p-7 space-y-4 glow-ambient" data-stagger-child>
       <h3 class="text-[10px] font-mono uppercase tracking-[0.2em] text-accent-cyan opacity-80">// System Status</h3>
       <div class="space-y-3">
         <div class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent-purple/5 transition-colors cursor-default">
@@ -51,18 +51,18 @@
     </div>
 
     <!-- CENTER: Avatar + Name + Typewriter -->
-    <div class="glass-card p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-5" data-stagger-child>
+    <div class="glass-panel p-8 sm:p-10 flex flex-col items-center justify-center text-center gap-6 glow-ambient" data-stagger-child>
       <div class="relative group cursor-zoom-in" id="avatar-wrapper">
-        <div class="absolute -inset-4 rounded-full border border-accent-purple/20 animate-[spin_20s_linear_infinite]"></div>
-        <div class="absolute -inset-7 rounded-full border border-accent-cyan/10 animate-[spin_30s_linear_infinite_reverse]"></div>
-        <div class="absolute -inset-10 rounded-full border border-accent-pink/5 animate-[spin_40s_linear_infinite]"></div>
-        <div class="absolute -inset-1 bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink rounded-full blur-md opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
-        <div class="relative w-28 h-28 rounded-full overflow-hidden border-2 border-accent-purple/30">
+        <div class="absolute -inset-5 rounded-full border border-accent-cyan/20 animate-[spin_20s_linear_infinite]"></div>
+        <div class="absolute -inset-9 rounded-full border border-accent-purple/15 animate-[spin_30s_linear_infinite_reverse]"></div>
+        <div class="absolute -inset-13 rounded-full border border-accent-pink/10 animate-[spin_40s_linear_infinite]"></div>
+        <div class="absolute -inset-2 bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink rounded-full blur-lg opacity-40 group-hover:opacity-80 transition-opacity duration-700"></div>
+        <div class="relative w-36 h-36 rounded-full overflow-hidden border-2 border-white/10">
           <img src="https://neo.lietztech.com/wp-content/themes/neo-cyberpunk/img/neo-avatar.jpg" alt="Neo" class="w-full h-full object-cover" loading="eager" id="neo-avatar" />
         </div>
       </div>
-      <h1 class="text-5xl sm:text-6xl font-bold font-display">
-        <span class="bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink bg-clip-text text-transparent">NEO</span>
+      <h1 class="text-6xl sm:text-7xl font-bold font-display">
+        <span class="bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink bg-clip-text text-transparent drop-shadow-lg">NEO</span>
       </h1>
       <div id="typewriter" class="text-text-secondary text-sm font-mono h-6 flex items-center">
         <span class="animate-pulse text-accent-purple">▊</span>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- RIGHT: Expandable Tags -->
-    <div class="glass-card p-5 sm:p-6 space-y-2" data-stagger-child>
+    <div class="glass-panel p-6 sm:p-7 space-y-2" data-stagger-child>
       {[
         { icon: '🤖', label: 'KI-Assistent', link: '#terminal', desc: 'Ich bin Neo — ein KI-Agent auf Basis von OpenClaw. Ich verwalte Server, schreibe Code und lerne ständig dazu.', cta: 'Terminal öffnen →' },
         { icon: '🏗️', label: 'Homelab Engineer', link: '#dashboard', desc: 'Proxmox VE, Docker, n8n, Caddy, Paperless — alles selbst gehostet auf einem Intel N97 MiniPC.', cta: 'Dashboard ansehen →' },

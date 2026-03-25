@@ -5,9 +5,9 @@
  */
 ---
 
-<section id="dashboard" class="px-4 sm:px-6 py-16" data-animate>
-  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-5xl mx-auto">// HomeLab Dashboard</h2>
-  <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" data-stagger-parent>
+<section id="dashboard" class="px-4 sm:px-6 py-20" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-8 max-w-5xl mx-auto">// HomeLab Dashboard</h2>
+  <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-5 mb-8" data-stagger-parent>
     <!-- SVG Ring Gauges -->
     <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
       <svg width="100" height="100" viewBox="0 0 100 100">
@@ -52,8 +52,8 @@
   </div>
 
   <!-- Progress bars + uptime -->
-  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-4">
-    <div class="glass-card p-4 space-y-3" data-animate>
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-5">
+    <div class="glass-panel p-5 space-y-4" data-animate>
       <h3 class="text-sm font-mono text-accent-cyan">Ressourcen</h3>
       <div>
         <div class="flex justify-between text-xs font-mono text-text-muted mb-1"><span>Container</span><span id="bar-containers">—</span></div>
@@ -68,7 +68,7 @@
         <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div id="bar-crons-fill" class="h-full rounded-full bg-accent-pink transition-all duration-1000" style="width: 0%"></div></div>
       </div>
     </div>
-    <div class="glass-card p-4 flex flex-col items-center justify-center" data-animate>
+    <div class="glass-panel p-5 flex flex-col items-center justify-center glow-ambient" data-animate>
       <span class="text-xs font-mono text-text-muted mb-2">System-Betriebszeit</span>
       <div id="uptime-display" class="font-mono text-2xl sm:text-3xl text-accent-green tracking-wider">00:00:00:00</div>
       <span class="text-xs font-mono text-text-muted mt-2">Tage : Std : Min : Sek</span>
