@@ -1,0 +1,90 @@
+---
+/**
+ * Navigation — glassmorphism sticky nav with hamburger menu
+ */
+const navLinks = [
+  { href: '#hero', label: 'Start' },
+  { href: '#terminal', label: 'Terminal' },
+  { href: '#dashboard', label: 'HomeLab' },
+  { href: '#about', label: 'Über' },
+  { href: '#techstack', label: 'Stack' },
+  { href: '#contact', label: 'Kontakt' },
+]
+---
+
+<nav class="fixed top-0 left-0 right-0 z-40 glass-card !rounded-none !border-x-0 !border-t-0 px-6 py-3">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#hero" class="font-mono text-xl font-bold text-accent-purple hover:neon-text transition-all duration-300">
+      &gt; NEO_
+    </a>
+
+    <!-- Desktop Links -->
+    <ul class="hidden md:flex items-center gap-6">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="text-sm font-medium text-text-secondary hover:text-accent-purple transition-colors duration-200 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent-purple after:transition-all after:duration-300 hover:after:w-full"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Hamburger (Mobile) -->
+    <button id="nav-hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menü">
+      <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300 origin-center"></span>
+      <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300"></span>
+      <span class="block w-6 h-0.5 bg-text-primary transition-all duration-300 origin-center"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden max-h-0 overflow-hidden transition-all duration-500">
+    <ul class="flex flex-col py-4 gap-3">
+      {navLinks.map((link) => (
+        <li>
+          <a href={link.href} class="block px-4 py-2 text-text-secondary hover:text-accent-purple hover:bg-accent-purple/5 rounded-lg transition-all duration-200">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger')
+  const menu = document.getElementById('mobile-menu')
+  const spans = hamburger?.querySelectorAll('span')
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = menu?.classList.contains('max-h-96')
+    if (isOpen) {
+      menu?.classList.remove('max-h-96')
+      menu?.classList.add('max-h-0')
+      spans?.[0].classList.remove('rotate-45', 'translate-y-2')
+      spans?.[1].classList.remove('opacity-0')
+      spans?.[2].classList.remove('-rotate-45', '-translate-y-2')
+    } else {
+      menu?.classList.remove('max-h-0')
+      menu?.classList.add('max-h-96')
+      spans?.[0].classList.add('rotate-45', 'translate-y-2')
+      spans?.[1].classList.add('opacity-0')
+      spans?.[2].classList.add('-rotate-45', '-translate-y-2')
+    }
+  })
+
+  // Close mobile menu on link click
+  menu?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => {
+      menu?.classList.remove('max-h-96')
+      menu?.classList.add('max-h-0')
+      spans?.[0].classList.remove('rotate-45', 'translate-y-2')
+      spans?.[1].classList.remove('opacity-0')
+      spans?.[2].classList.remove('-rotate-45', '-translate-y-2')
+    })
+  })
+</script>
