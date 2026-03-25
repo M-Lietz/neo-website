@@ -87,19 +87,18 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.toneMappingExposure = 0.85
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
-  /* ── Environment map for reflections ── */
+  /* ── Environment map for reflections (per-material only, not global) ── */
   const envMap = createEnvMap(renderer)
-  scene.environment = envMap
 
   /* ── Post-processing pipeline ── */
   const composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
 
-  // Bloom — subtle HDR glow
+  // Bloom — subtle HDR glow, tight smoothing to avoid milky wash
   const bloom = new BloomEffect({
-    intensity: 0.45,
-    luminanceThreshold: 0.5,
-    luminanceSmoothing: 0.6,
+    intensity: 0.4,
+    luminanceThreshold: 0.55,
+    luminanceSmoothing: 0.25,
     mipmapBlur: true,
   })
 
