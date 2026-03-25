@@ -7,8 +7,8 @@
 
 @theme {
   /* Color Palette — Cool icy tones */
-  --color-bg-primary: #050910;
-  --color-bg-secondary: #080e1a;
+  --color-bg-primary: #081020;
+  --color-bg-secondary: #0c1628;
   --color-bg-glass: rgba(10, 16, 32, 0.35);
   --color-bg-glass-hover: rgba(14, 22, 45, 0.45);
 
@@ -77,7 +77,7 @@
     position: fixed;
     inset: 0;
     z-index: -6;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(3, 5, 10, 0.5) 100%);
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(4, 8, 18, 0.5) 100%);
     pointer-events: none;
   }
 

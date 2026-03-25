@@ -14,24 +14,20 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 300)
   camera.position.z = 45
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+  renderer.setClearColor(0x081020, 1)
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.0
 
-  /* ── Lighting: directional from upper-right + ambient fill ── */
+  /* ── Lighting: single directional from upper-right ── */
   const dirLight = new THREE.DirectionalLight(0xffffff, 3.0)
   dirLight.position.set(60, 45, 35)
   scene.add(dirLight)
 
-  // Secondary fill from lower-left keeps shadow side visible
-  const fillLight = new THREE.DirectionalLight(0x8ab4d8, 0.8)
-  fillLight.position.set(-40, -30, 20)
-  scene.add(fillLight)
-
-  // Ambient so shadow-side stays soft white-blue, not black
-  const ambientLight = new THREE.AmbientLight(0x4a6a8a, 1.2)
+  // Minimal ambient — shadow side stays dark marine, no second reflection
+  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.5)
   scene.add(ambientLight)
 
   /* ── Orb configurations — widely spread across the viewport ── */
