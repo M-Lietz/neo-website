@@ -57,19 +57,7 @@
     overflow-x: hidden;
   }
 
-  /* Subtle grid overlay */
-  /* Subtle grid overlay — visible in dark areas, adds depth */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -5;
-    background-image:
-      linear-gradient(rgba(80, 130, 190, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(80, 130, 190, 0.035) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-  }
+
 
   /* Subtle radial vignette for depth */
   body::after {

@@ -98,6 +98,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
     group.position.set(cfg.pos[0], cfg.pos[1], cfg.pos[2])
     group.userData = { basePos: [...cfg.pos], speed: cfg.speed }
 
+    // Main lit sphere
     const geo = new THREE.SphereGeometry(cfg.size, 96, 96)
     const mat = new THREE.MeshPhongMaterial({
       color: cfg.color,
@@ -110,30 +111,44 @@ export function initBackground(canvas: HTMLCanvasElement) {
     })
     group.add(new THREE.Mesh(geo, mat))
 
+    // Soft additive glow shell — shiny aura around the lit side
+    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.18, 48, 48)
+    const glowMat = new THREE.MeshBasicMaterial({
+      color: 0xb0d4f0,
+      transparent: true,
+      opacity: cfg.opacity * 0.12,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+    })
+    group.add(new THREE.Mesh(glowGeo, glowMat))
+
     orbGroup.add(group)
     orbs.push(group)
   })
 
-  // Fine particle field — subtle blue dust
-  const particleCount = 200
-  const positions = new Float32Array(particleCount * 3)
-  for (let i = 0; i < particleCount; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 160
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 100
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 70 - 25
+  // Very subtle starfield background
+  const starCount = 600
+  const starPositions = new Float32Array(starCount * 3)
+  const starSizes = new Float32Array(starCount)
+  for (let i = 0; i < starCount; i++) {
+    starPositions[i * 3] = (Math.random() - 0.5) * 300
+    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 200
+    starPositions[i * 3 + 2] = -50 - Math.random() * 100
+    starSizes[i] = Math.random() * 0.08 + 0.02
   }
-  const particleGeo = new THREE.BufferGeometry()
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-  const particleMat = new THREE.PointsMaterial({
-    color: 0x3a6585,
-    size: 0.06,
+  const starGeo = new THREE.BufferGeometry()
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
+  starGeo.setAttribute('size', new THREE.BufferAttribute(starSizes, 1))
+  const starMat = new THREE.PointsMaterial({
+    color: 0x80a8c8,
+    size: 0.12,
     transparent: true,
-    opacity: 0.30,
+    opacity: 0.18,
     sizeAttenuation: true,
-    blending: THREE.AdditiveBlending,
     depthWrite: false,
   })
-  scene.add(new THREE.Points(particleGeo, particleMat))
+  scene.add(new THREE.Points(starGeo, starMat))
   const particles = scene.children[scene.children.length - 1] as THREE.Points
 
   // Mouse parallax
