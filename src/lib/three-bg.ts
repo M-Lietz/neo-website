@@ -26,8 +26,8 @@ const glowFragmentShader = `
   varying vec3 vNormal;
   varying vec3 vViewDir;
   void main() {
-    float rim = 1.0 - max(dot(vNormal, vViewDir), 0.0);
-    float glow = pow(rim, 2.5) * uIntensity;
+    float NdotV = max(dot(vNormal, vViewDir), 0.0);
+    float glow = pow(NdotV, 1.8) * uIntensity;
     gl_FragColor = vec4(uColor, glow);
   }
 `
