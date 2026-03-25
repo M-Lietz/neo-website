@@ -178,6 +178,83 @@ export function initBackground(canvas: HTMLCanvasElement) {
   scene.add(new THREE.Points(starGeo, starMat))
   const particles = scene.children[scene.children.length - 1] as THREE.Points
 
+  /* ── Matrix rain — subtle falling characters on a canvas texture ── */
+  const matrixCanvas = document.createElement('canvas')
+  const matrixW = 256, matrixH = 512
+  matrixCanvas.width = matrixW
+  matrixCanvas.height = matrixH
+  const mCtx = matrixCanvas.getContext('2d')!
+  mCtx.fillStyle = 'rgba(8, 16, 32, 1)'
+  mCtx.fillRect(0, 0, matrixW, matrixH)
+
+  const matrixTexture = new THREE.CanvasTexture(matrixCanvas)
+  matrixTexture.minFilter = THREE.LinearFilter
+  matrixTexture.magFilter = THREE.LinearFilter
+
+  const matrixChars = 'アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF<>{}[]=/'
+  const fontSize = 12
+  const matrixCols = Math.floor(matrixW / fontSize)
+  const matrixDrops: number[] = Array.from(
+    { length: matrixCols },
+    () => Math.random() * matrixH / fontSize
+  )
+
+  const matrixPlaneGeo = new THREE.PlaneGeometry(280, 200)
+  const matrixPlaneMat = new THREE.MeshBasicMaterial({
+    map: matrixTexture,
+    transparent: true,
+    opacity: 0.06,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+  const matrixMesh = new THREE.Mesh(matrixPlaneGeo, matrixPlaneMat)
+  matrixMesh.position.z = -75
+  scene.add(matrixMesh)
+
+  /* ── Grid floor — transparent perspective grid (Tron/Matrix style) ── */
+  const gridFloorVS = `
+    varying vec3 vWorldPos;
+    void main() {
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      vWorldPos = wp.xyz;
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }
+  `
+  const gridFloorFS = `
+    uniform vec3 uColor;
+    uniform float uTime;
+    varying vec3 vWorldPos;
+    void main() {
+      float gridSize = 4.0;
+      vec2 coord = vWorldPos.xz / gridSize;
+      vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+      float line = min(grid.x, grid.y);
+      float alpha = 1.0 - min(line, 1.0);
+      float dist = length(vWorldPos.xz);
+      alpha *= smoothstep(140.0, 10.0, dist);
+      alpha *= 0.14;
+      alpha *= 0.92 + sin(uTime * 0.4 + vWorldPos.x * 0.05) * 0.08;
+      gl_FragColor = vec4(uColor, alpha);
+    }
+  `
+  const gridFloorGeo = new THREE.PlaneGeometry(300, 300, 1, 1)
+  const gridFloorMat = new THREE.ShaderMaterial({
+    vertexShader: gridFloorVS,
+    fragmentShader: gridFloorFS,
+    uniforms: {
+      uColor: { value: new THREE.Color(0x3a80b0) },
+      uTime: { value: 0 },
+    },
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+  })
+  const gridFloor = new THREE.Mesh(gridFloorGeo, gridFloorMat)
+  gridFloor.rotation.x = -Math.PI / 2
+  gridFloor.position.y = -22
+  scene.add(gridFloor)
+
   // Mouse parallax
   let mouseX = 0, mouseY = 0
   document.addEventListener('mousemove', (e) => {
@@ -210,6 +287,26 @@ export function initBackground(canvas: HTMLCanvasElement) {
 
     particles.rotation.y = t * 0.006
     particles.rotation.x = t * 0.003
+
+    // Update matrix rain
+    mCtx.fillStyle = 'rgba(8, 16, 32, 0.07)'
+    mCtx.fillRect(0, 0, matrixW, matrixH)
+    mCtx.fillStyle = 'rgba(90, 160, 210, 0.55)'
+    mCtx.font = `${fontSize}px monospace`
+    for (let i = 0; i < matrixCols; i++) {
+      const char = matrixChars[Math.floor(Math.random() * matrixChars.length)]
+      const y = matrixDrops[i] * fontSize
+      // Lead character slightly brighter
+      if (Math.random() > 0.7) mCtx.fillStyle = 'rgba(140, 200, 240, 0.8)'
+      else mCtx.fillStyle = 'rgba(90, 160, 210, 0.55)'
+      mCtx.fillText(char, i * fontSize, y)
+      if (y > matrixH && Math.random() > 0.975) matrixDrops[i] = 0
+      matrixDrops[i] += 0.25
+    }
+    matrixTexture.needsUpdate = true
+
+    // Update grid floor
+    gridFloorMat.uniforms.uTime.value = t
 
     camera.position.x += (mouseX * 2 - camera.position.x) * 0.01
     camera.position.y += (-mouseY * 2 - camera.position.y) * 0.01
