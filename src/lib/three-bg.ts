@@ -84,7 +84,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.setSize(innerWidth, innerHeight)
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.1
+  renderer.toneMappingExposure = 0.85
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
   /* ── Environment map for reflections ── */
@@ -95,11 +95,11 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
 
-  // Bloom — HDR glow around bright objects
+  // Bloom — subtle HDR glow
   const bloom = new BloomEffect({
-    intensity: 0.8,
-    luminanceThreshold: 0.3,
-    luminanceSmoothing: 0.7,
+    intensity: 0.45,
+    luminanceThreshold: 0.5,
+    luminanceSmoothing: 0.6,
     mipmapBlur: true,
   })
 
@@ -114,12 +114,12 @@ export function initBackground(canvas: HTMLCanvasElement) {
 
   /* ── Lighting — multi-source for ultra-soft shadows ── */
   // Key light — upper right
-  const keyLight = new THREE.DirectionalLight(0xeef4ff, 2.2)
+  const keyLight = new THREE.DirectionalLight(0xeef4ff, 1.6)
   keyLight.position.set(60, 45, 35)
   scene.add(keyLight)
 
   // Fill light — soft from lower-left (kills hard terminator)
-  const fillLight = new THREE.DirectionalLight(0x4a6a8a, 0.8)
+  const fillLight = new THREE.DirectionalLight(0x4a6a8a, 0.5)
   fillLight.position.set(-40, -20, 25)
   scene.add(fillLight)
 
@@ -129,11 +129,11 @@ export function initBackground(canvas: HTMLCanvasElement) {
   scene.add(rimLight)
 
   // Hemisphere — sky/ground gradient fill
-  const hemiLight = new THREE.HemisphereLight(0x4a7aaa, 0x0a1520, 0.7)
+  const hemiLight = new THREE.HemisphereLight(0x4a7aaa, 0x0a1520, 0.45)
   scene.add(hemiLight)
 
   // Ambient — lift the deepest blacks
-  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.8)
+  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.5)
   scene.add(ambientLight)
 
   /* ── Orb configs — 8 orbs at varying depths for parallax ── */
@@ -182,14 +182,14 @@ export function initBackground(canvas: HTMLCanvasElement) {
     })
     group.add(new THREE.Mesh(geo, mat))
 
-    // Fresnel glow shell
-    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.3, 48, 48)
+    // Fresnel glow shell — tight and subtle
+    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.15, 48, 48)
     const glowMat = new THREE.ShaderMaterial({
       vertexShader: glowVS,
       fragmentShader: glowFS,
       uniforms: {
         uColor: { value: new THREE.Color(0xc0ddf0) },
-        uIntensity: { value: cfg.opacity * 0.3 },
+        uIntensity: { value: cfg.opacity * 0.18 },
       },
       transparent: true,
       depthWrite: false,
