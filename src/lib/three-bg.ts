@@ -44,13 +44,17 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.0
 
-  /* ── Lighting: single directional from upper-right ── */
-  const dirLight = new THREE.DirectionalLight(0xffffff, 3.0)
+  /* ── Lighting: directional from upper-right + hemisphere fill ── */
+  const dirLight = new THREE.DirectionalLight(0xffffff, 2.5)
   dirLight.position.set(60, 45, 35)
   scene.add(dirLight)
 
-  // Minimal ambient — shadow side stays dark marine, no second reflection
-  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.5)
+  // Hemisphere light for soft gradient fill (sky=cool blue, ground=dark)
+  const hemiLight = new THREE.HemisphereLight(0x3a5a80, 0x0a1520, 0.6)
+  scene.add(hemiLight)
+
+  // Minimal ambient to lift deepest shadows
+  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.7)
   scene.add(ambientLight)
 
   /* ── Orb configurations — widely spread across the viewport ── */
@@ -121,13 +125,15 @@ export function initBackground(canvas: HTMLCanvasElement) {
     group.position.set(cfg.pos[0], cfg.pos[1], cfg.pos[2])
     group.userData = { basePos: [...cfg.pos], speed: cfg.speed }
 
-    // Main lit sphere
+    // Main lit sphere — Physical material for soft shadow transition
     const geo = new THREE.SphereGeometry(cfg.size, 96, 96)
-    const mat = new THREE.MeshPhongMaterial({
+    const mat = new THREE.MeshPhysicalMaterial({
       color: cfg.color,
       emissive: cfg.emissive,
-      specular: cfg.specular,
-      shininess: cfg.shininess,
+      roughness: 0.35,
+      metalness: 0.05,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.4,
       transparent: true,
       opacity: cfg.opacity,
       depthWrite: false,
