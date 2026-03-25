@@ -5,7 +5,7 @@
  * Atmosphere: volumetric fog sprites + deep starfield
  */
 import * as THREE from 'three'
-import { EffectComposer, RenderPass, BloomEffect, DepthOfFieldEffect, EffectPass } from 'postprocessing'
+import { EffectComposer, RenderPass, BloomEffect, DepthOfFieldEffect, EffectPass, ToneMappingEffect } from 'postprocessing'
 
 /* Fresnel glow shader — bright at sphere surface, fading outward */
 const glowVS = `
@@ -83,8 +83,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.setClearColor(0x081020, 1)
   renderer.setSize(innerWidth, innerHeight)
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
-  renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.85
+  renderer.toneMapping = THREE.NoToneMapping
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
   /* ── Environment map for reflections (per-material only, not global) ── */
@@ -111,7 +110,12 @@ export function initBackground(canvas: HTMLCanvasElement) {
     bokehScale: 2.0,
   })
 
-  composer.addPass(new EffectPass(camera, bloom, dof))
+  // Tone mapping — applied ONCE by postprocessing, not by renderer
+  const toneMapping = new ToneMappingEffect({
+    mode: THREE.ACESFilmicToneMapping,
+  })
+
+  composer.addPass(new EffectPass(camera, bloom, dof, toneMapping))
 
   /* ── Lighting — multi-source for ultra-soft shadows ── */
   // Key light — upper right
