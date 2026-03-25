@@ -203,6 +203,62 @@
     text-shadow: 0 0 10px currentColor, 0 0 40px currentColor;
   }
 
+  /* ── #1: Section separator — gradient line between sections ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(126, 180, 245, 0.25) 20%, rgba(168, 212, 240, 0.35) 50%, rgba(126, 180, 245, 0.25) 80%, transparent);
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  /* ── #2: Title glow — cinematic heading effect ── */
+  .title-glow {
+    text-shadow: 0 0 20px rgba(126, 180, 245, 0.3), 0 0 60px rgba(126, 180, 245, 0.1);
+  }
+  .title-glow-line {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(126, 180, 245, 0.5), rgba(168, 212, 240, 0.3));
+    height: 1px;
+    width: 40px;
+    vertical-align: middle;
+    margin-right: 12px;
+  }
+
+  /* ── #5: Focus indicators — keyboard accessibility ── */
+  *:focus-visible {
+    outline: 2px solid rgba(126, 180, 245, 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid rgba(126, 180, 245, 0.6);
+    outline-offset: 2px;
+  }
+
+  /* ── #7: Avatar glow ring ── */
+  .avatar-glow {
+    box-shadow: 0 0 30px rgba(126, 180, 245, 0.3), 0 0 60px rgba(126, 180, 245, 0.1);
+  }
+
+  /* ── #6: Loading skeleton shimmer ── */
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+  }
+  .skeleton-text {
+    height: 14px;
+    margin-bottom: 8px;
+  }
+  .skeleton-box {
+    height: 80px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
   /* Ambient glow — soft blue-white */
   .glow-ambient {
     position: relative;

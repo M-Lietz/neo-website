@@ -69,4 +69,49 @@ export function initScrollAnimations() {
       snap: { textContent: 1 },
     })
   })
+
+  // #4: Section title entrance — glide in from left with glow pulse
+  gsap.utils.toArray<HTMLElement>('.title-glow').forEach((el) => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+      x: -30,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+    })
+    // Animate the decorative line width
+    const line = el.querySelector('.title-glow-line')
+    if (line) {
+      gsap.from(line, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          toggleActions: 'play none none none',
+        },
+        width: 0,
+        duration: 0.6,
+        delay: 0.3,
+        ease: 'power2.out',
+      })
+    }
+  })
+
+  // #4: Section divider entrance — expand from center
+  gsap.utils.toArray<HTMLElement>('.section-divider').forEach((el) => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 92%',
+        toggleActions: 'play none none none',
+      },
+      scaleX: 0,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+    })
+  })
 }

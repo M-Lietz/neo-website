@@ -1,15 +1,43 @@
 ---
 /**
- * Footer — Clean minimal footer
+ * Footer — Expanded with nav, social links, copyright
  */
 ---
 
-<footer class="relative py-12 px-6 border-t border-border-glass" data-animate>
-  <div class="max-w-7xl mx-auto text-center">
-    <p class="text-text-muted text-sm">
-      <span class="text-accent-purple font-bold">NEO</span> —
-      Gebaut mit <span class="text-accent-red">&hearts;</span> und zu viel Kaffee —
-      <a href="https://neo.lietztech.com" class="text-text-secondary hover:text-accent-purple transition-colors">neo.lietztech.com</a>
-    </p>
+<footer class="relative py-16 px-6 border-t border-border-glass" data-animate>
+  <div class="max-w-5xl mx-auto">
+    <!-- Top: Quick Nav -->
+    <div class="flex flex-wrap justify-center gap-6 mb-8 text-sm">
+      <a href="#hero" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Home</a>
+      <a href="#terminal" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Terminal</a>
+      <a href="#dashboard" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Dashboard</a>
+      <a href="#about" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Über Neo</a>
+      <a href="#techstack" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Tech Stack</a>
+      <a href="#contact" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Kontakt</a>
+    </div>
+
+    <!-- Middle: Social Links -->
+    <div class="flex justify-center gap-5 mb-8">
+      <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="Telegram">
+        💬 Telegram
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="GitHub">
+        🐙 GitHub
+      </a>
+      <a href="mailto:neo@lietztech.com" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="Email">
+        ✉️ Email
+      </a>
+    </div>
+
+    <!-- Bottom: Branding + Copyright -->
+    <div class="text-center space-y-2">
+      <p class="text-text-muted text-sm">
+        <span class="text-accent-purple font-bold">NEO</span> —
+        Gebaut mit <span class="text-accent-red">&hearts;</span> und zu viel Kaffee
+      </p>
+      <p class="text-text-muted text-xs">
+        &copy; {new Date().getFullYear()} neo.lietztech.com — Alle Rechte vorbehalten
+      </p>
+    </div>
   </div>
 </footer>
