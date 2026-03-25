@@ -59,14 +59,60 @@
 
 
 
-  /* Subtle radial vignette for depth */
+  /* Cinematic vignette — draws focus to center */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    z-index: -6;
-    background: radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(4, 8, 18, 0.5) 100%);
+    z-index: 1;
+    background: radial-gradient(ellipse 70% 55% at 50% 45%, transparent 30%, rgba(2, 4, 12, 0.45) 70%, rgba(0, 0, 0, 0.7) 100%);
     pointer-events: none;
+  }
+
+  /* ── EFFEKT #5: Chromatic Aberration — subtle color fringing at edges ── */
+  .chromatic-aberration {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 90% 80% at 50% 50%, transparent 60%, rgba(60, 120, 255, 0.04) 100%),
+      radial-gradient(ellipse 90% 80% at 50% 50%, transparent 60%, rgba(255, 60, 60, 0.03) 100%);
+    background-position: -2px 0, 2px 0;
+    background-size: 100% 100%;
+    mix-blend-mode: screen;
+  }
+
+  /* ── EFFEKT #6: Film Grain — animated noise texture ── */
+  .film-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    animation: grain 0.4s steps(3) infinite;
+  }
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    33% { transform: translate(-5px, -3px); }
+    66% { transform: translate(3px, 5px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* ── EFFEKT #7: God Rays — volumetric light from upper-right ── */
+  .god-rays {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 40% 70% at 85% 15%,
+      rgba(140, 180, 240, 0.06) 0%,
+      rgba(100, 150, 220, 0.03) 30%,
+      transparent 70%
+    );
   }
 
   ::selection {

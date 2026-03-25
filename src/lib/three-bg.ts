@@ -82,9 +82,13 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.setClearColor(0x081020, 1)
   renderer.setSize(innerWidth, innerHeight)
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+  /* ── EFFEKT #4: Tone Mapping — höhere Exposure = mehr Kino-Kontrast ── */
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.0
+  renderer.toneMappingExposure = 1.2
   renderer.outputColorSpace = THREE.SRGBColorSpace
+
+  /* ── Depth fog — distant objects fade into darkness ── */
+  scene.fog = new THREE.FogExp2(0x060e1a, 0.008)
 
   /* ── Environment map for reflections (per-material only) ── */
   const envMap = createEnvMap(renderer)
@@ -157,16 +161,17 @@ export function initBackground(canvas: HTMLCanvasElement) {
       opacity: cfg.opacity,
       depthWrite: false,
     })
+    mat.userData.baseRoughness = cfg.roughness
     group.add(new THREE.Mesh(geo, mat))
 
-    // Fresnel glow shell — tight and subtle
-    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.15, 48, 48)
+    // Fresnel glow shell — tight edge glow
+    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.12, 48, 48)
     const glowMat = new THREE.ShaderMaterial({
       vertexShader: glowVS,
       fragmentShader: glowFS,
       uniforms: {
         uColor: { value: new THREE.Color(0xc0ddf0) },
-        uIntensity: { value: cfg.opacity * 0.18 },
+        uIntensity: { value: cfg.opacity * 0.22 },
       },
       transparent: true,
       depthWrite: false,
@@ -174,6 +179,38 @@ export function initBackground(canvas: HTMLCanvasElement) {
       side: THREE.FrontSide,
     })
     group.add(new THREE.Mesh(glowGeo, glowMat))
+
+    // Bloom halo — larger, softer outer glow (simulates bloom without post-processing)
+    const haloGeo = new THREE.SphereGeometry(cfg.size * 1.5, 32, 32)
+    const haloMat = new THREE.ShaderMaterial({
+      vertexShader: glowVS,
+      fragmentShader: glowFS,
+      uniforms: {
+        uColor: { value: new THREE.Color(cfg.color) },
+        uIntensity: { value: cfg.opacity * 0.12 },
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.FrontSide,
+    })
+    group.add(new THREE.Mesh(haloGeo, haloMat))
+
+    // Outer bloom — very soft, wide atmospheric glow
+    const outerGeo = new THREE.SphereGeometry(cfg.size * 2.0, 24, 24)
+    const outerMat = new THREE.ShaderMaterial({
+      vertexShader: glowVS,
+      fragmentShader: glowFS,
+      uniforms: {
+        uColor: { value: new THREE.Color(cfg.color) },
+        uIntensity: { value: cfg.opacity * 0.04 },
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.FrontSide,
+    })
+    group.add(new THREE.Mesh(outerGeo, outerMat))
 
     orbGroup.add(group)
     orbs.push(group)
@@ -220,7 +257,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
     requestAnimationFrame(animate)
     const t = clock.getElapsedTime()
 
-    // Orb float + breathe
+    // Orb float + breathe + EFFEKT #8: Depth of Field (roughness shifts based on distance)
     orbs.forEach((group) => {
       const base = group.userData.basePos
       const sp = group.userData.speed
@@ -228,6 +265,14 @@ export function initBackground(canvas: HTMLCanvasElement) {
       group.position.y = base[1] + Math.cos(t * sp * 0.7) * 2
       group.position.z = base[2] + Math.sin(t * sp * 0.3) * 1.2
       group.scale.setScalar(1 + Math.sin(t * sp * 1.3) * 0.015)
+
+      // Simulated DoF: orbs far from focal plane get softer (higher roughness)
+      const dist = Math.abs(group.position.z - (-10)) // focal plane at z=-10
+      const dofRoughness = Math.min(dist * 0.004, 0.15)
+      const pbrMesh = group.children[0] as THREE.Mesh
+      if (pbrMesh?.material instanceof THREE.MeshPhysicalMaterial) {
+        pbrMesh.material.roughness = (pbrMesh.material.userData.baseRoughness ?? pbrMesh.material.roughness) + dofRoughness
+      }
     })
 
     particles.rotation.y = t * 0.006
@@ -237,7 +282,6 @@ export function initBackground(canvas: HTMLCanvasElement) {
     camera.position.y += (-mouseY * 2 - camera.position.y) * 0.01
     camera.lookAt(scene.position)
 
-    // Direct render — no post-processing, no milky wash
     renderer.render(scene, camera)
   }
 
