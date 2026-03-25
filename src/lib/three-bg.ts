@@ -5,7 +5,6 @@
  * Atmosphere: volumetric fog sprites + deep starfield
  */
 import * as THREE from 'three'
-import { EffectComposer, RenderPass, BloomEffect, DepthOfFieldEffect, EffectPass, ToneMappingEffect } from 'postprocessing'
 
 /* Fresnel glow shader — bright at sphere surface, fading outward */
 const glowVS = `
@@ -83,39 +82,12 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.setClearColor(0x081020, 1)
   renderer.setSize(innerWidth, innerHeight)
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
-  renderer.toneMapping = THREE.NoToneMapping
+  renderer.toneMapping = THREE.ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.0
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
-  /* ── Environment map for reflections (per-material only, not global) ── */
+  /* ── Environment map for reflections (per-material only) ── */
   const envMap = createEnvMap(renderer)
-
-  /* ── Post-processing pipeline ── */
-  const composer = new EffectComposer(renderer, {
-    frameBufferType: THREE.HalfFloatType,
-  })
-  composer.addPass(new RenderPass(scene, camera))
-
-  // Bloom — only brightest highlights, very tight
-  const bloom = new BloomEffect({
-    intensity: 0.3,
-    luminanceThreshold: 0.75,
-    luminanceSmoothing: 0.1,
-    mipmapBlur: true,
-  })
-
-  // Depth of Field — subtle cinematic bokeh
-  const dof = new DepthOfFieldEffect(camera, {
-    focusDistance: 0.06,
-    focalLength: 0.04,
-    bokehScale: 2.0,
-  })
-
-  // Tone mapping — applied ONCE by postprocessing, not by renderer
-  const toneMapping = new ToneMappingEffect({
-    mode: THREE.ACESFilmicToneMapping,
-  })
-
-  composer.addPass(new EffectPass(camera, bloom, dof, toneMapping))
 
   /* ── Lighting — multi-source for ultra-soft shadows ── */
   // Key light — upper right
@@ -240,7 +212,6 @@ export function initBackground(canvas: HTMLCanvasElement) {
     camera.aspect = innerWidth / innerHeight
     camera.updateProjectionMatrix()
     renderer.setSize(innerWidth, innerHeight)
-    composer.setSize(innerWidth, innerHeight)
   })
 
   // Animation loop
@@ -266,8 +237,8 @@ export function initBackground(canvas: HTMLCanvasElement) {
     camera.position.y += (-mouseY * 2 - camera.position.y) * 0.01
     camera.lookAt(scene.position)
 
-    // Render through post-processing pipeline
-    composer.render()
+    // Direct render — no post-processing, no milky wash
+    renderer.render(scene, camera)
   }
 
   animate()
