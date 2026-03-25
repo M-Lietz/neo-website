@@ -91,22 +91,24 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const envMap = createEnvMap(renderer)
 
   /* ── Post-processing pipeline ── */
-  const composer = new EffectComposer(renderer)
+  const composer = new EffectComposer(renderer, {
+    frameBufferType: THREE.HalfFloatType,
+  })
   composer.addPass(new RenderPass(scene, camera))
 
-  // Bloom — subtle HDR glow, tight smoothing to avoid milky wash
+  // Bloom — only brightest highlights, very tight
   const bloom = new BloomEffect({
-    intensity: 0.4,
-    luminanceThreshold: 0.55,
-    luminanceSmoothing: 0.25,
+    intensity: 0.3,
+    luminanceThreshold: 0.75,
+    luminanceSmoothing: 0.1,
     mipmapBlur: true,
   })
 
-  // Depth of Field — cinematic bokeh
+  // Depth of Field — subtle cinematic bokeh
   const dof = new DepthOfFieldEffect(camera, {
     focusDistance: 0.06,
     focalLength: 0.04,
-    bokehScale: 3.0,
+    bokehScale: 2.0,
   })
 
   composer.addPass(new EffectPass(camera, bloom, dof))
