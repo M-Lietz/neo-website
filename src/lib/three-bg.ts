@@ -20,18 +20,18 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.0
 
-  /* ── Lighting: directional from upper-right + subtle ambient fill ── */
-  const dirLight = new THREE.DirectionalLight(0xc8ddf0, 2.2)
+  /* ── Lighting: directional from upper-right + ambient fill ── */
+  const dirLight = new THREE.DirectionalLight(0xffffff, 3.0)
   dirLight.position.set(60, 45, 35)
   scene.add(dirLight)
 
-  // Subtle secondary fill from lower-left (prevents orbs from being 100% dark)
-  const fillLight = new THREE.DirectionalLight(0x2a4060, 0.4)
+  // Secondary fill from lower-left keeps shadow side visible
+  const fillLight = new THREE.DirectionalLight(0x8ab4d8, 0.8)
   fillLight.position.set(-40, -30, 20)
   scene.add(fillLight)
 
-  // Very dim ambient so shadow-side isn't pure black
-  const ambientLight = new THREE.AmbientLight(0x0a1525, 0.6)
+  // Ambient so shadow-side stays soft white-blue, not black
+  const ambientLight = new THREE.AmbientLight(0x4a6a8a, 1.2)
   scene.add(ambientLight)
 
   /* ── Orb configurations — widely spread across the viewport ── */
@@ -42,19 +42,21 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const orbConfigs = [
     // HERO ORB — large, far right, partially off-screen
     {
-      color: 0x2e6a96,
-      specular: 0xd0e8ff,
-      shininess: 70,
-      opacity: 0.82,
+      color: 0xc8dae8,
+      emissive: 0x1a2a3a,
+      specular: 0xffffff,
+      shininess: 90,
+      opacity: 0.80,
       size: 11,
       pos: [26, 5, -10],
       speed: 0.05,
     },
     // SECONDARY — medium, upper-left corner
     {
-      color: 0x1e5580,
-      specular: 0xb8d8f5,
-      shininess: 55,
+      color: 0xb8cee0,
+      emissive: 0x162636,
+      specular: 0xffffff,
+      shininess: 75,
       opacity: 0.72,
       size: 8,
       pos: [-30, 16, -14],
@@ -62,9 +64,10 @@ export function initBackground(canvas: HTMLCanvasElement) {
     },
     // ACCENT — small, lower-left
     {
-      color: 0x3a7aaa,
-      specular: 0xc5e0f8,
-      shininess: 80,
+      color: 0xd0e0ee,
+      emissive: 0x1c2e40,
+      specular: 0xffffff,
+      shininess: 100,
       opacity: 0.75,
       size: 5,
       pos: [-20, -16, -6],
@@ -72,9 +75,10 @@ export function initBackground(canvas: HTMLCanvasElement) {
     },
     // MID — medium-small, lower-right
     {
-      color: 0x255e88,
-      specular: 0xc0d8f0,
-      shininess: 60,
+      color: 0xbdd0e2,
+      emissive: 0x182838,
+      specular: 0xffffff,
+      shininess: 80,
       opacity: 0.68,
       size: 6.5,
       pos: [18, -14, -18],
@@ -82,9 +86,10 @@ export function initBackground(canvas: HTMLCanvasElement) {
     },
     // DEPTH — large, far back center, subtle presence
     {
-      color: 0x1a4870,
-      specular: 0xa0c0e0,
-      shininess: 40,
+      color: 0xa8c0d5,
+      emissive: 0x142434,
+      specular: 0xe8f0ff,
+      shininess: 50,
       opacity: 0.45,
       size: 18,
       pos: [-5, 4, -55],
@@ -100,6 +105,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
     const geo = new THREE.SphereGeometry(cfg.size, 96, 96)
     const mat = new THREE.MeshPhongMaterial({
       color: cfg.color,
+      emissive: cfg.emissive,
       specular: cfg.specular,
       shininess: cfg.shininess,
       transparent: true,
