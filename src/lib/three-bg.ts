@@ -84,7 +84,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.setSize(innerWidth, innerHeight)
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.6
+  renderer.toneMappingExposure = 0.85
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
   /* ── Environment map for reflections ── */
@@ -95,11 +95,11 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
 
-  // Bloom — very subtle HDR glow
+  // Bloom — subtle HDR glow
   const bloom = new BloomEffect({
-    intensity: 0.25,
-    luminanceThreshold: 0.65,
-    luminanceSmoothing: 0.4,
+    intensity: 0.45,
+    luminanceThreshold: 0.5,
+    luminanceSmoothing: 0.6,
     mipmapBlur: true,
   })
 
@@ -114,26 +114,26 @@ export function initBackground(canvas: HTMLCanvasElement) {
 
   /* ── Lighting — multi-source for ultra-soft shadows ── */
   // Key light — upper right
-  const keyLight = new THREE.DirectionalLight(0xc0d8f0, 1.2)
+  const keyLight = new THREE.DirectionalLight(0xeef4ff, 1.6)
   keyLight.position.set(60, 45, 35)
   scene.add(keyLight)
 
   // Fill light — soft from lower-left (kills hard terminator)
-  const fillLight = new THREE.DirectionalLight(0x2a4a6a, 0.35)
+  const fillLight = new THREE.DirectionalLight(0x4a6a8a, 0.5)
   fillLight.position.set(-40, -20, 25)
   scene.add(fillLight)
 
   // Rim/back light — edge definition from behind
-  const rimLight = new THREE.DirectionalLight(0x4070a0, 0.3)
+  const rimLight = new THREE.DirectionalLight(0x6090c0, 0.5)
   rimLight.position.set(-10, 30, -40)
   scene.add(rimLight)
 
   // Hemisphere — sky/ground gradient fill
-  const hemiLight = new THREE.HemisphereLight(0x2a4a6a, 0x060e18, 0.3)
+  const hemiLight = new THREE.HemisphereLight(0x4a7aaa, 0x0a1520, 0.45)
   scene.add(hemiLight)
 
-  // Ambient — lift the deepest blacks just slightly
-  const ambientLight = new THREE.AmbientLight(0x0e1a2a, 0.4)
+  // Ambient — lift the deepest blacks
+  const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.5)
   scene.add(ambientLight)
 
   /* ── Orb configs — 8 orbs at varying depths for parallax ── */
@@ -143,21 +143,21 @@ export function initBackground(canvas: HTMLCanvasElement) {
 
   const orbConfigs = [
     // HERO — large, far right
-    { color: 0x6a8aa8, emissive: 0x0e1a28, roughness: 0.22, metalness: 0.08, clearcoat: 0.5, opacity: 0.82, size: 11, pos: [26, 5, -10], speed: 0.05 },
+    { color: 0xd0e2f0, emissive: 0x1a2a3a, roughness: 0.22, metalness: 0.08, clearcoat: 0.5, opacity: 0.82, size: 11, pos: [26, 5, -10], speed: 0.05 },
     // SECONDARY — upper-left
-    { color: 0x5a7a98, emissive: 0x0c1822, roughness: 0.28, metalness: 0.06, clearcoat: 0.4, opacity: 0.74, size: 8, pos: [-30, 16, -14], speed: 0.04 },
+    { color: 0xc0d4e8, emissive: 0x162636, roughness: 0.28, metalness: 0.06, clearcoat: 0.4, opacity: 0.74, size: 8, pos: [-30, 16, -14], speed: 0.04 },
     // ACCENT — small, lower-left
-    { color: 0x7090aa, emissive: 0x101c2a, roughness: 0.20, metalness: 0.10, clearcoat: 0.6, opacity: 0.78, size: 5, pos: [-20, -16, -6], speed: 0.07 },
+    { color: 0xd8e8f4, emissive: 0x1c2e40, roughness: 0.20, metalness: 0.10, clearcoat: 0.6, opacity: 0.78, size: 5, pos: [-20, -16, -6], speed: 0.07 },
     // MID — lower-right
-    { color: 0x6080a0, emissive: 0x0e1824, roughness: 0.25, metalness: 0.07, clearcoat: 0.45, opacity: 0.70, size: 6.5, pos: [18, -14, -18], speed: 0.055 },
+    { color: 0xc4d6e8, emissive: 0x182838, roughness: 0.25, metalness: 0.07, clearcoat: 0.45, opacity: 0.70, size: 6.5, pos: [18, -14, -18], speed: 0.055 },
     // DEPTH — large, far back center
-    { color: 0x4a6a88, emissive: 0x0a1420, roughness: 0.30, metalness: 0.04, clearcoat: 0.3, opacity: 0.48, size: 18, pos: [-5, 4, -55], speed: 0.025 },
+    { color: 0xb0c8de, emissive: 0x142434, roughness: 0.30, metalness: 0.04, clearcoat: 0.3, opacity: 0.48, size: 18, pos: [-5, 4, -55], speed: 0.025 },
     // NEAR — small, close to camera (parallax foreground)
-    { color: 0x7898b0, emissive: 0x121e2e, roughness: 0.18, metalness: 0.12, clearcoat: 0.7, opacity: 0.55, size: 3, pos: [-14, -8, 12], speed: 0.09 },
+    { color: 0xe0eef8, emissive: 0x202e3e, roughness: 0.18, metalness: 0.12, clearcoat: 0.7, opacity: 0.55, size: 3, pos: [-14, -8, 12], speed: 0.09 },
     // FAR-LEFT — tiny, deep background
-    { color: 0x405e78, emissive: 0x081420, roughness: 0.35, metalness: 0.03, clearcoat: 0.2, opacity: 0.35, size: 4, pos: [35, 12, -40], speed: 0.03 },
+    { color: 0x98b8d0, emissive: 0x101e2c, roughness: 0.35, metalness: 0.03, clearcoat: 0.2, opacity: 0.35, size: 4, pos: [35, 12, -40], speed: 0.03 },
     // FAR-HIGH — medium-small, upper depth
-    { color: 0x4a6a86, emissive: 0x0a1620, roughness: 0.32, metalness: 0.05, clearcoat: 0.35, opacity: 0.40, size: 7, pos: [8, 22, -35], speed: 0.035 },
+    { color: 0xa8c4da, emissive: 0x121e30, roughness: 0.32, metalness: 0.05, clearcoat: 0.35, opacity: 0.40, size: 7, pos: [8, 22, -35], speed: 0.035 },
   ]
 
   orbConfigs.forEach((cfg) => {
@@ -175,7 +175,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
       clearcoat: cfg.clearcoat,
       clearcoatRoughness: 0.3,
       envMap: envMap,
-      envMapIntensity: 0.25,
+      envMapIntensity: 0.6,
       transparent: true,
       opacity: cfg.opacity,
       depthWrite: false,
