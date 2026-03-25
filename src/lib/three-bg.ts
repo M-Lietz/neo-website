@@ -223,34 +223,6 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const particles = new THREE.Points(starGeo, starMat)
   scene.add(particles)
 
-  /* ── Volumetric fog sprites — soft atmosphere between orbs ── */
-  const fogSprites: THREE.Sprite[] = []
-  const fogTex = generateSoftCircle()
-  for (let i = 0; i < 12; i++) {
-    const spriteMat = new THREE.SpriteMaterial({
-      map: fogTex,
-      color: 0x1a3050,
-      transparent: true,
-      opacity: 0.04 + Math.random() * 0.03,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    })
-    const sprite = new THREE.Sprite(spriteMat)
-    const s = 25 + Math.random() * 40
-    sprite.scale.set(s, s, 1)
-    sprite.position.set(
-      (Math.random() - 0.5) * 80,
-      (Math.random() - 0.5) * 50,
-      -20 - Math.random() * 60
-    )
-    sprite.userData = {
-      basePos: [sprite.position.x, sprite.position.y, sprite.position.z],
-      driftSpeed: 0.01 + Math.random() * 0.02,
-    }
-    scene.add(sprite)
-    fogSprites.push(sprite)
-  }
-
   // Mouse parallax
   let mouseX = 0, mouseY = 0
   document.addEventListener('mousemove', (e) => {
@@ -282,14 +254,6 @@ export function initBackground(canvas: HTMLCanvasElement) {
       group.scale.setScalar(1 + Math.sin(t * sp * 1.3) * 0.015)
     })
 
-    // Fog drift
-    fogSprites.forEach((s) => {
-      const bp = s.userData.basePos
-      const ds = s.userData.driftSpeed
-      s.position.x = bp[0] + Math.sin(t * ds) * 8
-      s.position.y = bp[1] + Math.cos(t * ds * 0.6) * 5
-    })
-
     particles.rotation.y = t * 0.006
     particles.rotation.x = t * 0.003
 
@@ -302,20 +266,4 @@ export function initBackground(canvas: HTMLCanvasElement) {
   }
 
   animate()
-}
-
-/* Generate a soft radial gradient texture for fog sprites */
-function generateSoftCircle(): THREE.Texture {
-  const size = 128
-  const c = document.createElement('canvas')
-  c.width = c.height = size
-  const ctx = c.getContext('2d')!
-  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2)
-  grad.addColorStop(0, 'rgba(255,255,255,1)')
-  grad.addColorStop(0.3, 'rgba(255,255,255,0.4)')
-  grad.addColorStop(1, 'rgba(255,255,255,0)')
-  ctx.fillStyle = grad
-  ctx.fillRect(0, 0, size, size)
-  const tex = new THREE.CanvasTexture(c)
-  return tex
 }
