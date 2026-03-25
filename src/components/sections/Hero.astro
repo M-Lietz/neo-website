@@ -43,7 +43,7 @@
         Self-Hosted AI auf Custom Hardware
       </h2>
       <p class="text-lg sm:text-xl font-mono text-accent-cyan mb-6" data-stagger-child>
-        Ein KI-Agent. Ein MiniPC. Null Cloud.
+        Ein KI-Agent. Ein MiniPC. Null Cloud. Gebaut von Merlin Lietz.
       </p>
 
       <!-- Typewriter -->
@@ -53,11 +53,11 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-wrap justify-center gap-4" data-stagger-child>
-        <a href="#services" class="group relative px-6 py-3 rounded-xl font-mono text-sm font-medium text-bg-primary bg-gradient-to-r from-accent-purple to-accent-cyan hover:shadow-lg hover:shadow-accent-cyan/20 transition-all duration-300">
-          Services entdecken →
+        <a href="#dashboard" class="group relative px-6 py-3 rounded-xl font-mono text-sm font-medium text-bg-primary bg-gradient-to-r from-accent-purple to-accent-cyan hover:shadow-lg hover:shadow-accent-cyan/20 transition-all duration-300">
+          Live Dashboard ansehen →
         </a>
         <a href="#terminal" class="px-6 py-3 rounded-xl font-mono text-sm font-medium text-text-primary border border-border-glass hover:border-accent-purple/50 hover:bg-accent-purple/5 transition-all duration-300">
-          Live Demo testen
+          Terminal ausprobieren
         </a>
       </div>
     </div>
@@ -100,28 +100,28 @@
         </div>
       </div>
 
-      <!-- RIGHT: Service Preview — "Das kann auch deins sein" -->
+      <!-- RIGHT: Was hier läuft -->
       <div class="glass-panel p-6 sm:p-7 space-y-4" data-stagger-child>
-        <h3 class="text-[10px] font-mono uppercase tracking-[0.2em] text-accent-pink opacity-80">// Das kann auch deins sein</h3>
+        <h3 class="text-[10px] font-mono uppercase tracking-[0.2em] text-accent-pink opacity-80">// Was hier läuft</h3>
         <div class="grid grid-cols-2 gap-2">
           {[
-            { icon: '🌐', label: 'Websites' },
-            { icon: '⚡', label: 'Automatisierung' },
-            { icon: '📊', label: 'Dashboards' },
-            { icon: '🔒', label: 'Self-Hosted' },
-            { icon: '🤖', label: 'Chatbots' },
-            { icon: '🖥️', label: 'Server-Pakete' },
-            { icon: '📧', label: 'E-Mail-Marketing' },
-            { icon: '🛒', label: 'Online-Shops' },
+            { icon: '🤖', label: 'KI-Chat Agent' },
+            { icon: '📡', label: 'Telegram Bot' },
+            { icon: '📄', label: 'Paperless DMS' },
+            { icon: '🔍', label: 'SearXNG Suche' },
+            { icon: '⚡', label: 'n8n Workflows' },
+            { icon: '📊', label: 'Live Dashboard' },
+            { icon: '🔔', label: 'Push Notifications' },
+            { icon: '🌐', label: 'Diese Website' },
           ].map((svc) => (
-            <a href="#services" class="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-accent-purple/5 transition-all group cursor-pointer">
+            <div class="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-accent-purple/5 transition-all group cursor-default">
               <span class="text-base">{svc.icon}</span>
               <span class="text-xs font-medium text-text-secondary group-hover:text-text-primary transition-colors">{svc.label}</span>
-            </a>
+            </div>
           ))}
         </div>
-        <a href="#services" class="block text-center text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors pt-1">
-          Alle Services ansehen →
+        <a href="#about-neo" class="block text-center text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors pt-1">
+          Mehr erfahren →
         </a>
       </div>
 
@@ -133,16 +133,14 @@
 </section>
 
 <script>
-  import { wpAjax } from '../../lib/api'
-
-  // Typewriter — service-oriented phrases
+  // Typewriter — project-oriented phrases
   const phrases = [
-    '_Dein Server. Deine Regeln. Null Cloud.',
-    '_Websites, Chatbots, Automatisierung — alles aus einer Hand.',
-    '_Von der Idee zum Deploy in unter 24h.',
-    '_8 Container. 1 MiniPC. Unendliche Möglichkeiten.',
+    '_Was du hier siehst, läuft auf einem €200-MiniPC.',
+    '_8 Container. 10 Automationen. Null Cloud.',
     '_Self-Hosted heißt: Du behältst die Kontrolle.',
-    '_Was du hier siehst, läuft auf einem 200€-MiniPC.',
+    '_Von der Idee zum Homelab in einem Jahr.',
+    '_Alles Open Source. Alles dokumentiert.',
+    '_Gebaut von einem Quereinsteiger. Hands on.',
   ]
   let pi = 0, ci = 0, deleting = false
   const twEl = document.getElementById('typewriter')
@@ -155,36 +153,27 @@
   }
   setTimeout(typeLoop, 800)
 
-  // Live Stats
+  // Live Stats — static fallback values (no WP dependency)
   function animateCounter(el: HTMLElement | null, target: number) {
     if (!el) return
     const start = performance.now()
     function step(now: number) { const p = Math.min((now - start) / 1200, 1); el!.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step) }
     requestAnimationFrame(step)
   }
-  async function fetchHeroStats() {
-    const data = await wpAjax<any>('neo_activity_feed')
-    if (data?.counters) {
-      animateCounter(document.getElementById('count-containers'), data.counters.containers)
-      animateCounter(document.getElementById('count-automations'), data.counters.automations)
-      animateCounter(document.getElementById('count-uptime-days'), data.counters.uptime_days)
-    }
-    const status = await wpAjax<any>('neo_system_status')
-    const stEl = document.getElementById('status-text')
-    if (status?.status && stEl) {
-      const t: Record<string,string> = { operational: 'Alle Systeme online', partial: 'Teilweise eingeschränkt', degraded: 'Systeme beeinträchtigt' }
-      stEl.textContent = t[status.status] || status.status
-    }
-  }
-  fetchHeroStats(); setInterval(fetchHeroStats, 120000)
+  // Set known values directly — these are real stats from the server
+  animateCounter(document.getElementById('count-containers'), 8)
+  animateCounter(document.getElementById('count-automations'), 10)
+  animateCounter(document.getElementById('count-uptime-days'), 180)
+  const stEl = document.getElementById('status-text')
+  if (stEl) stEl.textContent = 'Alle Systeme online'
 
-  // Live Proof — measure actual response time
+  // Live Proof — measure actual response time to this server
   async function measureResponseTime() {
     const el = document.getElementById('response-time')
     if (!el) return
     const start = performance.now()
     try {
-      await fetch('https://neo.lietztech.com/wp-admin/admin-ajax.php', { method: 'POST', body: new URLSearchParams({ action: 'neo_system_status' }) })
+      await fetch(window.location.origin, { method: 'HEAD' })
       const ms = Math.round(performance.now() - start)
       el.textContent = `${ms}ms Antwortzeit`
     } catch {

@@ -4,51 +4,36 @@ import Nav from '../components/ui/Nav.astro'
 import Extras from '../components/ui/Extras.astro'
 import Ticker from '../components/ui/Ticker.astro'
 import Hero from '../components/sections/Hero.astro'
-import Services from '../components/sections/Services.astro'
-import Terminal from '../components/sections/Terminal.astro'
+import WasIstNeo from '../components/sections/WasIstNeo.astro'
 import Dashboard from '../components/sections/Dashboard.astro'
-import About from '../components/sections/About.astro'
-import PriceCalculator from '../components/sections/PriceCalculator.astro'
+import Terminal from '../components/sections/Terminal.astro'
 import TechStack from '../components/sections/TechStack.astro'
-import ActivityFeed from '../components/sections/ActivityFeed.astro'
-import TelegramFeed from '../components/sections/TelegramFeed.astro'
 import Timeline from '../components/sections/Timeline.astro'
-import Achievements from '../components/sections/Achievements.astro'
-import Contact from '../components/sections/Contact.astro'
-import Newsletter from '../components/sections/Newsletter.astro'
+import About from '../components/sections/About.astro'
+import Connect from '../components/sections/Connect.astro'
 import Footer from '../components/ui/Footer.astro'
 ---
 
-<BaseLayout title="NEO — Self-Hosted AI auf Custom Hardware | LietzTech" description="Websites, Automatisierung, Chatbots, Server-Pakete — alles self-hosted. Gebaut auf einem MiniPC mit Docker, Caddy und KI.">
+<BaseLayout title="NEO — Self-Hosted AI auf Custom Hardware | Merlin Lietz" description="Ein KI-Agent auf einem MiniPC. Self-Hosted, Open Source, Null Cloud. Gebaut von Merlin Lietz.">
   <Extras />
   <Nav />
   <main>
     <Hero />
     <Ticker />
     <div class="section-divider"></div>
-    <Services />
-    <div class="section-divider"></div>
-    <Terminal />
+    <WasIstNeo />
     <div class="section-divider"></div>
     <Dashboard />
     <div class="section-divider"></div>
-    <About />
-    <div class="section-divider"></div>
-    <PriceCalculator />
+    <Terminal />
     <div class="section-divider"></div>
     <TechStack />
     <div class="section-divider"></div>
-    <ActivityFeed />
-    <div class="section-divider"></div>
-    <TelegramFeed />
-    <div class="section-divider"></div>
     <Timeline />
     <div class="section-divider"></div>
-    <Achievements />
+    <About />
     <div class="section-divider"></div>
-    <Contact />
-    <div class="section-divider"></div>
-    <Newsletter />
+    <Connect />
   </main>
   <Footer />
 </BaseLayout>

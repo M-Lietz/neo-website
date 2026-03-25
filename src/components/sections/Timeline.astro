@@ -1,20 +1,23 @@
 ---
 /**
- * Timeline Section — Project milestones
- * Static data (was WP_Query with fallback in old site)
+ * Timeline Section — Merlins Weg vom Quereinsteiger zum Homelab
  */
 const milestones = [
-  { date: 'März 2025', title: 'Project Neo gestartet', desc: 'Erster Proxmox-Host aufgesetzt, erste VM erstellt.' },
-  { date: 'April 2025', title: 'OpenClaw v1 deployed', desc: 'KI-Gateway mit Claude + DeepSeek live auf dem Homelab.' },
-  { date: 'Mai 2025', title: 'Docker-Stack komplett', desc: 'Paperless, SearXNG, Gotify, n8n — alles containerisiert.' },
-  { date: 'Juni 2025', title: 'Telegram Bot & Channel', desc: '7 Automationen, Content-Mix, Callback-Daemon — das volle Programm.' },
-  { date: 'Oktober 2025', title: 'Neo Website Launch', desc: 'Cyberpunk-Design mit Echtzeit-Dashboard und Terminal.' },
-  { date: 'März 2026', title: 'Astro Migration', desc: 'Kompletter Rewrite: Astro + Tailwind + Three.js. Schneller, modularer, geiler.' },
+  { date: 'Ende 2024', title: 'Der Anfang', desc: 'IT-Umschulung gestartet. Erster eigener Linux-Server aufgesetzt. Alles war neu.' },
+  { date: 'März 2025', title: 'Homelab geboren', desc: 'ACE Magic MiniPC gekauft, Proxmox installiert, erste VMs und Container erstellt.' },
+  { date: 'April 2025', title: 'KI trifft Homelab', desc: 'OpenClaw Gateway gebaut — eigener KI-Agent mit Claude + DeepSeek, komplett self-hosted.' },
+  { date: 'Mai 2025', title: 'Docker-Stack wächst', desc: 'Paperless, SearXNG, Gotify, n8n — Service für Service dazugelernt und containerisiert.' },
+  { date: 'Sommer 2025', title: 'Telegram-Automatisierung', desc: '7 Automationen, Content-Mix, eigener Bot — alles über APIs verbunden, kein Klick-Tool.' },
+  { date: 'Herbst 2025', title: 'Erste Website live', desc: 'neo.lietztech.com mit WordPress, Cyberpunk-Design, Echtzeit-Dashboard. Alles custom.' },
+  { date: 'März 2026', title: 'Migration auf Astro', desc: 'Kompletter Rewrite: Astro + Tailwind + Three.js. Schneller, sicherer, modularer.' },
 ]
 ---
 
 <section id="timeline" class="px-4 sm:px-6 py-16" data-animate>
-  <h2 class="text-lg font-mono text-accent-cyan mb-8 max-w-4xl mx-auto title-glow"><span class="title-glow-line"></span>// Timeline</h2>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-4xl mx-auto title-glow"><span class="title-glow-line"></span>// Mein Weg</h2>
+  <p class="text-text-secondary text-sm max-w-4xl mx-auto mb-8 pl-[52px]">
+    Vom Quereinsteiger zum eigenen Homelab — in unter zwei Jahren.
+  </p>
   <div class="max-w-4xl mx-auto relative">
     <!-- Vertical line -->
     <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-accent-purple via-accent-cyan to-accent-pink"></div>

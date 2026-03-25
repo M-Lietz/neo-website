@@ -1,8 +1,8 @@
 ---
 /**
- * Dual Terminal Section — Fake Bot (left) + Real Chat (right)
- * Left: 8 automated showcase scenarios with typing animation
- * Right: Real LLM chat placeholder (LiteLLM/Ollama integration)
+ * Dual Terminal Section — Real Chat (left) + Fake Bot (right)
+ * Left: Interactive LLM chat
+ * Right: 8 automated showcase scenarios with typing animation
  */
 ---
 
@@ -11,12 +11,44 @@
     <span class="title-glow-line"></span>// Live Terminal
   </h2>
   <p class="text-text-secondary text-sm max-w-6xl mx-auto mb-8 pl-[52px]">
-    Links: Was Neo automatisch erledigt. Rechts: Stell Neo eine Frage.
+    Links: Stell Neo eine Frage. Rechts: Was Neo automatisch erledigt.
   </p>
 
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
 
-    <!-- LEFT: Fake Bot Terminal -->
+    <!-- LEFT: Real Chat Terminal -->
+    <div class="glass-panel overflow-hidden glow-ambient">
+      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+        <span class="w-3 h-3 rounded-full bg-accent-cyan"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
+        <span class="ml-3 text-xs font-mono text-text-muted">neo-chat · interaktiv</span>
+      </div>
+      <div id="chat-output" class="p-4 font-mono text-xs h-[320px] overflow-y-auto space-y-2">
+        <div class="text-accent-cyan">Neo KI-Chat</div>
+        <div class="text-text-muted">Stell mir eine Frage über dieses Projekt, die Technik oder Self-Hosting.</div>
+        <div class="text-text-muted text-[10px] mt-2">5 Nachrichten pro Session · Powered by lokale KI</div>
+      </div>
+      <div class="flex items-center px-4 py-3 border-t border-white/5">
+        <span class="font-mono text-xs text-accent-cyan mr-2">du →</span>
+        <input
+          type="text"
+          id="chat-input"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="200"
+          placeholder="Frag mich etwas..."
+          class="flex-1 bg-transparent outline-none font-mono text-xs text-text-primary placeholder-text-muted"
+        />
+        <button id="chat-send" class="ml-2 text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors">↵</button>
+      </div>
+      <div class="px-4 py-1 border-t border-white/5 flex items-center justify-between">
+        <span class="text-[10px] font-mono text-text-muted" id="chat-counter">5 Nachrichten übrig</span>
+        <span class="text-[10px] font-mono text-text-muted" id="chat-model">Model: local-llm</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Fake Bot Terminal -->
     <div class="glass-panel overflow-hidden glow-ambient">
       <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
         <span class="w-3 h-3 rounded-full bg-accent-green"></span>
@@ -40,38 +72,6 @@
       <div class="px-4 py-2 border-t border-white/5 flex items-center justify-between">
         <span class="text-[10px] font-mono text-text-muted" id="bot-status">Szenario läuft...</span>
         <button id="bot-replay" class="text-[10px] font-mono text-accent-cyan hover:text-accent-purple transition-colors">↻ Replay</button>
-      </div>
-    </div>
-
-    <!-- RIGHT: Real Chat Terminal -->
-    <div class="glass-panel overflow-hidden glow-ambient">
-      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-        <span class="w-3 h-3 rounded-full bg-accent-cyan"></span>
-        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
-        <span class="ml-3 text-xs font-mono text-text-muted">neo-chat · interaktiv</span>
-      </div>
-      <div id="chat-output" class="p-4 font-mono text-xs h-[320px] overflow-y-auto space-y-2">
-        <div class="text-accent-cyan">Neo KI-Chat</div>
-        <div class="text-text-muted">Stell mir eine Frage über Services, Technik oder Self-Hosting.</div>
-        <div class="text-text-muted text-[10px] mt-2">5 Nachrichten pro Session · Powered by lokale KI</div>
-      </div>
-      <div class="flex items-center px-4 py-3 border-t border-white/5">
-        <span class="font-mono text-xs text-accent-cyan mr-2">du →</span>
-        <input
-          type="text"
-          id="chat-input"
-          autocomplete="off"
-          spellcheck="false"
-          maxlength="200"
-          placeholder="Frag mich etwas..."
-          class="flex-1 bg-transparent outline-none font-mono text-xs text-text-primary placeholder-text-muted"
-        />
-        <button id="chat-send" class="ml-2 text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors">↵</button>
-      </div>
-      <div class="px-4 py-1 border-t border-white/5 flex items-center justify-between">
-        <span class="text-[10px] font-mono text-text-muted" id="chat-counter">5 Nachrichten übrig</span>
-        <span class="text-[10px] font-mono text-text-muted" id="chat-model">Model: local-llm</span>
       </div>
     </div>
 
@@ -335,19 +335,19 @@
 
   // Predefined responses for offline mode (when LLM not available)
   const offlineResponses: Record<string, string> = {
-    'default': 'Ich bin Neo — ein Self-Hosted KI-Agent. Frag mich über unsere Services, Self-Hosting oder die Technik hinter dieser Seite!',
-    'services': 'Wir bieten 8 Core-Services: Websites, Automatisierung, Dashboards, Self-Hosted, Chatbots, Server-Pakete, E-Mail-Marketing und Online-Shops. Scroll nach unten zu #services für Details!',
-    'preis': 'Unsere Pakete starten ab €49/Monat für Basis-Hosting. Check den Preisrechner weiter unten für ein individuelles Angebot!',
+    'default': 'Ich bin Neo — ein Self-Hosted KI-Agent auf einem MiniPC. Frag mich über das Projekt, die Technik oder Self-Hosting!',
+    'projekt': 'Neo ist ein Homelab-Projekt von Merlin Lietz. Ein KI-Agent auf einem Intel N97 MiniPC — komplett self-hosted, ohne Cloud. Schau dir das Dashboard an für Live-Daten!',
     'technik': 'Diese Seite läuft auf einem Intel N97 MiniPC mit 16GB RAM. Stack: Proxmox VE, Docker, Astro, Three.js, Caddy, Cloudflare Tunnel.',
-    'hosting': 'Self-Hosting bedeutet: Deine Daten auf deinem Server. Wir richten alles ein — Docker, SSL, Backups, Monitoring. Du behältst 100% Kontrolle.',
+    'hosting': 'Self-Hosting bedeutet: Deine Daten auf deinem Server. Kein Drittanbieter, keine monatlichen Cloud-Kosten. Alles unter deiner Kontrolle.',
+    'merlin': 'Merlin Lietz ist IT-Quereinsteiger und hat dieses gesamte System in einem Jahr aufgebaut. Portfolio: merlinlietz.com',
   }
 
   function getOfflineResponse(input: string): string {
     const lower = input.toLowerCase()
-    if (lower.includes('service') || lower.includes('angebot')) return offlineResponses['services']
-    if (lower.includes('preis') || lower.includes('kost') || lower.includes('paket')) return offlineResponses['preis']
+    if (lower.includes('projekt') || lower.includes('neo') || lower.includes('was')) return offlineResponses['projekt']
     if (lower.includes('technik') || lower.includes('stack') || lower.includes('server')) return offlineResponses['technik']
     if (lower.includes('hosting') || lower.includes('self') || lower.includes('cloud')) return offlineResponses['hosting']
+    if (lower.includes('merlin') || lower.includes('wer') || lower.includes('du')) return offlineResponses['merlin']
     return offlineResponses['default']
   }
 

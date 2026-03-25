@@ -1,0 +1,69 @@
+---
+/**
+ * Was ist Neo? — Projekt-Vorstellung
+ * Erklärt was Neo ist, keine Verkaufslogik
+ */
+---
+
+<section id="about-neo" class="px-4 sm:px-6 py-20" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-5xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// Was ist Neo?
+  </h2>
+  <p class="text-text-secondary text-sm max-w-5xl mx-auto mb-10 pl-[52px]">
+    Ein Homelab-Projekt das zeigt, was mit Self-Hosting möglich ist.
+  </p>
+
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
+
+    <!-- LEFT: Erklärung -->
+    <div class="glass-panel p-8 glow-ambient space-y-5" data-animate>
+      <p class="text-text-primary text-sm leading-relaxed">
+        <span class="text-accent-purple font-bold">Neo</span> ist ein KI-Agent, der komplett auf eigener Hardware läuft —
+        kein Cloud-Abo, keine API-Abhängigkeit, keine monatlichen Kosten. Ein Intel N97 MiniPC für €200,
+        ein Proxmox-Cluster, Docker und ein selbst geschriebenes Gateway.
+      </p>
+      <p class="text-text-secondary text-sm leading-relaxed">
+        Was als Lernprojekt angefangen hat, ist zu einer vollständigen Infrastruktur geworden:
+        KI-Chat, Telegram-Automatisierung, Document-Management, Monitoring —
+        alles self-hosted, alles auf einem kleinen Rechner im Wohnzimmer.
+      </p>
+      <p class="text-text-secondary text-sm leading-relaxed">
+        <span class="text-accent-cyan">„Was ich für mich baue, baue ich auch für dich."</span> —
+        Dieses Projekt ist gleichzeitig Lernplattform, Testumgebung und lebendiger Beweis.
+      </p>
+    </div>
+
+    <!-- RIGHT: Zahlen & Fakten -->
+    <div class="space-y-4" data-stagger-parent>
+      <div class="glass-card p-5 flex items-center gap-4 group" data-stagger-child>
+        <span class="text-3xl">🖥️</span>
+        <div>
+          <div class="text-lg font-bold text-accent-purple font-mono">€200</div>
+          <span class="text-xs text-text-muted">Hardware-Kosten — ein MiniPC, mehr nicht</span>
+        </div>
+      </div>
+      <div class="glass-card p-5 flex items-center gap-4 group" data-stagger-child>
+        <span class="text-3xl">🐳</span>
+        <div>
+          <div class="text-lg font-bold text-accent-cyan font-mono">8+ Container</div>
+          <span class="text-xs text-text-muted">Paperless, SearXNG, n8n, Gotify, Caddy, Valkey ...</span>
+        </div>
+      </div>
+      <div class="glass-card p-5 flex items-center gap-4 group" data-stagger-child>
+        <span class="text-3xl">⚡</span>
+        <div>
+          <div class="text-lg font-bold text-accent-green font-mono">10+ Automationen</div>
+          <span class="text-xs text-text-muted">n8n Workflows + Cron Jobs + Telegram Bot</span>
+        </div>
+      </div>
+      <div class="glass-card p-5 flex items-center gap-4 group" data-stagger-child>
+        <span class="text-3xl">☁️</span>
+        <div>
+          <div class="text-lg font-bold text-accent-pink font-mono">€0/Monat</div>
+          <span class="text-xs text-text-muted">Cloud-Kosten — alles läuft lokal</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
