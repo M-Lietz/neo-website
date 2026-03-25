@@ -35,7 +35,7 @@ const glowFragmentShader = `
 export function initBackground(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 300)
-  camera.position.set(0, 6, 48)
+  camera.position.set(0, 0, 45)
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
   renderer.setClearColor(0x081020, 1)
@@ -178,43 +178,6 @@ export function initBackground(canvas: HTMLCanvasElement) {
   scene.add(new THREE.Points(starGeo, starMat))
   const particles = scene.children[scene.children.length - 1] as THREE.Points
 
-/* ── 3D Grid floor — real perspective grid with depth ── */
-  const floorY = -24
-  const grid = new THREE.GridHelper(300, 60, 0x1a4a70, 0x0e2e4a)
-  grid.position.y = floorY
-  grid.material = new THREE.LineBasicMaterial({
-    color: 0x1a4a70,
-    transparent: true,
-    opacity: 0.25,
-    depthWrite: false,
-  })
-  scene.add(grid)
-
-  // Fog to fade grid into darkness at distance
-  scene.fog = new THREE.FogExp2(0x081020, 0.012)
-
-  // Light spots under each orb — projected glow on the floor
-  const glowSpots: THREE.Mesh[] = []
-  orbConfigs.forEach((cfg) => {
-    const spotGeo = new THREE.CircleGeometry(cfg.size * 1.5, 48)
-    const spotMat = new THREE.MeshBasicMaterial({
-      color: 0x2a6a9a,
-      transparent: true,
-      opacity: cfg.opacity * 0.12,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    })
-    const spot = new THREE.Mesh(spotGeo, spotMat)
-    spot.rotation.x = -Math.PI / 2
-    spot.position.set(cfg.pos[0], floorY + 0.1, cfg.pos[2])
-    scene.add(spot)
-    glowSpots.push(spot)
-  })
-
-  // Camera slight downward tilt for floor perspective
-  camera.position.y = 6
-  camera.position.z = 48
-
   // Mouse parallax
   let mouseX = 0, mouseY = 0
   document.addEventListener('mousemove', (e) => {
@@ -248,17 +211,9 @@ export function initBackground(canvas: HTMLCanvasElement) {
     particles.rotation.y = t * 0.006
     particles.rotation.x = t * 0.003
 
-    // Update glow spots to follow orb X/Z positions
-    orbs.forEach((group, i) => {
-      if (glowSpots[i]) {
-        glowSpots[i].position.x = group.position.x
-        glowSpots[i].position.z = group.position.z
-      }
-    })
-
     camera.position.x += (mouseX * 2 - camera.position.x) * 0.01
-    camera.position.y += (6 + -mouseY * 1.5 - camera.position.y) * 0.01
-    camera.lookAt(0, -4, 0)
+    camera.position.y += (-mouseY * 2 - camera.position.y) * 0.01
+    camera.lookAt(scene.position)
 
     renderer.render(scene, camera)
   }
