@@ -7,8 +7,8 @@ interface Props {
 }
 
 const {
-  title = 'NEO — Digital Architect & HomeLab Engineer',
-  description = 'Neo — Homelab Engineer, KI-Enthusiast, Digital Architect. Self-hosted AI on custom hardware.',
+  title = 'NEO — Self-Hosted AI auf Custom Hardware | LietzTech',
+  description = 'Websites, Automatisierung, Chatbots, Server-Pakete — alles self-hosted auf Custom Hardware. Von der Idee zum Deploy.',
 } = Astro.props
 ---
 
@@ -29,8 +29,10 @@ const {
     <title>{title}</title>
   </head>
   <body class="bg-bg-primary text-text-primary antialiased">
-    <!-- 3D Background Canvas (Three.js) -->
+    <!-- 3D Background Canvas (Three.js) — hinter HTML -->
     <canvas id="bg-canvas" class="fixed inset-0 -z-10"></canvas>
+    <!-- 3D Foreground Canvas — über HTML, transparent, keine Mausevents -->
+    <canvas id="fg-canvas" class="fixed inset-0 z-10 pointer-events-none"></canvas>
 
     <!-- EFFEKT #5: Chromatic Aberration (entfernen = dieses div löschen) -->
     <div class="chromatic-aberration"></div>
@@ -53,8 +55,9 @@ const {
       import { initScrollAnimations } from '../lib/animations'
 
       document.addEventListener('DOMContentLoaded', () => {
-        const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement
-        if (canvas) initBackground(canvas)
+        const bgCanvas = document.getElementById('bg-canvas') as HTMLCanvasElement
+        const fgCanvas = document.getElementById('fg-canvas') as HTMLCanvasElement
+        if (bgCanvas && fgCanvas) initBackground(bgCanvas, fgCanvas)
         initScrollAnimations()
 
         // Scroll progress bar

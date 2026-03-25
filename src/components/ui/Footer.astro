@@ -1,6 +1,6 @@
 ---
 /**
- * Footer — Expanded with nav, social links, copyright
+ * Footer — Showcase branding + nav + social links
  */
 ---
 
@@ -8,11 +8,12 @@
   <div class="max-w-5xl mx-auto">
     <!-- Top: Quick Nav -->
     <div class="flex flex-wrap justify-center gap-6 mb-8 text-sm">
-      <a href="#hero" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Home</a>
-      <a href="#terminal" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Terminal</a>
+      <a href="#hero" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Start</a>
+      <a href="#services" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Services</a>
+      <a href="#terminal" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Demo</a>
       <a href="#dashboard" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Dashboard</a>
-      <a href="#about" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Über Neo</a>
-      <a href="#techstack" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Tech Stack</a>
+      <a href="#pricing" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Preise</a>
+      <a href="#about" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Wie es geht</a>
       <a href="#contact" class="text-text-secondary hover:text-accent-purple transition-colors font-mono">Kontakt</a>
     </div>
 
@@ -21,11 +22,11 @@
       <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="Telegram">
         💬 Telegram
       </a>
-      <a href="https://github.com" target="_blank" rel="noopener" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="GitHub">
-        🐙 GitHub
-      </a>
       <a href="mailto:neo@lietztech.com" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="Email">
         ✉️ Email
+      </a>
+      <a href="#pricing" class="glass-card px-4 py-2 text-xs font-mono text-text-secondary hover:text-accent-cyan transition-colors" aria-label="Preise">
+        💰 Preisrechner
       </a>
     </div>
 
@@ -33,10 +34,13 @@
     <div class="text-center space-y-2">
       <p class="text-text-muted text-sm">
         <span class="text-accent-purple font-bold">NEO</span> —
-        Gebaut mit <span class="text-accent-red">&hearts;</span> und zu viel Kaffee
+        Self-Hosted <span class="text-accent-cyan">AI</span> auf Custom Hardware
       </p>
       <p class="text-text-muted text-xs">
-        &copy; {new Date().getFullYear()} neo.lietztech.com — Alle Rechte vorbehalten
+        &copy; {new Date().getFullYear()} LietzTech · Merlin Lietz — Alle Rechte vorbehalten
+      </p>
+      <p class="text-text-muted text-[10px] font-mono">
+        Diese Seite läuft auf einem Intel N97 MiniPC · Docker · Caddy · Cloudflare
       </p>
     </div>
   </div>

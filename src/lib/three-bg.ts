@@ -73,48 +73,62 @@ function createEnvMap(renderer: THREE.WebGLRenderer): THREE.Texture {
   return envMap
 }
 
-export function initBackground(canvas: HTMLCanvasElement) {
+export function initBackground(bgCanvas: HTMLCanvasElement, fgCanvas: HTMLCanvasElement) {
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 300)
   camera.position.set(0, 0, 45)
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' })
-  renderer.setClearColor(0x081020, 1)
-  renderer.setSize(innerWidth, innerHeight)
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
-  /* ── EFFEKT #4: Tone Mapping — höhere Exposure = mehr Kino-Kontrast ── */
-  renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.2
-  renderer.outputColorSpace = THREE.SRGBColorSpace
+  /* ── Background Renderer — behind HTML ── */
+  const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, antialias: true, powerPreference: 'high-performance' })
+  bgRenderer.setClearColor(0x081020, 1)
+  bgRenderer.setSize(innerWidth, innerHeight)
+  bgRenderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+  bgRenderer.toneMapping = THREE.ACESFilmicToneMapping
+  bgRenderer.toneMappingExposure = 1.2
+  bgRenderer.outputColorSpace = THREE.SRGBColorSpace
+
+  /* ── Foreground Renderer — above HTML, transparent background ── */
+  const fgRenderer = new THREE.WebGLRenderer({ canvas: fgCanvas, antialias: true, alpha: true, powerPreference: 'high-performance' })
+  fgRenderer.setClearColor(0x000000, 0) // fully transparent
+  fgRenderer.setSize(innerWidth, innerHeight)
+  fgRenderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+  fgRenderer.toneMapping = THREE.ACESFilmicToneMapping
+  fgRenderer.toneMappingExposure = 1.2
+  fgRenderer.outputColorSpace = THREE.SRGBColorSpace
 
   /* ── Depth fog — distant objects fade into darkness ── */
   scene.fog = new THREE.FogExp2(0x060e1a, 0.008)
 
   /* ── Environment map for reflections (per-material only) ── */
-  const envMap = createEnvMap(renderer)
+  const envMap = createEnvMap(bgRenderer)
 
   /* ── Lighting — multi-source for ultra-soft shadows ── */
   // Key light — upper right
   const keyLight = new THREE.DirectionalLight(0xeef4ff, 1.6)
   keyLight.position.set(60, 45, 35)
+  keyLight.layers.enableAll()
   scene.add(keyLight)
 
   // Fill light — soft from lower-left (kills hard terminator)
   const fillLight = new THREE.DirectionalLight(0x4a6a8a, 0.5)
   fillLight.position.set(-40, -20, 25)
+  fillLight.layers.enableAll()
   scene.add(fillLight)
 
   // Rim/back light — edge definition from behind
   const rimLight = new THREE.DirectionalLight(0x6090c0, 0.5)
   rimLight.position.set(-10, 30, -40)
+  rimLight.layers.enableAll()
   scene.add(rimLight)
 
   // Hemisphere — sky/ground gradient fill
   const hemiLight = new THREE.HemisphereLight(0x4a7aaa, 0x0a1520, 0.45)
+  hemiLight.layers.enableAll()
   scene.add(hemiLight)
 
   // Ambient — lift the deepest blacks
   const ambientLight = new THREE.AmbientLight(0x1a2a40, 0.5)
+  ambientLight.layers.enableAll()
   scene.add(ambientLight)
 
   /* ── Orb configs — 8 orbs at varying depths for parallax ── */
@@ -127,14 +141,12 @@ export function initBackground(canvas: HTMLCanvasElement) {
     { color: 0xd0e2f0, emissive: 0x1a2a3a, roughness: 0.22, metalness: 0.08, clearcoat: 0.5, opacity: 0.82, size: 11, pos: [26, 5, -10], speed: 0.05 },
     // SECONDARY — upper-left
     { color: 0xc0d4e8, emissive: 0x162636, roughness: 0.28, metalness: 0.06, clearcoat: 0.4, opacity: 0.74, size: 8, pos: [-30, 16, -14], speed: 0.04 },
-    // ACCENT — small, lower-left
-    { color: 0xd8e8f4, emissive: 0x1c2e40, roughness: 0.20, metalness: 0.10, clearcoat: 0.6, opacity: 0.78, size: 5, pos: [-20, -16, -6], speed: 0.07 },
+    // ACCENT — foreground orb, overlaps left glass card edge for 3D depth
+    { color: 0xd0e2f0, emissive: 0x0a1520, roughness: 0.35, metalness: 0.05, clearcoat: 0.3, opacity: 0.50, size: 5, pos: [-26, -16, -2], speed: 0.01, fg: true },
     // MID — lower-right
     { color: 0xc4d6e8, emissive: 0x182838, roughness: 0.25, metalness: 0.07, clearcoat: 0.45, opacity: 0.70, size: 6.5, pos: [18, -14, -18], speed: 0.055 },
     // DEPTH — large, far back center
     { color: 0xb0c8de, emissive: 0x142434, roughness: 0.30, metalness: 0.04, clearcoat: 0.3, opacity: 0.48, size: 18, pos: [-5, 4, -55], speed: 0.025 },
-    // NEAR — small, close to camera (parallax foreground)
-    { color: 0xe0eef8, emissive: 0x202e3e, roughness: 0.18, metalness: 0.12, clearcoat: 0.7, opacity: 0.55, size: 3, pos: [-14, -8, 12], speed: 0.09 },
     // FAR-LEFT — tiny, deep background
     { color: 0x98b8d0, emissive: 0x101e2c, roughness: 0.35, metalness: 0.03, clearcoat: 0.2, opacity: 0.35, size: 4, pos: [35, 12, -40], speed: 0.03 },
     // FAR-HIGH — medium-small, upper depth
@@ -145,6 +157,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
     const group = new THREE.Group()
     group.position.set(cfg.pos[0], cfg.pos[1], cfg.pos[2])
     group.userData = { basePos: [...cfg.pos], speed: cfg.speed }
+    const isFg = 'fg' in cfg && cfg.fg
 
     // PBR sphere with environment reflections
     const geo = new THREE.SphereGeometry(cfg.size, 96, 96)
@@ -162,7 +175,9 @@ export function initBackground(canvas: HTMLCanvasElement) {
       depthWrite: false,
     })
     mat.userData.baseRoughness = cfg.roughness
-    group.add(new THREE.Mesh(geo, mat))
+    const pbrMesh = new THREE.Mesh(geo, mat)
+    if (isFg) pbrMesh.layers.set(1)
+    group.add(pbrMesh)
 
     // Fresnel glow shell — tight edge glow
     const glowGeo = new THREE.SphereGeometry(cfg.size * 1.12, 48, 48)
@@ -178,7 +193,9 @@ export function initBackground(canvas: HTMLCanvasElement) {
       blending: THREE.AdditiveBlending,
       side: THREE.FrontSide,
     })
-    group.add(new THREE.Mesh(glowGeo, glowMat))
+    const glowMesh = new THREE.Mesh(glowGeo, glowMat)
+    if (isFg) glowMesh.layers.set(1)
+    group.add(glowMesh)
 
     // Bloom halo — larger, softer outer glow (simulates bloom without post-processing)
     const haloGeo = new THREE.SphereGeometry(cfg.size * 1.5, 32, 32)
@@ -194,7 +211,9 @@ export function initBackground(canvas: HTMLCanvasElement) {
       blending: THREE.AdditiveBlending,
       side: THREE.FrontSide,
     })
-    group.add(new THREE.Mesh(haloGeo, haloMat))
+    const haloMesh = new THREE.Mesh(haloGeo, haloMat)
+    if (isFg) haloMesh.layers.set(1)
+    group.add(haloMesh)
 
     // Outer bloom — very soft, wide atmospheric glow
     const outerGeo = new THREE.SphereGeometry(cfg.size * 2.0, 24, 24)
@@ -210,7 +229,9 @@ export function initBackground(canvas: HTMLCanvasElement) {
       blending: THREE.AdditiveBlending,
       side: THREE.FrontSide,
     })
-    group.add(new THREE.Mesh(outerGeo, outerMat))
+    const outerMesh = new THREE.Mesh(outerGeo, outerMat)
+    if (isFg) outerMesh.layers.set(1)
+    group.add(outerMesh)
 
     orbGroup.add(group)
     orbs.push(group)
@@ -248,7 +269,8 @@ export function initBackground(canvas: HTMLCanvasElement) {
   window.addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight
     camera.updateProjectionMatrix()
-    renderer.setSize(innerWidth, innerHeight)
+    bgRenderer.setSize(innerWidth, innerHeight)
+    fgRenderer.setSize(innerWidth, innerHeight)
   })
 
   // Animation loop
@@ -282,7 +304,13 @@ export function initBackground(canvas: HTMLCanvasElement) {
     camera.position.y += (-mouseY * 2 - camera.position.y) * 0.01
     camera.lookAt(scene.position)
 
-    renderer.render(scene, camera)
+    // Background pass — layer 0 (all bg orbs, stars, fog)
+    camera.layers.set(0)
+    bgRenderer.render(scene, camera)
+
+    // Foreground pass — layer 1 (fg orb overlapping HTML)
+    camera.layers.set(1)
+    fgRenderer.render(scene, camera)
   }
 
   animate()

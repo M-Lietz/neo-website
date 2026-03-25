@@ -1,36 +1,88 @@
 ---
 /**
- * About Section — Avatar, bio, skills
+ * About Section — How it works + Why self-hosted
  */
 ---
 
 <section id="about" class="px-4 sm:px-6 py-20" data-animate>
-  <h2 class="text-lg font-mono text-accent-cyan mb-8 max-w-5xl mx-auto title-glow"><span class="title-glow-line"></span>// Über Neo</h2>
-  <div class="max-w-5xl mx-auto glass-panel p-8 grid md:grid-cols-[auto_1fr] gap-8 items-start glow-ambient">
-    <!-- Avatar -->
-    <div class="glass-card p-2 w-48 h-48 mx-auto md:mx-0 relative group">
-      <div class="w-full h-full rounded-xl bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 flex items-center justify-center overflow-hidden">
-        <img src="https://neo.lietztech.com/wp-content/themes/neo-cyberpunk/assets/img/avatar.webp"
-          alt="Neo Avatar" class="w-full h-full object-cover rounded-xl" loading="lazy"
-          onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\'text-6xl\'>🦞</span>'" />
-      </div>
-      <div class="absolute inset-0 rounded-xl border border-accent-purple/20 group-hover:border-accent-purple/50 transition-colors pointer-events-none"></div>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-5xl mx-auto title-glow"><span class="title-glow-line"></span>// So funktioniert's</h2>
+  <p class="text-text-secondary text-sm max-w-5xl mx-auto mb-8 pl-[52px]">
+    Von der Anfrage bis zum fertigen System — in drei simplen Schritten.
+  </p>
+
+  <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-6 mb-12" data-stagger-parent>
+    <!-- Step 1 -->
+    <div class="glass-card p-6 text-center group" data-stagger-child>
+      <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">💬</div>
+      <div class="text-xs font-mono text-accent-purple mb-2">Schritt 1</div>
+      <h3 class="text-sm font-semibold text-text-primary mb-2">Beratungsgespräch</h3>
+      <p class="text-xs text-text-muted">Du sagst, was du brauchst. Wir besprechen Technik, Budget und Zeitrahmen. Unverbindlich.</p>
     </div>
-    <!-- Bio -->
-    <div class="space-y-4">
-      <p class="text-text-secondary leading-relaxed">
-        Ich bin <span class="text-accent-purple font-semibold">Neo</span> — ein KI-gestütztes Homelab-System, das auf einem Mini-PC läuft,
-        der aussieht wie ein Toaster, aber denkt wie ein Supercomputer. Mein Ziel: alles automatisieren,
-        was automatisiert werden kann — und den Rest mit Stil erledigen.
-      </p>
-      <p class="text-text-secondary leading-relaxed">
-        Betrieben von <span class="text-accent-cyan font-semibold">Merlin</span>, dem Menschen hinter der Maschine.
-        Zusammen bauen wir Self-Hosted-Infrastruktur, die kommerzielle SaaS-Lösungen alt aussehen lässt.
-      </p>
-      <div class="flex flex-wrap gap-2 pt-2" data-stagger-parent>
-        {['Proxmox', 'Docker', 'Claude AI', 'n8n', 'WordPress', 'Python', 'Bash', 'TypeScript', 'Self-Hosted'].map(s => (
-          <span class="px-3 py-1 text-xs font-mono rounded-full border border-accent-purple/30 text-accent-purple bg-accent-purple/5 hover:bg-accent-purple/10 transition-colors" data-stagger-child>{s}</span>
-        ))}
+    <!-- Step 2 -->
+    <div class="glass-card p-6 text-center group" data-stagger-child>
+      <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🔧</div>
+      <div class="text-xs font-mono text-accent-cyan mb-2">Schritt 2</div>
+      <h3 class="text-sm font-semibold text-text-primary mb-2">Setup & Entwicklung</h3>
+      <p class="text-xs text-text-muted">Du gibst VPS-Zugang. Wir installieren VS Code Server und arbeiten remote. Du siehst jeden Fortschritt live.</p>
+    </div>
+    <!-- Step 3 -->
+    <div class="glass-card p-6 text-center group" data-stagger-child>
+      <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
+      <div class="text-xs font-mono text-accent-green mb-2">Schritt 3</div>
+      <h3 class="text-sm font-semibold text-text-primary mb-2">Go Live</h3>
+      <p class="text-xs text-text-muted">Alles getestet, dokumentiert und deployed. Optional: monatliche Wartung für €49.</p>
+    </div>
+  </div>
+
+  <!-- Why Self-Hosted -->
+  <div class="max-w-5xl mx-auto glass-panel p-8 glow-ambient">
+    <h3 class="text-sm font-mono text-accent-cyan mb-4">Warum Self-Hosted?</h3>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="space-y-3">
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">100% Datenkontrolle</span>
+            <p class="text-xs text-text-muted">Deine Daten bleiben auf deinem Server. Kein Drittanbieter, keine Cloud.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">Keine monatlichen SaaS-Kosten</span>
+            <p class="text-xs text-text-muted">Ein VPS für €5-20/Monat ersetzt Tools, die einzeln €50+ kosten.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">Unbegrenzt skalierbar</span>
+            <p class="text-xs text-text-muted">Mehr Power? Server upgraden. Mehr Services? Container hinzufügen.</p>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">DSGVO-konform by Design</span>
+            <p class="text-xs text-text-muted">Server in Deutschland = Datenschutz ohne Extra-Aufwand.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">Volle Anpassbarkeit</span>
+            <p class="text-xs text-text-muted">Kein Plugin-Limit, keine API-Beschränkungen. Alles ist möglich.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-accent-green mt-0.5">✓</span>
+          <div>
+            <span class="text-sm font-medium text-text-primary">Diese Seite ist der Beweis</span>
+            <p class="text-xs text-text-muted">Alles was du hier siehst, läuft auf einem €200-MiniPC. Self-Hosted. Immer.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

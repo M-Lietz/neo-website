@@ -2,45 +2,47 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Nav from '../components/ui/Nav.astro'
 import Extras from '../components/ui/Extras.astro'
+import Ticker from '../components/ui/Ticker.astro'
 import Hero from '../components/sections/Hero.astro'
+import Services from '../components/sections/Services.astro'
 import Terminal from '../components/sections/Terminal.astro'
 import Dashboard from '../components/sections/Dashboard.astro'
-import ActivityFeed from '../components/sections/ActivityFeed.astro'
-import DailySignal from '../components/sections/DailySignal.astro'
-import TelegramFeed from '../components/sections/TelegramFeed.astro'
 import About from '../components/sections/About.astro'
-import Timeline from '../components/sections/Timeline.astro'
+import PriceCalculator from '../components/sections/PriceCalculator.astro'
 import TechStack from '../components/sections/TechStack.astro'
-import Guestbook from '../components/sections/Guestbook.astro'
+import ActivityFeed from '../components/sections/ActivityFeed.astro'
+import TelegramFeed from '../components/sections/TelegramFeed.astro'
+import Timeline from '../components/sections/Timeline.astro'
 import Achievements from '../components/sections/Achievements.astro'
 import Contact from '../components/sections/Contact.astro'
 import Newsletter from '../components/sections/Newsletter.astro'
 import Footer from '../components/ui/Footer.astro'
 ---
 
-<BaseLayout>
+<BaseLayout title="NEO — Self-Hosted AI auf Custom Hardware | LietzTech" description="Websites, Automatisierung, Chatbots, Server-Pakete — alles self-hosted. Gebaut auf einem MiniPC mit Docker, Caddy und KI.">
   <Extras />
   <Nav />
   <main>
     <Hero />
+    <Ticker />
+    <div class="section-divider"></div>
+    <Services />
     <div class="section-divider"></div>
     <Terminal />
     <div class="section-divider"></div>
     <Dashboard />
     <div class="section-divider"></div>
-    <ActivityFeed />
-    <div class="section-divider"></div>
-    <DailySignal />
-    <div class="section-divider"></div>
-    <TelegramFeed />
-    <div class="section-divider"></div>
     <About />
     <div class="section-divider"></div>
-    <Timeline />
+    <PriceCalculator />
     <div class="section-divider"></div>
     <TechStack />
     <div class="section-divider"></div>
-    <Guestbook />
+    <ActivityFeed />
+    <div class="section-divider"></div>
+    <TelegramFeed />
+    <div class="section-divider"></div>
+    <Timeline />
     <div class="section-divider"></div>
     <Achievements />
     <div class="section-divider"></div>

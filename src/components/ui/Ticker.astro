@@ -1,0 +1,77 @@
+---
+/**
+ * Activity Ticker — Scrolling real-time activity band
+ * Shows live system events creating a sense of constant operation
+ */
+---
+
+<div class="ticker-wrapper overflow-hidden py-3 border-y border-border-glass relative" data-animate>
+  <div class="ticker-gradient-left"></div>
+  <div class="ticker-gradient-right"></div>
+  <div id="ticker-track" class="flex gap-8 whitespace-nowrap ticker-scroll">
+    <!-- Items duplicated for infinite scroll -->
+  </div>
+</div>
+
+<style>
+  .ticker-wrapper {
+    position: relative;
+  }
+  .ticker-gradient-left,
+  .ticker-gradient-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ticker-gradient-left {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-primary), transparent);
+  }
+  .ticker-gradient-right {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-primary), transparent);
+  }
+  .ticker-scroll {
+    animation: ticker-slide 40s linear infinite;
+  }
+  .ticker-scroll:hover {
+    animation-play-state: paused;
+  }
+  @keyframes ticker-slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>
+
+<script>
+  const events = [
+    { icon: '🚀', text: 'Website deployed — client-site.de', time: '2m ago' },
+    { icon: '🛡️', text: 'Security-Scan abgeschlossen — 0 kritisch', time: '8m ago' },
+    { icon: '📦', text: 'Container paperless-ngx updated → v2.14.2', time: '15m ago' },
+    { icon: '💾', text: 'Backup erstellt — 890MB komprimiert', time: '1h ago' },
+    { icon: '🤖', text: 'AI Content generiert — Telegram Channel', time: '2h ago' },
+    { icon: '📊', text: 'Dashboard-Daten aktualisiert — 6 Metriken', time: '3h ago' },
+    { icon: '⚡', text: 'n8n Workflow "Daily Report" ausgeführt', time: '4h ago' },
+    { icon: '🔒', text: 'SSL-Zertifikate erneuert — 5 Domains', time: '6h ago' },
+    { icon: '📧', text: 'Newsletter versendet — 247 Empfänger', time: '8h ago' },
+    { icon: '🖥️', text: 'Uptime: 99.97% — Alle Systeme operational', time: '12h ago' },
+    { icon: '📡', text: 'Monitoring-Alert: CPU kurz über 80%', time: '1d ago' },
+    { icon: '🔧', text: 'System-Wartung abgeschlossen — 14 Pakete', time: '1d ago' },
+  ]
+
+  const track = document.getElementById('ticker-track')
+  if (track) {
+    // Create items twice for seamless loop
+    const html = events.map(e =>
+      `<span class="inline-flex items-center gap-2 text-xs font-mono text-text-muted hover:text-text-secondary transition-colors cursor-default">
+        <span>${e.icon}</span>
+        <span>${e.text}</span>
+        <span class="text-text-muted/50">· ${e.time}</span>
+      </span>`
+    ).join('')
+    track.innerHTML = html + html
+  }
+</script>

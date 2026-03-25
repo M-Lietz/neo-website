@@ -9,8 +9,8 @@
   /* Color Palette — Cool icy tones */
   --color-bg-primary: #081020;
   --color-bg-secondary: #0c1628;
-  --color-bg-glass: rgba(10, 16, 32, 0.35);
-  --color-bg-glass-hover: rgba(14, 22, 45, 0.45);
+  --color-bg-glass: rgba(12, 18, 36, 0.48);
+  --color-bg-glass-hover: rgba(16, 24, 48, 0.56);
 
   /* Monochrome blue-white accent system */
   --color-accent-purple: #7eb4f5;
@@ -132,26 +132,40 @@
 /* Premium Frosted Glass Card */
 @layer components {
   .glass-card {
-    background: var(--color-bg-glass);
-    backdrop-filter: blur(28px) saturate(1.2);
-    -webkit-backdrop-filter: blur(28px) saturate(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* #5: Weißlich-milchiger Frost-Tint über dunklem Grund */
+    background:
+      linear-gradient(135deg, rgba(180, 200, 230, 0.08) 0%, rgba(120, 150, 200, 0.04) 50%, rgba(180, 200, 230, 0.06) 100%),
+      var(--color-bg-glass);
+    backdrop-filter: blur(40px) saturate(1.5) brightness(0.95);
+    -webkit-backdrop-filter: blur(40px) saturate(1.5) brightness(0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--glass-border-radius);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
-      0 8px 40px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+      /* Äußerer Tiefenschatten */
+      0 8px 40px rgba(0, 0, 0, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      /* #2: Glass Thickness — Oberkante fängt Licht */
+      inset 0 2px 0 rgba(255, 255, 255, 0.20),
+      /* #2: Glass Thickness — Unterkante Schatten */
+      inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+      /* #1: Milky Inner Glow */
+      inset 0 0 20px 8px rgba(160, 190, 230, 0.07),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+    /* #4: Double-Border Bevel */
+    outline: 1px solid rgba(255, 255, 255, 0.04);
+    outline-offset: 2px;
     position: relative;
   }
 
+  /* #6: Verstärkter Refraktions-Sheen im ::before */
   .glass-card::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 30%, transparent 50%, rgba(255,255,255,0.02) 80%, rgba(255,255,255,0.08) 100%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 25%, transparent 40%, rgba(255,255,255,0.02) 80%, rgba(255,255,255,0.10) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -159,42 +173,84 @@
     pointer-events: none;
   }
 
+  /* #3: Frosted Noise Texture — Mikrostruktur wie echtes Milchglas */
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
   .glass-card:hover {
-    background: var(--color-bg-glass-hover);
-    border-color: rgba(255, 255, 255, 0.14);
+    background:
+      linear-gradient(135deg, rgba(200, 215, 240, 0.10) 0%, rgba(140, 170, 220, 0.06) 50%, rgba(200, 215, 240, 0.08) 100%),
+      var(--color-bg-glass-hover);
+    border-color: rgba(255, 255, 255, 0.20);
     box-shadow:
-      0 16px 56px rgba(0, 0, 0, 0.45),
-      0 0 50px rgba(100, 160, 220, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      0 16px 56px rgba(0, 0, 0, 0.55),
+      0 4px 12px rgba(0, 0, 0, 0.35),
+      0 0 50px rgba(100, 160, 220, 0.08),
+      inset 0 2px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.18),
+      inset 0 0 24px 10px rgba(160, 190, 230, 0.09);
     transform: translateY(-2px);
   }
 
   /* Large frosted panel — orbs must be visible through the frost */
   .glass-panel {
-    background: rgba(8, 14, 28, 0.38);
-    backdrop-filter: blur(32px) saturate(1.3);
-    -webkit-backdrop-filter: blur(32px) saturate(1.3);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    /* #5: Milchig-weißer Frost-Tint */
+    background:
+      linear-gradient(135deg, rgba(180, 200, 230, 0.07) 0%, rgba(120, 150, 200, 0.03) 50%, rgba(180, 200, 230, 0.05) 100%),
+      rgba(10, 16, 32, 0.46);
+    backdrop-filter: blur(44px) saturate(1.6) brightness(0.92);
+    -webkit-backdrop-filter: blur(44px) saturate(1.6) brightness(0.92);
+    border: 1.5px solid rgba(255, 255, 255, 0.10);
     border-radius: 24px;
     box-shadow:
-      0 20px 80px rgba(0, 0, 0, 0.45),
-      0 0 1px rgba(255, 255, 255, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.09),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+      0 20px 80px rgba(0, 0, 0, 0.55),
+      0 4px 16px rgba(0, 0, 0, 0.35),
+      0 0 1px rgba(255, 255, 255, 0.12),
+      /* #2: Glass Thickness */
+      inset 0 2px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.12),
+      /* #1: Milky Inner Glow */
+      inset 0 0 18px 6px rgba(160, 190, 230, 0.06);
+    /* #4: Double-Border Bevel */
+    outline: 1px solid rgba(255, 255, 255, 0.03);
+    outline-offset: 2px;
     position: relative;
   }
 
+  /* #6: Verstärkter Refraktions-Sheen */
   .glass-panel::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.03) 35%, transparent 55%, rgba(255,255,255,0.02) 85%, rgba(255,255,255,0.06) 100%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 25%, transparent 45%, rgba(255,255,255,0.02) 85%, rgba(255,255,255,0.08) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* #3: Frosted Noise Texture für Panels */
+  .glass-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    opacity: 0.025;
+    mix-blend-mode: overlay;
     pointer-events: none;
   }
 

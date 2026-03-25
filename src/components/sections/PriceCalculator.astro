@@ -1,0 +1,197 @@
+---
+/**
+ * PriceCalculator Section — Interactive pricing tool
+ * Visitors select services, get instant price estimate
+ */
+---
+
+<section id="pricing" class="px-4 sm:px-6 py-20" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-4xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// Preisrechner
+  </h2>
+  <p class="text-text-secondary text-sm max-w-4xl mx-auto mb-8 pl-[52px]">
+    Wähle die Services, die du brauchst. Sofort ein Preisangebot erhalten.
+  </p>
+
+  <div class="max-w-4xl mx-auto grid md:grid-cols-[1fr_auto] gap-6">
+    <!-- Service Selector -->
+    <div class="glass-panel p-6 space-y-4">
+      <h3 class="text-xs font-mono text-text-muted uppercase tracking-wider mb-4">Services auswählen</h3>
+
+      <div class="space-y-2" id="price-options">
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="149" data-service="website" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-purple peer-checked:border-accent-purple flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">🌐</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Website</span>
+            <span class="text-[10px] text-text-muted ml-2">Astro, Next.js oder WordPress</span>
+          </div>
+          <span class="text-sm font-mono text-accent-purple">ab €149</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="99" data-service="automation" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-cyan peer-checked:border-accent-cyan flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">⚡</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Automatisierung</span>
+            <span class="text-[10px] text-text-muted ml-2">n8n Workflows & Cron</span>
+          </div>
+          <span class="text-sm font-mono text-accent-cyan">ab €99</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="79" data-service="dashboard" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-pink peer-checked:border-accent-pink flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">📊</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Dashboard</span>
+            <span class="text-[10px] text-text-muted ml-2">Echtzeit-Monitoring</span>
+          </div>
+          <span class="text-sm font-mono text-accent-pink">ab €79</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="199" data-service="selfhosted" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-blue peer-checked:border-accent-blue flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">🔒</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Self-Hosted Setup</span>
+            <span class="text-[10px] text-text-muted ml-2">Docker, SSL, Backups</span>
+          </div>
+          <span class="text-sm font-mono text-accent-blue">ab €199</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="129" data-service="chatbot" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-green peer-checked:border-accent-green flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">🤖</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Chatbot</span>
+            <span class="text-[10px] text-text-muted ml-2">Telegram, Web, LLM</span>
+          </div>
+          <span class="text-sm font-mono text-accent-green">ab €129</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="249" data-service="server" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-purple peer-checked:border-accent-purple flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">🖥️</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Server-Paket</span>
+            <span class="text-[10px] text-text-muted ml-2">VPS, Docker, Monitoring</span>
+          </div>
+          <span class="text-sm font-mono text-accent-purple">ab €249</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="89" data-service="email" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-cyan peer-checked:border-accent-cyan flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">📧</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">E-Mail-Marketing</span>
+            <span class="text-[10px] text-text-muted ml-2">Newsletter, DSGVO</span>
+          </div>
+          <span class="text-sm font-mono text-accent-cyan">ab €89</span>
+        </label>
+
+        <label class="price-option flex items-center gap-3 py-3 px-4 rounded-xl border border-transparent hover:border-accent-purple/20 hover:bg-accent-purple/5 transition-all cursor-pointer group">
+          <input type="checkbox" class="sr-only peer" data-price="299" data-service="shop" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-pink peer-checked:border-accent-pink flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="text-xl">🛒</span>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">Online-Shop</span>
+            <span class="text-[10px] text-text-muted ml-2">WooCommerce, Stripe</span>
+          </div>
+          <span class="text-sm font-mono text-accent-pink">ab €299</span>
+        </label>
+      </div>
+
+      <!-- Monthly addon -->
+      <div class="pt-3 border-t border-border-glass">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" id="monthly-addon" class="sr-only peer" />
+          <div class="w-5 h-5 rounded border border-border-glass peer-checked:bg-accent-green peer-checked:border-accent-green flex items-center justify-center transition-all">
+            <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="flex-1">
+            <span class="text-sm font-medium text-text-primary">+ Monatliche Wartung</span>
+            <span class="text-[10px] text-text-muted ml-2">Updates, Backups, Monitoring</span>
+          </div>
+          <span class="text-sm font-mono text-accent-green">+€49/Monat</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Price Summary -->
+    <div class="glass-card p-6 md:w-64 flex flex-col items-center justify-center text-center glow-ambient sticky top-24">
+      <span class="text-xs font-mono text-text-muted uppercase tracking-wider mb-4">Geschätzte Kosten</span>
+      <div class="mb-2">
+        <span class="text-4xl font-bold font-mono text-accent-purple" id="total-price">€0</span>
+      </div>
+      <span class="text-[10px] font-mono text-text-muted mb-1" id="price-type">einmalig</span>
+      <span class="text-[10px] font-mono text-accent-green mb-4 hidden" id="monthly-price">+ €49/Monat Wartung</span>
+      <div class="text-[10px] text-text-muted mb-4" id="selected-count">Keine Services ausgewählt</div>
+      <a href="#contact" class="w-full px-4 py-2.5 rounded-xl font-mono text-xs font-medium text-bg-primary bg-gradient-to-r from-accent-purple to-accent-cyan hover:shadow-lg hover:shadow-accent-cyan/20 transition-all duration-300 text-center">
+        Unverbindlich anfragen
+      </a>
+      <p class="text-[9px] text-text-muted mt-3">Preise sind Richtwerte. Genaues Angebot nach Beratung.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const checkboxes = document.querySelectorAll('#price-options input[type="checkbox"]')
+  const monthlyAddon = document.getElementById('monthly-addon') as HTMLInputElement
+  const totalEl = document.getElementById('total-price')
+  const typeEl = document.getElementById('price-type')
+  const monthlyEl = document.getElementById('monthly-price')
+  const countEl = document.getElementById('selected-count')
+
+  function updatePrice() {
+    let total = 0
+    let count = 0
+    checkboxes.forEach(cb => {
+      const input = cb as HTMLInputElement
+      if (input.checked) {
+        total += parseInt(input.dataset.price || '0')
+        count++
+        // Visual feedback — check icon
+        const icon = input.nextElementSibling?.querySelector('svg')
+        if (icon) icon.classList.remove('opacity-0')
+      } else {
+        const icon = input.nextElementSibling?.querySelector('svg')
+        if (icon) icon.classList.add('opacity-0')
+      }
+    })
+
+    if (totalEl) totalEl.textContent = `€${total}`
+    if (countEl) countEl.textContent = count === 0 ? 'Keine Services ausgewählt' : `${count} Service${count > 1 ? 's' : ''} ausgewählt`
+
+    if (monthlyAddon?.checked) {
+      monthlyEl?.classList.remove('hidden')
+    } else {
+      monthlyEl?.classList.add('hidden')
+    }
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updatePrice))
+  monthlyAddon?.addEventListener('change', updatePrice)
+</script>

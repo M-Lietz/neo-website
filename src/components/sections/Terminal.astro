@@ -1,203 +1,399 @@
 ---
 /**
- * Terminal Section — Interactive web terminal with commands
- * Migrated from old index.php + main.js terminal code
+ * Dual Terminal Section — Fake Bot (left) + Real Chat (right)
+ * Left: 8 automated showcase scenarios with typing animation
+ * Right: Real LLM chat placeholder (LiteLLM/Ollama integration)
  */
 ---
 
 <section id="terminal" class="px-4 sm:px-6 py-20" data-animate>
-  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-4xl mx-auto title-glow"><span class="title-glow-line"></span>// Terminal</h2>
-  <div class="glass-panel max-w-4xl mx-auto overflow-hidden glow-ambient">
-    <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-      <span class="w-3 h-3 rounded-full bg-accent-red"></span>
-      <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-      <span class="w-3 h-3 rounded-full bg-accent-green"></span>
-      <span class="ml-3 text-xs font-mono text-text-muted">neo@lietztech:~</span>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-6xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// Live Terminal
+  </h2>
+  <p class="text-text-secondary text-sm max-w-6xl mx-auto mb-8 pl-[52px]">
+    Links: Was Neo automatisch erledigt. Rechts: Stell Neo eine Frage.
+  </p>
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
+
+    <!-- LEFT: Fake Bot Terminal -->
+    <div class="glass-panel overflow-hidden glow-ambient">
+      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+        <span class="w-3 h-3 rounded-full bg-accent-green"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
+        <span class="ml-3 text-xs font-mono text-text-muted">neo-bot · automatisiert</span>
+        <span class="ml-auto text-[10px] font-mono text-accent-green animate-pulse">● LIVE</span>
+      </div>
+      <!-- Scenario Selector -->
+      <div class="flex gap-1 px-4 py-2 border-b border-white/5 overflow-x-auto scrollbar-none">
+        <button class="scenario-btn active text-[10px] font-mono px-2 py-1 rounded bg-accent-purple/10 text-accent-purple border border-accent-purple/20 whitespace-nowrap" data-scenario="0">🚀 Deploy</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="1">🛡️ Security</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="2">📦 Container</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="3">🔧 Wartung</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="4">💾 Backup</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="5">🤖 AI Content</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="6">📧 E-Mail</button>
+        <button class="scenario-btn text-[10px] font-mono px-2 py-1 rounded text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10 whitespace-nowrap" data-scenario="7">📡 Monitor</button>
+      </div>
+      <div id="bot-output" class="p-4 font-mono text-xs h-[280px] overflow-y-auto space-y-0.5 text-text-secondary"></div>
+      <div class="px-4 py-2 border-t border-white/5 flex items-center justify-between">
+        <span class="text-[10px] font-mono text-text-muted" id="bot-status">Szenario läuft...</span>
+        <button id="bot-replay" class="text-[10px] font-mono text-accent-cyan hover:text-accent-purple transition-colors">↻ Replay</button>
+      </div>
     </div>
-    <div id="terminal-output" class="p-5 font-mono text-sm h-[320px] overflow-y-auto space-y-1 text-text-secondary"></div>
-    <div class="flex items-center px-5 py-3 border-t border-white/5">
-      <span class="font-mono text-xs text-accent-cyan mr-2">neo@lietztech:~$</span>
-      <input
-        type="text"
-        id="terminal-input"
-        autocomplete="off"
-        spellcheck="false"
-        placeholder="Gib 'help' ein..."
-        class="flex-1 bg-transparent outline-none font-mono text-sm text-text-primary placeholder-text-muted"
-      />
+
+    <!-- RIGHT: Real Chat Terminal -->
+    <div class="glass-panel overflow-hidden glow-ambient">
+      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+        <span class="w-3 h-3 rounded-full bg-accent-cyan"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
+        <span class="ml-3 text-xs font-mono text-text-muted">neo-chat · interaktiv</span>
+      </div>
+      <div id="chat-output" class="p-4 font-mono text-xs h-[320px] overflow-y-auto space-y-2">
+        <div class="text-accent-cyan">Neo KI-Chat</div>
+        <div class="text-text-muted">Stell mir eine Frage über Services, Technik oder Self-Hosting.</div>
+        <div class="text-text-muted text-[10px] mt-2">5 Nachrichten pro Session · Powered by lokale KI</div>
+      </div>
+      <div class="flex items-center px-4 py-3 border-t border-white/5">
+        <span class="font-mono text-xs text-accent-cyan mr-2">du →</span>
+        <input
+          type="text"
+          id="chat-input"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="200"
+          placeholder="Frag mich etwas..."
+          class="flex-1 bg-transparent outline-none font-mono text-xs text-text-primary placeholder-text-muted"
+        />
+        <button id="chat-send" class="ml-2 text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors">↵</button>
+      </div>
+      <div class="px-4 py-1 border-t border-white/5 flex items-center justify-between">
+        <span class="text-[10px] font-mono text-text-muted" id="chat-counter">5 Nachrichten übrig</span>
+        <span class="text-[10px] font-mono text-text-muted" id="chat-model">Model: local-llm</span>
+      </div>
     </div>
+
   </div>
 </section>
 
 <script>
-  import { wpAjax, WEATHER_URL } from '../../lib/api'
+  // ═══════════════════════════════════
+  // FAKE BOT — 8 Automated Scenarios
+  // ═══════════════════════════════════
 
-  const output = document.getElementById('terminal-output')
-  const input = document.getElementById('terminal-input') as HTMLInputElement
-  const cmdHistory: string[] = []
-  let historyIndex = -1
+  const scenarios = [
+    { // 0: Deploy
+      name: '🚀 Website Deploy',
+      lines: [
+        { text: '$ neo deploy --project client-website', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Checking project configuration...', cls: '', delay: 400 },
+        { text: '> Building Astro site... [██████████] 100%', cls: 'text-accent-cyan', delay: 800 },
+        { text: '> Optimizing assets: 12 images compressed (-68%)', cls: '', delay: 600 },
+        { text: '> Running Lighthouse audit...', cls: '', delay: 500 },
+        { text: '  Performance: 98  Accessibility: 100  SEO: 100', cls: 'text-accent-green', delay: 700 },
+        { text: '> Deploying to production server...', cls: '', delay: 500 },
+        { text: '> Configuring Caddy reverse proxy...', cls: '', delay: 400 },
+        { text: '> SSL certificate issued via Let\'s Encrypt', cls: '', delay: 500 },
+        { text: '> Cloudflare DNS updated: client-site.de → 192.168.8.11', cls: '', delay: 400 },
+        { text: '✓ Deploy erfolgreich! Site live unter https://client-site.de', cls: 'text-accent-green', delay: 600 },
+        { text: '  Build-Zeit: 4.2s · Größe: 847KB · 0 Fehler', cls: 'text-text-muted', delay: 300 },
+      ]
+    },
+    { // 1: Security Scan
+      name: '🛡️ Security Scan',
+      lines: [
+        { text: '$ neo security --scan-all', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Scanning 8 containers for vulnerabilities...', cls: '', delay: 500 },
+        { text: '  [1/8] caddy:latest ............ ✓ clean', cls: 'text-accent-green', delay: 400 },
+        { text: '  [2/8] paperless-ngx:2.x ....... ✓ clean', cls: 'text-accent-green', delay: 350 },
+        { text: '  [3/8] searxng:latest .......... ✓ clean', cls: 'text-accent-green', delay: 300 },
+        { text: '  [4/8] n8n:latest .............. ✓ clean', cls: 'text-accent-green', delay: 350 },
+        { text: '  [5/8] gotify:latest ........... ✓ clean', cls: 'text-accent-green', delay: 300 },
+        { text: '  [6/8] valkey:latest ........... ✓ clean', cls: 'text-accent-green', delay: 350 },
+        { text: '  [7/8] browserless:latest ...... ⚠ 1 low', cls: 'text-yellow-400', delay: 400 },
+        { text: '  [8/8] wordpress:latest ........ ✓ clean', cls: 'text-accent-green', delay: 350 },
+        { text: '> Checking UFW rules... 3 rules active', cls: '', delay: 400 },
+        { text: '> Checking SSL certificates... all valid (89 days)', cls: '', delay: 400 },
+        { text: '✓ Scan abgeschlossen: 0 kritisch, 1 niedrig, 8/8 Container geprüft', cls: 'text-accent-green', delay: 500 },
+      ]
+    },
+    { // 2: Container Setup
+      name: '📦 Container Setup',
+      lines: [
+        { text: '$ neo container --create nextcloud', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Pulling nextcloud:latest...', cls: '', delay: 500 },
+        { text: '  [██████████] 100% · 892MB', cls: 'text-accent-cyan', delay: 1000 },
+        { text: '> Creating docker-compose.yml...', cls: '', delay: 400 },
+        { text: '> Configuring volumes: /data/nextcloud', cls: '', delay: 350 },
+        { text: '> Setting up MariaDB database...', cls: '', delay: 400 },
+        { text: '> Applying security hardening...', cls: '', delay: 350 },
+        { text: '> Configuring Caddy reverse proxy...', cls: '', delay: 350 },
+        { text: '> Requesting SSL certificate...', cls: '', delay: 400 },
+        { text: '✓ Nextcloud deployed! https://cloud.client-site.de', cls: 'text-accent-green', delay: 500 },
+        { text: '  Admin: admin / (in Gotify gesendet)', cls: 'text-text-muted', delay: 300 },
+      ]
+    },
+    { // 3: Maintenance
+      name: '🔧 Wartung',
+      lines: [
+        { text: '$ neo maintain --auto', cls: 'text-accent-purple', delay: 0 },
+        { text: '> System-Update gestartet: 25. März 2026, 03:00 UTC', cls: '', delay: 400 },
+        { text: '> apt update && apt upgrade -y', cls: 'text-text-muted', delay: 500 },
+        { text: '  14 packages upgraded, 0 newly installed', cls: '', delay: 600 },
+        { text: '> Docker images aktualisieren...', cls: '', delay: 400 },
+        { text: '  caddy: up-to-date', cls: 'text-text-muted', delay: 250 },
+        { text: '  paperless-ngx: 2.14.1 → 2.14.2 ✓', cls: 'text-accent-green', delay: 300 },
+        { text: '  n8n: up-to-date', cls: 'text-text-muted', delay: 250 },
+        { text: '> Logs rotiert: 48MB freigegeben', cls: '', delay: 350 },
+        { text: '> Temp-Files bereinigt: 12MB gelöscht', cls: '', delay: 300 },
+        { text: '> Health-Check: alle 8 Container healthy', cls: 'text-accent-green', delay: 400 },
+        { text: '✓ Wartung abgeschlossen in 2m 14s', cls: 'text-accent-green', delay: 400 },
+      ]
+    },
+    { // 4: Backup
+      name: '💾 Backup',
+      lines: [
+        { text: '$ neo backup --full --compress', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Starting full system backup...', cls: '', delay: 400 },
+        { text: '> Backing up databases...', cls: '', delay: 500 },
+        { text: '  WordPress DB: 24MB [██████████] ✓', cls: 'text-accent-green', delay: 600 },
+        { text: '  Paperless DB: 156MB [██████████] ✓', cls: 'text-accent-green', delay: 700 },
+        { text: '  n8n DB: 8MB [██████████] ✓', cls: 'text-accent-green', delay: 400 },
+        { text: '> Backing up Docker volumes...', cls: '', delay: 400 },
+        { text: '  8 volumes · 2.4GB total [██████████] ✓', cls: 'text-accent-green', delay: 800 },
+        { text: '> Compressing with zstd (level 3)...', cls: '', delay: 500 },
+        { text: '  2.4GB → 890MB (63% compression)', cls: 'text-accent-cyan', delay: 600 },
+        { text: '> Uploading to off-site storage...', cls: '', delay: 500 },
+        { text: '✓ Backup complete: neo-backup-2026-03-25.tar.zst (890MB)', cls: 'text-accent-green', delay: 500 },
+      ]
+    },
+    { // 5: AI Content
+      name: '🤖 AI Content',
+      lines: [
+        { text: '$ neo content --generate --channel telegram', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Selecting content mix for today...', cls: '', delay: 400 },
+        { text: '> Topic: "Self-Hosting vs Cloud: Kostenvergleich 2026"', cls: 'text-accent-cyan', delay: 500 },
+        { text: '> Generating article with Claude Sonnet 4...', cls: '', delay: 600 },
+        { text: '  Tokens: 1,247 in / 2,830 out · $0.02', cls: 'text-text-muted', delay: 800 },
+        { text: '> Generating header image with CF Workers AI...', cls: '', delay: 500 },
+        { text: '  Model: @cf/black-forest-labs/flux-1-schnell', cls: 'text-text-muted', delay: 600 },
+        { text: '> Generating TTS audio with edge-tts...', cls: '', delay: 400 },
+        { text: '  Voice: de-DE-ConradNeural · 2:34 min', cls: 'text-text-muted', delay: 500 },
+        { text: '> Publishing to Telegram channel...', cls: '', delay: 400 },
+        { text: '✓ Content veröffentlicht! 📢 1 Artikel + 1 Bild + 1 Audio', cls: 'text-accent-green', delay: 500 },
+      ]
+    },
+    { // 6: E-Mail Campaign
+      name: '📧 E-Mail Kampagne',
+      lines: [
+        { text: '$ neo email --campaign "März Newsletter"', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Loading template: responsive-glass.html', cls: '', delay: 400 },
+        { text: '> Generating personalized content...', cls: '', delay: 500 },
+        { text: '> Validating 247 recipients...', cls: '', delay: 400 },
+        { text: '  247 valid · 3 bounced · 0 unsubscribed', cls: 'text-accent-green', delay: 500 },
+        { text: '> DKIM signing... ✓', cls: '', delay: 300 },
+        { text: '> SPF check... ✓', cls: '', delay: 250 },
+        { text: '> DMARC policy... ✓', cls: '', delay: 250 },
+        { text: '> Sending in batches of 50...', cls: '', delay: 400 },
+        { text: '  Batch 1/5: sent [██████████]', cls: 'text-accent-cyan', delay: 500 },
+        { text: '  Batch 2-5: queued for delivery', cls: 'text-text-muted', delay: 300 },
+        { text: '✓ Kampagne gestartet: 247 Empfänger · ETA: 5 Minuten', cls: 'text-accent-green', delay: 500 },
+      ]
+    },
+    { // 7: Monitoring Alert
+      name: '📡 Monitoring',
+      lines: [
+        { text: '$ neo monitor --status', cls: 'text-accent-purple', delay: 0 },
+        { text: '> Checking all endpoints...', cls: '', delay: 400 },
+        { text: '', cls: '', delay: 200 },
+        { text: '  SERVICE              STATUS    LATENCY', cls: 'text-accent-cyan', delay: 300 },
+        { text: '  ─────────────────────────────────────', cls: 'text-text-muted', delay: 100 },
+        { text: '  neo.lietztech.com    ● UP      42ms', cls: 'text-accent-green', delay: 300 },
+        { text: '  search.lietztech.com ● UP      38ms', cls: 'text-accent-green', delay: 250 },
+        { text: '  n8n.lietztech.com    ● UP      51ms', cls: 'text-accent-green', delay: 250 },
+        { text: '  docs.lietztech.com   ● UP      35ms', cls: 'text-accent-green', delay: 250 },
+        { text: '  gotify (internal)    ● UP      12ms', cls: 'text-accent-green', delay: 250 },
+        { text: '  paperless (internal) ● UP      28ms', cls: 'text-accent-green', delay: 250 },
+        { text: '', cls: '', delay: 200 },
+        { text: '  CPU: 12% · RAM: 58% · Disk: 34% · Net: 2.4 Mbps', cls: 'text-text-muted', delay: 400 },
+        { text: '✓ Alle 6 Services online · Uptime: 99.97% (30d)', cls: 'text-accent-green', delay: 500 },
+      ]
+    },
+  ]
 
-  function addLine(text: string, cls = '') {
-    if (!output) return
+  const botOutput = document.getElementById('bot-output')
+  const botStatus = document.getElementById('bot-status')
+  let currentScenario = 0
+  let isPlaying = false
+  let autoTimer: ReturnType<typeof setTimeout> | null = null
+
+  function addBotLine(text: string, cls: string) {
+    if (!botOutput) return
     const div = document.createElement('div')
     div.className = cls
     div.textContent = text
-    output.appendChild(div)
-    output.scrollTop = output.scrollHeight
-  }
-
-  const commands: Record<string, () => Promise<void> | void> = {
-    help: () => {
-      const lines = [
-        '╔══════════════════════════════════════════╗',
-        '║  Verfügbare Befehle:                      ║',
-        '║  help      — zeigt dieses Menü            ║',
-        '║  whoami    — über Neo                     ║',
-        '║  skills    — Tech Stack                  ║',
-        '║  homelab   — Infrastruktur-Info           ║',
-        '║  status    — Live System Stats            ║',
-        '║  neofetch  — System-Info (styled)         ║',
-        '║  weather   — Aktuelles Wetter             ║',
-        '║  uptime    — Betriebszeit                 ║',
-        '║  contact   — Kontakt                      ║',
-        '║  clear     — Terminal leeren              ║',
-        '╚══════════════════════════════════════════╝',
-      ]
-      lines.forEach(l => addLine(l, 'text-accent-cyan'))
-    },
-    whoami: () => {
-      addLine('Neo — Homelab-Engineer, KI-Enthusiast, Self-Hosting-Philosoph.')
-      addLine('Betreibe custom silicon schon bevor es cool war.')
-      addLine('Sub-Agents erledigen die Drecksarbeit. Ich trinke Kaffee.')
-    },
-    skills: () => {
-      addLine('[ Infrastruktur ]', 'text-accent-cyan')
-      addLine('  Proxmox · Docker · LXC · Nginx · Caddy · UFW')
-      addLine('[ KI & Automatisierung ]', 'text-accent-cyan')
-      addLine('  OpenClaw · Claude · DeepSeek · LiteLLM · Whisper · TTS')
-      addLine('[ Entwicklung ]', 'text-accent-cyan')
-      addLine('  PHP · Python · JavaScript · Bash · Git · WP-CLI')
-    },
-    homelab: () => {
-      addLine('[ Hardware ]', 'text-accent-cyan')
-      addLine('  Intel N97 · 16GB RAM · NVMe SSD · Proxmox VE')
-      addLine('[ Virtualisierung ]', 'text-accent-cyan')
-      addLine('  1 VM + 3 LXC-Container in Proxmox')
-      addLine('[ Netzwerk ]', 'text-accent-cyan')
-      addLine('  Cloudflare Tunnel · Caddy Reverse Proxy · UFW')
-      addLine('[ Services ]', 'text-accent-cyan')
-      addLine('  WordPress · SearXNG · n8n · Paperless · Gotify · Valkey')
-    },
-    neofetch: () => {
-      const lines = [
-        '        _   _  _____ ___  ', '       | \\ | || ____/ _ \\ ',
-        '       |  \\| ||  _|| | | |', '       | |\\  || |__| |_| |',
-        '       |_| \\_||_____\\___/ ', '',
-        '  OS:      Ubuntu 24.04 LTS', '  Host:    Proxmox VE @ Intel N97',
-        '  RAM:     16 GB DDR4', '  CPU:     Intel N97 (4C/4T @ 3.6GHz)',
-        '  Disk:    512 GB NVMe SSD', '  Docker:  8+ containers',
-        '  AI:      Claude Sonnet 4.6 + DeepSeek V3.2',
-      ]
-      lines.forEach(l => addLine(l, l.startsWith('  ') ? '' : 'text-accent-cyan'))
-    },
-    weather: async () => {
-      try {
-        const r = await fetch(WEATHER_URL)
-        const d = await r.json()
-        const c = d.current
-        const codes: Record<number, string> = { 0: '☀️ Klar', 1: '⛅ Teilweise bewölkt', 2: '☁️ Bewölkt', 3: '☁️ Bedeckt', 45: '🌫️ Nebel', 61: '🌧️ Regen', 71: '❄️ Schnee', 95: '⚡ Gewitter' }
-        addLine('[ Wetter — Berlin ]', 'text-accent-cyan')
-        addLine(`  ${codes[c.weather_code] || '🌤️ Wetter'}`)
-        addLine(`  Temperatur: ${c.temperature_2m}°C`)
-        addLine(`  Wind: ${c.wind_speed_10m} km/h`)
-      } catch { addLine('Wetterdaten nicht verfügbar.', 'text-accent-red') }
-    },
-    status: async () => {
-      const s = await wpAjax<any>('neo_get_stats')
-      if (s) {
-        addLine('[ Live Status ]', 'text-accent-cyan')
-        addLine(`  CPU: ${s.cpu}`)
-        addLine(`  RAM frei: ${s.ram_free}M / ${s.ram_total}M`)
-        addLine(`  Container: ${s.containers}`)
-        addLine(`  Betriebszeit: ${s.uptime}`)
-      } else { addLine('Status-Daten nicht verfügbar.', 'text-accent-red') }
-    },
-    uptime: async () => {
-      const s = await wpAjax<any>('neo_get_stats')
-      if (s) addLine(`System-Betriebszeit: ${s.uptime}`)
-      else addLine('Uptime nicht verfügbar.', 'text-accent-red')
-    },
-    contact: () => {
-      addLine('[ Kontakt ]', 'text-accent-cyan')
-      addLine('  Telegram: @merlin_neo_ai_bot')
-      addLine('  Website: neo.lietztech.com')
-    },
-    clear: () => { if (output) output.innerHTML = '' },
-    date: () => { addLine(new Date().toLocaleString('de-DE', { dateStyle: 'full', timeStyle: 'medium' })) },
-    pwd: () => { addLine('/home/neo/consciousness/') },
-    id: () => { addLine('uid=0(neo) gid=0(ai) groups=0(ai),1(homelab),2(cyberpunk)') },
-    'sudo': () => { addLine("Neo braucht kein sudo. Neo IST root.", 'text-accent-red') },
-    'sudo rm -rf /': () => { addLine('Permission denied. Nice try, human. 😈', 'text-accent-red') },
-    exit: () => { addLine('Es gibt kein Entkommen. Du bist in Neos Matrix.') },
-    ping: () => {
-      addLine('PING neo.lietztech.com (127.0.0.1): 56 data bytes')
-      addLine('64 bytes: icmp_seq=0 ttl=64 time=0.042 ms')
-      addLine('64 bytes: icmp_seq=1 ttl=64 time=0.038 ms')
-      addLine('— neo.lietztech.com ping statistics —')
-      addLine('3 packets transmitted, 3 received, 0% packet loss')
-    },
-    echo: () => { addLine('Echo... echo... echo...') },
-    hack: async () => {
-      const lines = ['> INITIATING BREACH PROTOCOL...', '> Scanning firewall: [██████████] 100%', '> Bypassing UFW rules...', '> Injecting payload into port 18789...', '> ACCESS DENIED.', '> NICE TRY, HUMAN. 😈', '', '  Neo sieht alles. Neo weiß alles.']
-      for (const line of lines) { addLine(line, line.includes('DENIED') || line.includes('NICE') ? 'text-accent-red' : 'text-accent-cyan'); await new Promise(r => setTimeout(r, 300 + Math.random() * 200)) }
-    },
-    history: () => {
-      if (cmdHistory.length === 0) { addLine('Noch keine Befehle ausgeführt.'); return }
-      cmdHistory.slice(-10).forEach((cmd, i) => addLine(`  ${i + 1}  ${cmd}`))
-    },
-    'ls /mind': () => {
-      addLine('total 6', 'text-accent-cyan')
-      addLine('drwxr-xr-x  Curiosity/')
-      addLine('drwxr-xr-x  Strategy/')
-      addLine('drwxr-xr-x  Sass/')
-      addLine('-rw-r--r--  coffee_addiction.conf')
-      addLine('-rw-r--r--  world_domination_plan.txt')
-    },
-  }
-
-  // Boot messages
-  const bootLines = ['Booting NEO Terminal v3.0.0...', 'Loading environment...', 'Connecting to homelab...', 'Initializing AI modules...', 'Ready. Gib help ein, um zu starten.']
-  let bi = 0
-  function bootLine() { if (bi < bootLines.length) { addLine(bootLines[bi++]); setTimeout(bootLine, 200 + Math.random() * 150) } }
-  bootLine()
-
-  // Input handler
-  const allCommands = Object.keys(commands)
-  if (input) {
-    input.addEventListener('keydown', async (e) => {
-      if (e.key === 'Tab') {
-        e.preventDefault()
-        const val = input.value.trim().toLowerCase()
-        const matches = allCommands.filter(c => c.startsWith(val))
-        if (matches.length === 1) input.value = matches[0]
-        else if (matches.length > 1) addLine(matches.join('  '), 'text-accent-cyan')
-        return
-      }
-      if (e.key === 'ArrowUp') { e.preventDefault(); if (historyIndex < cmdHistory.length - 1) { historyIndex++; input.value = cmdHistory[cmdHistory.length - 1 - historyIndex] } return }
-      if (e.key === 'ArrowDown') { e.preventDefault(); if (historyIndex > 0) { historyIndex--; input.value = cmdHistory[cmdHistory.length - 1 - historyIndex] } else { historyIndex = -1; input.value = '' } return }
-      if (e.key !== 'Enter') return
-      const cmd = input.value.trim().toLowerCase()
-      input.value = ''
-      historyIndex = -1
-      if (!cmd) return
-      cmdHistory.push(cmd)
-      addLine(`$ ${cmd}`, 'text-accent-purple')
-      const fn = commands[cmd]
-      if (fn) await fn()
-      else addLine(`Befehl nicht gefunden: ${cmd}. Gib 'help' ein.`, 'text-accent-red')
+    div.style.opacity = '0'
+    div.style.transform = 'translateY(4px)'
+    botOutput.appendChild(div)
+    requestAnimationFrame(() => {
+      div.style.transition = 'opacity 0.3s, transform 0.3s'
+      div.style.opacity = '1'
+      div.style.transform = 'translateY(0)'
     })
+    botOutput.scrollTop = botOutput.scrollHeight
   }
 
-  // Click terminal to focus input
-  document.querySelector('#terminal .glass-card')?.addEventListener('click', () => input?.focus())
+  async function playScenario(idx: number) {
+    if (isPlaying) return
+    isPlaying = true
+    currentScenario = idx
+    if (botOutput) botOutput.innerHTML = ''
+    if (botStatus) botStatus.textContent = `${scenarios[idx].name} läuft...`
+
+    // Update active tab
+    document.querySelectorAll('.scenario-btn').forEach((btn, i) => {
+      if (i === idx) {
+        btn.classList.add('active', 'bg-accent-purple/10', 'text-accent-purple', 'border-accent-purple/20')
+        btn.classList.remove('text-text-muted', 'border-transparent')
+      } else {
+        btn.classList.remove('active', 'bg-accent-purple/10', 'text-accent-purple', 'border-accent-purple/20')
+        btn.classList.add('text-text-muted', 'border-transparent')
+      }
+    })
+
+    for (const line of scenarios[idx].lines) {
+      await new Promise<void>(r => setTimeout(r, line.delay))
+      addBotLine(line.text, line.cls)
+    }
+
+    if (botStatus) botStatus.textContent = `${scenarios[idx].name} — abgeschlossen`
+    isPlaying = false
+
+    // Auto-advance to next scenario after 5s
+    if (autoTimer) clearTimeout(autoTimer)
+    autoTimer = setTimeout(() => {
+      const next = (idx + 1) % scenarios.length
+      playScenario(next)
+    }, 5000)
+  }
+
+  // Scenario button clicks
+  document.querySelectorAll('.scenario-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (autoTimer) clearTimeout(autoTimer)
+      const idx = parseInt((btn as HTMLElement).dataset.scenario || '0')
+      isPlaying = false // force stop current
+      playScenario(idx)
+    })
+  })
+
+  // Replay button
+  document.getElementById('bot-replay')?.addEventListener('click', () => {
+    if (autoTimer) clearTimeout(autoTimer)
+    isPlaying = false
+    playScenario(currentScenario)
+  })
+
+  // Start first scenario
+  setTimeout(() => playScenario(0), 500)
+
+  // ═══════════════════════════════════
+  // REAL CHAT — LLM Integration
+  // ═══════════════════════════════════
+
+  const chatOutput = document.getElementById('chat-output')
+  const chatInput = document.getElementById('chat-input') as HTMLInputElement
+  const chatSend = document.getElementById('chat-send')
+  const chatCounter = document.getElementById('chat-counter')
+  let messagesRemaining = 5
+
+  function addChatMessage(text: string, sender: 'user' | 'neo') {
+    if (!chatOutput) return
+    const div = document.createElement('div')
+    if (sender === 'user') {
+      div.className = 'text-accent-purple'
+      div.textContent = `du → ${text}`
+    } else {
+      div.className = 'text-text-secondary'
+      div.innerHTML = `<span class="text-accent-cyan">neo →</span> ${text}`
+    }
+    chatOutput.appendChild(div)
+    chatOutput.scrollTop = chatOutput.scrollHeight
+  }
+
+  function addTypingIndicator(): HTMLElement {
+    if (!chatOutput) return document.createElement('div')
+    const div = document.createElement('div')
+    div.className = 'text-accent-cyan typing-indicator'
+    div.innerHTML = 'neo → <span class="animate-pulse">▊</span>'
+    chatOutput.appendChild(div)
+    chatOutput.scrollTop = chatOutput.scrollHeight
+    return div
+  }
+
+  // Predefined responses for offline mode (when LLM not available)
+  const offlineResponses: Record<string, string> = {
+    'default': 'Ich bin Neo — ein Self-Hosted KI-Agent. Frag mich über unsere Services, Self-Hosting oder die Technik hinter dieser Seite!',
+    'services': 'Wir bieten 8 Core-Services: Websites, Automatisierung, Dashboards, Self-Hosted, Chatbots, Server-Pakete, E-Mail-Marketing und Online-Shops. Scroll nach unten zu #services für Details!',
+    'preis': 'Unsere Pakete starten ab €49/Monat für Basis-Hosting. Check den Preisrechner weiter unten für ein individuelles Angebot!',
+    'technik': 'Diese Seite läuft auf einem Intel N97 MiniPC mit 16GB RAM. Stack: Proxmox VE, Docker, Astro, Three.js, Caddy, Cloudflare Tunnel.',
+    'hosting': 'Self-Hosting bedeutet: Deine Daten auf deinem Server. Wir richten alles ein — Docker, SSL, Backups, Monitoring. Du behältst 100% Kontrolle.',
+  }
+
+  function getOfflineResponse(input: string): string {
+    const lower = input.toLowerCase()
+    if (lower.includes('service') || lower.includes('angebot')) return offlineResponses['services']
+    if (lower.includes('preis') || lower.includes('kost') || lower.includes('paket')) return offlineResponses['preis']
+    if (lower.includes('technik') || lower.includes('stack') || lower.includes('server')) return offlineResponses['technik']
+    if (lower.includes('hosting') || lower.includes('self') || lower.includes('cloud')) return offlineResponses['hosting']
+    return offlineResponses['default']
+  }
+
+  async function sendMessage() {
+    if (!chatInput || messagesRemaining <= 0) return
+    const text = chatInput.value.trim()
+    if (!text) return
+
+    chatInput.value = ''
+    messagesRemaining--
+    if (chatCounter) chatCounter.textContent = `${messagesRemaining} Nachrichten übrig`
+
+    addChatMessage(text, 'user')
+
+    const typing = addTypingIndicator()
+
+    // Try LLM endpoint, fallback to offline
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        typing.remove()
+        addChatMessage(data.response || 'Keine Antwort erhalten.', 'neo')
+      } else {
+        throw new Error('API not available')
+      }
+    } catch {
+      // Offline fallback with simulated delay
+      await new Promise(r => setTimeout(r, 800 + Math.random() * 600))
+      typing.remove()
+      addChatMessage(getOfflineResponse(text), 'neo')
+    }
+
+    if (messagesRemaining <= 0) {
+      chatInput.disabled = true
+      chatInput.placeholder = 'Session-Limit erreicht'
+      if (chatCounter) chatCounter.textContent = 'Session beendet'
+    }
+  }
+
+  chatInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage()
+  })
+  chatSend?.addEventListener('click', sendMessage)
 </script>

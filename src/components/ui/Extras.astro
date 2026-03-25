@@ -1,7 +1,7 @@
 ---
 /**
- * Extras — Boot overlay, Back-to-top, Visitor counter, Konami code, Custom cursor
- * All the small interactive features from the old site
+ * Extras — Boot overlay, Back-to-top, Visitor counter, Konami code, Custom cursor, Built-with badge
+ * All the small interactive features and easter eggs
  */
 ---
 
@@ -26,9 +26,42 @@
   👁 <span id="visitor-count">—</span>
 </div>
 
+<!-- Built-with Badge -->
+<div id="built-with" class="fixed bottom-16 left-6 z-50 group cursor-pointer">
+  <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bg-secondary/80 backdrop-blur-sm border border-border-glass text-[10px] font-mono text-text-muted hover:text-text-secondary hover:border-accent-purple/30 transition-all duration-300">
+    <span>⚡</span>
+    <span>Built with</span>
+    <span class="text-accent-purple">Neo Stack</span>
+  </div>
+  <!-- Expanded tech badge on hover -->
+  <div class="absolute bottom-full left-0 mb-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+    <div class="glass-card p-3 text-[10px] font-mono space-y-1 w-48">
+      <div class="text-accent-cyan mb-2">Tech Stack dieser Site:</div>
+      <div class="text-text-muted">🏗️ Astro v6 + Three.js</div>
+      <div class="text-text-muted">🎨 Tailwind CSS + GSAP</div>
+      <div class="text-text-muted">🖥️ Intel N97 MiniPC</div>
+      <div class="text-text-muted">🐳 Docker + Caddy</div>
+      <div class="text-text-muted">☁️ Cloudflare Tunnel</div>
+      <div class="text-text-muted">🤖 OpenClaw AI Agent</div>
+      <div class="text-accent-green mt-2">€0/Monat Cloud-Kosten</div>
+    </div>
+  </div>
+</div>
+
 <!-- Custom cursor elements -->
 <div id="cursor-ring" class="fixed w-8 h-8 rounded-full border border-accent-purple/50 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-transform duration-150 hidden md:block" style="top:-100px;left:-100px"></div>
 <div id="cursor-dot" class="fixed w-1.5 h-1.5 rounded-full bg-accent-purple pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block" style="top:-100px;left:-100px"></div>
+
+<!-- Easter Egg Notification -->
+<div id="easter-egg-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-4">
+  <div class="glass-card px-6 py-3 flex items-center gap-3">
+    <span class="text-2xl" id="egg-icon">🥚</span>
+    <div>
+      <div class="text-sm font-mono text-accent-purple" id="egg-title">Easter Egg!</div>
+      <div class="text-xs text-text-muted" id="egg-desc">Du hast etwas Geheimes gefunden.</div>
+    </div>
+  </div>
+</div>
 
 <script>
   import { wpAjax } from '../../lib/api'
@@ -42,9 +75,9 @@
     'Loading neural pathways...',
     'Connecting to homelab cluster...',
     'Mounting /dev/consciousness...',
-    'Starting AI modules...',
-    'Deploying cyberpunk interface...',
-    'System ready.',
+    'Loading service catalog...',
+    'Deploying showcase interface...',
+    'System ready. Willkommen.',
   ]
 
   let bootIdx = 0
@@ -66,7 +99,6 @@
     }
   }
 
-  // Skip boot on revisit within session
   if (sessionStorage.getItem('neo_booted')) {
     overlay?.remove()
   } else {
@@ -108,11 +140,35 @@
     })
     document.addEventListener('mousedown', () => ring.style.transform = 'translate(-50%,-50%) scale(0.8)')
     document.addEventListener('mouseup', () => ring.style.transform = 'translate(-50%,-50%) scale(1)')
-    // Grow on interactive elements
     document.querySelectorAll('a, button, input, textarea, select, [role="button"]').forEach(el => {
       el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)')
       el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)')
     })
+  }
+
+  // ===== EASTER EGG TOAST SYSTEM =====
+  const foundEggs = new Set<string>(JSON.parse(sessionStorage.getItem('neo_eggs') || '[]'))
+
+  function showEasterEgg(id: string, icon: string, title: string, desc: string) {
+    if (foundEggs.has(id)) return
+    foundEggs.add(id)
+    sessionStorage.setItem('neo_eggs', JSON.stringify([...foundEggs]))
+
+    const toast = document.getElementById('easter-egg-toast')
+    const eggIcon = document.getElementById('egg-icon')
+    const eggTitle = document.getElementById('egg-title')
+    const eggDesc = document.getElementById('egg-desc')
+    if (!toast || !eggIcon || !eggTitle || !eggDesc) return
+
+    eggIcon.textContent = icon
+    eggTitle.textContent = title
+    eggDesc.textContent = desc
+    toast.style.opacity = '1'
+    toast.style.transform = 'translateX(-50%) translateY(0)'
+    setTimeout(() => {
+      toast.style.opacity = '0'
+      toast.style.transform = 'translateX(-50%) translateY(-16px)'
+    }, 3000)
   }
 
   // ===== KONAMI CODE =====
@@ -124,13 +180,49 @@
       if (konamiIdx === konamiSequence.length) {
         konamiIdx = 0
         activateMatrix()
-        if ((window as any).unlockAchievement) (window as any).unlockAchievement('konami_code')
+        showEasterEgg('konami', '🕹️', 'Konami Code!', '↑↑↓↓←→←→BA — Du bist ein Klassiker.')
       }
     } else {
       konamiIdx = 0
     }
   })
 
+  // ===== EASTER EGG: Type "neo" anywhere =====
+  let neoBuffer = ''
+  document.addEventListener('keypress', (e) => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+    neoBuffer += e.key.toLowerCase()
+    if (neoBuffer.length > 10) neoBuffer = neoBuffer.slice(-10)
+    if (neoBuffer.includes('neo')) {
+      neoBuffer = ''
+      showEasterEgg('neo-type', '🦞', 'Du hast mich gerufen!', 'Neo ist immer da. Immer aufmerksam.')
+    }
+  })
+
+  // ===== EASTER EGG: Rapid scroll (scrolling like crazy) =====
+  let scrollCount = 0
+  let scrollTimer: ReturnType<typeof setTimeout>
+  window.addEventListener('scroll', () => {
+    scrollCount++
+    clearTimeout(scrollTimer)
+    scrollTimer = setTimeout(() => { scrollCount = 0 }, 1000)
+    if (scrollCount > 30) {
+      scrollCount = 0
+      showEasterEgg('speed-scroll', '🏎️', 'Speed Runner!', 'Du scrollst schneller als Neo deployen kann.')
+    }
+  }, { passive: true })
+
+  // ===== EASTER EGG: Click avatar 5 times =====
+  let avatarClicks = 0
+  document.getElementById('avatar-wrapper')?.addEventListener('click', () => {
+    avatarClicks++
+    if (avatarClicks >= 5) {
+      avatarClicks = 0
+      showEasterEgg('avatar-click', '👽', 'Vertrau niemandem!', 'Nicht mal deinem eigenen Avatar.')
+    }
+  })
+
+  // ===== MATRIX RAIN =====
   function activateMatrix() {
     const canvas = document.createElement('canvas')
     canvas.id = 'matrix-rain'

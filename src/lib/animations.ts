@@ -1,5 +1,5 @@
 /**
- * GSAP scroll-triggered animations
+ * GSAP scroll-triggered animations — enhanced for showcase site
  */
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -70,7 +70,7 @@ export function initScrollAnimations() {
     })
   })
 
-  // #4: Section title entrance — glide in from left with glow pulse
+  // Section title entrance — glide in from left with glow pulse
   gsap.utils.toArray<HTMLElement>('.title-glow').forEach((el) => {
     gsap.from(el, {
       scrollTrigger: {
@@ -83,7 +83,6 @@ export function initScrollAnimations() {
       duration: 0.7,
       ease: 'power3.out',
     })
-    // Animate the decorative line width
     const line = el.querySelector('.title-glow-line')
     if (line) {
       gsap.from(line, {
@@ -100,7 +99,7 @@ export function initScrollAnimations() {
     }
   })
 
-  // #4: Section divider entrance — expand from center
+  // Section divider entrance — expand from center
   gsap.utils.toArray<HTMLElement>('.section-divider').forEach((el) => {
     gsap.from(el, {
       scrollTrigger: {
@@ -111,6 +110,54 @@ export function initScrollAnimations() {
       scaleX: 0,
       opacity: 0,
       duration: 0.8,
+      ease: 'power2.out',
+    })
+  })
+
+  // Service cards — scale up with stagger
+  gsap.utils.toArray<HTMLElement>('.service-card').forEach((el, i) => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        toggleActions: 'play none none none',
+      },
+      scale: 0.9,
+      opacity: 0,
+      duration: 0.5,
+      delay: i * 0.05,
+      ease: 'back.out(1.4)',
+    })
+  })
+
+  // Price options — slide in from right
+  gsap.utils.toArray<HTMLElement>('.price-option').forEach((el, i) => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+      },
+      x: 30,
+      opacity: 0,
+      duration: 0.4,
+      delay: i * 0.06,
+      ease: 'power2.out',
+    })
+  })
+
+  // Glass panels — subtle scale entrance
+  gsap.utils.toArray<HTMLElement>('.glass-panel').forEach((el) => {
+    if (el.closest('[data-stagger-parent]')) return // skip if already stagger-animated
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+      y: 20,
+      opacity: 0,
+      duration: 0.7,
       ease: 'power2.out',
     })
   })
