@@ -1,0 +1,33 @@
+---
+/**
+ * Daily Signal — Word of the day + AI insight
+ * Uses neo_daily_word AJAX endpoint
+ */
+---
+
+<section id="daily" class="px-4 sm:px-6 py-12" data-animate>
+  <div class="max-w-3xl mx-auto glass-card p-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-accent-purple/5 to-accent-cyan/5 pointer-events-none"></div>
+    <span class="text-xs font-mono text-accent-cyan mb-2 block relative">// Signal des Tages</span>
+    <div id="daily-word" class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-accent-purple to-accent-cyan bg-clip-text text-transparent mb-3 relative">...</div>
+    <p id="daily-desc" class="text-sm text-text-secondary font-mono relative">Lade...</p>
+    <div id="daily-meta" class="mt-3 text-xs text-text-muted font-mono relative"></div>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  async function fetchDaily() {
+    const d = await wpAjax<any>('neo_daily_word')
+    if (!d) return
+    const word = document.getElementById('daily-word')
+    const desc = document.getElementById('daily-desc')
+    const meta = document.getElementById('daily-meta')
+    if (word) word.textContent = d.word || d.title || '—'
+    if (desc) desc.textContent = d.description || d.meaning || ''
+    if (meta && d.date) meta.textContent = d.date
+  }
+
+  fetchDaily()
+</script>

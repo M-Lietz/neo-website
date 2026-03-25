@@ -1,0 +1,38 @@
+---
+/**
+ * Telegram Feed — Live channel entries
+ * Uses neo_feed_entries AJAX endpoint
+ */
+---
+
+<section id="telegram-feed" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-5xl mx-auto">// Telegram Channel</h2>
+  <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-stagger-parent id="tg-feed-grid">
+    <div class="glass-card p-4 text-xs font-mono text-text-muted animate-pulse" data-stagger-child>Lade Beiträge...</div>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  async function fetchTgFeed() {
+    const data = await wpAjax<any>('neo_feed_entries')
+    const grid = document.getElementById('tg-feed-grid')
+    if (!grid || !data?.entries?.length) return
+
+    grid.innerHTML = ''
+    data.entries.slice(0, 6).forEach((e: any) => {
+      const card = document.createElement('div')
+      card.className = 'glass-card p-4 space-y-2 hover:border-accent-cyan/30 transition-colors'
+      const typeIcons: Record<string, string> = { image: '🖼️', text: '💬', audio: '🎵', video: '🎬', poll: '📊' }
+      const icon = typeIcons[e.type] || '📌'
+      card.innerHTML = `<div class="flex items-center gap-2 text-xs font-mono text-text-muted">
+        <span>${icon}</span><span>${e.date || ''}</span></div>
+        <p class="text-sm text-text-primary line-clamp-3">${e.text || e.caption || ''}</p>
+        ${e.image ? `<img src="${e.image}" alt="" class="w-full rounded-lg mt-2 object-cover max-h-40" loading="lazy"/>` : ''}`
+      grid.appendChild(card)
+    })
+  }
+
+  fetchTgFeed()
+</script>

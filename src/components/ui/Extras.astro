@@ -1,0 +1,166 @@
+---
+/**
+ * Extras — Boot overlay, Back-to-top, Visitor counter, Konami code, Custom cursor
+ * All the small interactive features from the old site
+ */
+---
+
+<!-- Boot Overlay -->
+<div id="boot-overlay" class="fixed inset-0 z-[9999] bg-bg-primary flex items-center justify-center transition-opacity duration-500">
+  <div class="text-center">
+    <div id="boot-text" class="font-mono text-sm text-accent-cyan space-y-1"></div>
+    <div class="mt-4 w-48 h-1 rounded-full bg-white/10 mx-auto overflow-hidden">
+      <div id="boot-bar" class="h-full rounded-full bg-accent-purple transition-all duration-300" style="width: 0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Back to Top -->
+<button id="back-to-top" aria-label="Nach oben scrollen"
+  class="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full glass-card flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:border-accent-purple/50 text-text-muted hover:text-accent-purple">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- Visitor Counter (footer overlay) -->
+<div id="visitor-counter" class="fixed bottom-6 left-6 z-50 text-xs font-mono text-text-muted">
+  👁 <span id="visitor-count">—</span>
+</div>
+
+<!-- Custom cursor elements -->
+<div id="cursor-ring" class="fixed w-8 h-8 rounded-full border border-accent-purple/50 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-transform duration-150 hidden md:block" style="top:-100px;left:-100px"></div>
+<div id="cursor-dot" class="fixed w-1.5 h-1.5 rounded-full bg-accent-purple pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block" style="top:-100px;left:-100px"></div>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  // ===== BOOT SEQUENCE =====
+  const overlay = document.getElementById('boot-overlay')
+  const bootText = document.getElementById('boot-text')
+  const bootBar = document.getElementById('boot-bar')
+  const bootMessages = [
+    'Initializing NEO system...',
+    'Loading neural pathways...',
+    'Connecting to homelab cluster...',
+    'Mounting /dev/consciousness...',
+    'Starting AI modules...',
+    'Deploying cyberpunk interface...',
+    'System ready.',
+  ]
+
+  let bootIdx = 0
+  function bootStep() {
+    if (bootIdx < bootMessages.length) {
+      const line = document.createElement('div')
+      line.textContent = bootMessages[bootIdx]
+      bootText?.appendChild(line)
+      if (bootBar) bootBar.style.width = `${((bootIdx + 1) / bootMessages.length) * 100}%`
+      bootIdx++
+      setTimeout(bootStep, 200 + Math.random() * 150)
+    } else {
+      setTimeout(() => {
+        if (overlay) {
+          overlay.style.opacity = '0'
+          setTimeout(() => overlay.remove(), 500)
+        }
+      }, 400)
+    }
+  }
+
+  // Skip boot on revisit within session
+  if (sessionStorage.getItem('neo_booted')) {
+    overlay?.remove()
+  } else {
+    sessionStorage.setItem('neo_booted', '1')
+    bootStep()
+  }
+
+  // ===== BACK TO TOP =====
+  const btn = document.getElementById('back-to-top')
+  window.addEventListener('scroll', () => {
+    if (!btn) return
+    if (window.scrollY > 400) {
+      btn.classList.remove('opacity-0', 'pointer-events-none')
+      btn.classList.add('opacity-100', 'pointer-events-auto')
+    } else {
+      btn.classList.add('opacity-0', 'pointer-events-none')
+      btn.classList.remove('opacity-100', 'pointer-events-auto')
+    }
+  }, { passive: true })
+  btn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+
+  // ===== VISITOR COUNTER =====
+  async function fetchVisitors() {
+    const data = await wpAjax<any>('neo_visitor_count')
+    const el = document.getElementById('visitor-count')
+    if (el && data?.count) el.textContent = String(data.count)
+  }
+  fetchVisitors()
+
+  // ===== CUSTOM CURSOR =====
+  const ring = document.getElementById('cursor-ring')
+  const dot = document.getElementById('cursor-dot')
+  if (ring && dot && window.matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mousemove', (e) => {
+      dot.style.top = `${e.clientY}px`
+      dot.style.left = `${e.clientX}px`
+      ring.style.top = `${e.clientY}px`
+      ring.style.left = `${e.clientX}px`
+    })
+    document.addEventListener('mousedown', () => ring.style.transform = 'translate(-50%,-50%) scale(0.8)')
+    document.addEventListener('mouseup', () => ring.style.transform = 'translate(-50%,-50%) scale(1)')
+    // Grow on interactive elements
+    document.querySelectorAll('a, button, input, textarea, select, [role="button"]').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.style.transform = 'translate(-50%,-50%) scale(1.5)')
+      el.addEventListener('mouseleave', () => ring.style.transform = 'translate(-50%,-50%) scale(1)')
+    })
+  }
+
+  // ===== KONAMI CODE =====
+  const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
+  let konamiIdx = 0
+  document.addEventListener('keydown', (e) => {
+    if (e.key === konamiSequence[konamiIdx]) {
+      konamiIdx++
+      if (konamiIdx === konamiSequence.length) {
+        konamiIdx = 0
+        activateMatrix()
+        if ((window as any).unlockAchievement) (window as any).unlockAchievement('konami_code')
+      }
+    } else {
+      konamiIdx = 0
+    }
+  })
+
+  function activateMatrix() {
+    const canvas = document.createElement('canvas')
+    canvas.id = 'matrix-rain'
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:0.8'
+    document.body.appendChild(canvas)
+    const ctx = canvas.getContext('2d')!
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const cols = Math.floor(canvas.width / 14)
+    const drops = Array(cols).fill(1)
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789'
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = '#0f0'
+      ctx.font = '14px monospace'
+      for (let i = 0; i < drops.length; i++) {
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, drops[i] * 14)
+        if (drops[i] * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0
+        drops[i]++
+      }
+    }
+
+    const interval = setInterval(draw, 50)
+    setTimeout(() => {
+      clearInterval(interval)
+      canvas.style.transition = 'opacity 1s'
+      canvas.style.opacity = '0'
+      setTimeout(() => canvas.remove(), 1000)
+    }, 6000)
+  }
+</script>

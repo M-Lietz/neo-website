@@ -1,0 +1,148 @@
+---
+/**
+ * Dashboard Section — Live SVG ring gauges + progress bars + uptime
+ * Fetches neo_get_stats every 30s from WP backend
+ */
+---
+
+<section id="dashboard" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-5xl mx-auto">// HomeLab Dashboard</h2>
+  <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" data-stagger-parent>
+    <!-- SVG Ring Gauges -->
+    <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" stroke="rgba(168,85,247,0.15)" stroke-width="6" fill="none" />
+        <circle id="gauge-cpu" cx="50" cy="50" r="42" stroke="#a855f7" stroke-width="6" fill="none"
+          stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"
+          transform="rotate(-90 50 50)" class="transition-all duration-1000" />
+        <text x="50" y="50" text-anchor="middle" dominant-baseline="central" fill="white" font-size="18" font-family="JetBrains Mono" id="gauge-cpu-text">—</text>
+      </svg>
+      <span class="text-xs font-mono text-text-muted">CPU</span>
+    </div>
+    <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" stroke="rgba(6,182,212,0.15)" stroke-width="6" fill="none" />
+        <circle id="gauge-ram" cx="50" cy="50" r="42" stroke="#06b6d4" stroke-width="6" fill="none"
+          stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"
+          transform="rotate(-90 50 50)" class="transition-all duration-1000" />
+        <text x="50" y="50" text-anchor="middle" dominant-baseline="central" fill="white" font-size="18" font-family="JetBrains Mono" id="gauge-ram-text">—</text>
+      </svg>
+      <span class="text-xs font-mono text-text-muted">RAM</span>
+    </div>
+    <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" stroke="rgba(236,72,153,0.15)" stroke-width="6" fill="none" />
+        <circle id="gauge-disk" cx="50" cy="50" r="42" stroke="#ec4899" stroke-width="6" fill="none"
+          stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"
+          transform="rotate(-90 50 50)" class="transition-all duration-1000" />
+        <text x="50" y="50" text-anchor="middle" dominant-baseline="central" fill="white" font-size="18" font-family="JetBrains Mono" id="gauge-disk-text">—</text>
+      </svg>
+      <span class="text-xs font-mono text-text-muted">Disk</span>
+    </div>
+    <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" stroke="rgba(59,130,246,0.15)" stroke-width="6" fill="none" />
+        <circle id="gauge-net" cx="50" cy="50" r="42" stroke="#3b82f6" stroke-width="6" fill="none"
+          stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"
+          transform="rotate(-90 50 50)" class="transition-all duration-1000" />
+        <text x="50" y="50" text-anchor="middle" dominant-baseline="central" fill="white" font-size="18" font-family="JetBrains Mono" id="gauge-net-text">—</text>
+      </svg>
+      <span class="text-xs font-mono text-text-muted">Netzwerk</span>
+    </div>
+  </div>
+
+  <!-- Progress bars + uptime -->
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-4">
+    <div class="glass-card p-4 space-y-3" data-animate>
+      <h3 class="text-sm font-mono text-accent-cyan">Ressourcen</h3>
+      <div>
+        <div class="flex justify-between text-xs font-mono text-text-muted mb-1"><span>Container</span><span id="bar-containers">—</span></div>
+        <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div id="bar-containers-fill" class="h-full rounded-full bg-accent-purple transition-all duration-1000" style="width: 0%"></div></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs font-mono text-text-muted mb-1"><span>Services</span><span id="bar-services">—</span></div>
+        <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div id="bar-services-fill" class="h-full rounded-full bg-accent-cyan transition-all duration-1000" style="width: 0%"></div></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs font-mono text-text-muted mb-1"><span>Cron Jobs</span><span id="bar-crons">—</span></div>
+        <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div id="bar-crons-fill" class="h-full rounded-full bg-accent-pink transition-all duration-1000" style="width: 0%"></div></div>
+      </div>
+    </div>
+    <div class="glass-card p-4 flex flex-col items-center justify-center" data-animate>
+      <span class="text-xs font-mono text-text-muted mb-2">System-Betriebszeit</span>
+      <div id="uptime-display" class="font-mono text-2xl sm:text-3xl text-accent-green tracking-wider">00:00:00:00</div>
+      <span class="text-xs font-mono text-text-muted mt-2">Tage : Std : Min : Sek</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  const CIRC = 2 * Math.PI * 42 // 263.89
+
+  function setGauge(id: string, pct: number, label: string) {
+    const circle = document.getElementById(id) as SVGCircleElement | null
+    const text = document.getElementById(`${id}-text`) as SVGTextElement | null
+    if (circle) circle.setAttribute('stroke-dashoffset', String(CIRC - (CIRC * Math.min(pct, 100)) / 100))
+    if (text) text.textContent = label
+  }
+
+  function setBar(id: string, value: number, max: number, label: string) {
+    const span = document.getElementById(id)
+    const fill = document.getElementById(`${id}-fill`)
+    if (span) span.textContent = label
+    if (fill) fill.style.width = `${Math.min((value / max) * 100, 100)}%`
+  }
+
+  let uptimeSeconds = 0
+  function startUptimeCounter(initial: number) {
+    uptimeSeconds = initial
+    const el = document.getElementById('uptime-display')
+    if (!el) return
+    function tick() {
+      const d = Math.floor(uptimeSeconds / 86400)
+      const h = Math.floor((uptimeSeconds % 86400) / 3600)
+      const m = Math.floor((uptimeSeconds % 3600) / 60)
+      const s = uptimeSeconds % 60
+      el!.textContent = `${String(d).padStart(2, '0')}:${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+      uptimeSeconds++
+    }
+    tick()
+    setInterval(tick, 1000)
+  }
+
+  async function fetchStats() {
+    const s = await wpAjax<any>('neo_get_stats')
+    if (!s) return
+
+    // Gauges
+    const cpuPct = parseInt(s.cpu) || 0
+    setGauge('gauge-cpu', cpuPct, `${cpuPct}%`)
+
+    const ramUsed = (s.ram_total || 0) - (s.ram_free || 0)
+    const ramPct = s.ram_total ? Math.round((ramUsed / s.ram_total) * 100) : 0
+    setGauge('gauge-ram', ramPct, `${ramPct}%`)
+
+    const diskPct = parseInt(s.disk_used_pct) || 0
+    setGauge('gauge-disk', diskPct, `${diskPct}%`)
+
+    const netKbps = parseInt(s.net_rx) || 0
+    const netPct = Math.min(netKbps / 100, 100)
+    setGauge('gauge-net', netPct, `${netKbps}k`)
+
+    // Progress bars
+    const containers = parseInt(s.containers) || 0
+    setBar('bar-containers', containers, 15, `${containers} / 15`)
+    const services = parseInt(s.services) || 0
+    setBar('bar-services', services, 20, `${services} / 20`)
+    const crons = parseInt(s.crons) || 0
+    setBar('bar-crons', crons, 15, `${crons} / 15`)
+
+    // Uptime counter
+    if (s.uptime_seconds) startUptimeCounter(parseInt(s.uptime_seconds))
+  }
+
+  fetchStats()
+  setInterval(fetchStats, 30_000)
+</script>

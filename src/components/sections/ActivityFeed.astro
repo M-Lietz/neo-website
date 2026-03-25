@@ -1,0 +1,67 @@
+---
+/**
+ * Activity Feed — Live system activity timeline
+ * Uses neo_activity_feed AJAX endpoint
+ */
+---
+
+<section id="activity" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-5xl mx-auto">// Aktivität</h2>
+  <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-4 mb-6" data-stagger-parent>
+    <div class="glass-card p-4 text-center" data-stagger-child>
+      <div id="act-posts" class="text-3xl font-bold text-accent-purple" data-count="0">0</div>
+      <span class="text-xs font-mono text-text-muted">Posts gesamt</span>
+    </div>
+    <div class="glass-card p-4 text-center" data-stagger-child>
+      <div id="act-automations" class="text-3xl font-bold text-accent-cyan" data-count="0">0</div>
+      <span class="text-xs font-mono text-text-muted">Automationen</span>
+    </div>
+    <div class="glass-card p-4 text-center" data-stagger-child>
+      <div id="act-visitors" class="text-3xl font-bold text-accent-pink" data-count="0">0</div>
+      <span class="text-xs font-mono text-text-muted">Besucher</span>
+    </div>
+  </div>
+  <div class="max-w-5xl mx-auto glass-card p-4">
+    <h3 class="text-sm font-mono text-accent-cyan mb-3">Live Feed</h3>
+    <div id="activity-feed" class="space-y-2 max-h-[250px] overflow-y-auto">
+      <div class="text-xs font-mono text-text-muted animate-pulse">Lade Aktivitäten...</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  const icons: Record<string, string> = { post: '📝', automation: '⚡', deploy: '🚀', system: '🔧', ai: '🤖', default: '📌' }
+
+  async function fetchActivity() {
+    const data = await wpAjax<any>('neo_activity_feed')
+    if (!data) return
+
+    // Summary counters
+    if (data.stats) {
+      const fields = [['act-posts', data.stats.posts], ['act-automations', data.stats.automations], ['act-visitors', data.stats.visitors]] as const
+      fields.forEach(([id, val]) => {
+        const el = document.getElementById(id)
+        if (el && val) { el.setAttribute('data-count', String(val)); el.textContent = String(val) }
+      })
+    }
+
+    // Timeline
+    const feed = document.getElementById('activity-feed')
+    if (!feed || !data.entries?.length) return
+    feed.innerHTML = ''
+    data.entries.slice(0, 12).forEach((e: any) => {
+      const div = document.createElement('div')
+      div.className = 'flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors'
+      const icon = icons[e.type] || icons.default
+      div.innerHTML = `<span class="text-base mt-0.5">${icon}</span>
+        <div class="flex-1 min-w-0"><p class="text-sm text-text-primary truncate">${e.title || e.message}</p>
+        <span class="text-xs text-text-muted">${e.time || ''}</span></div>`
+      feed.appendChild(div)
+    })
+  }
+
+  fetchActivity()
+  setInterval(fetchActivity, 120_000)
+</script>

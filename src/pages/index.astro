@@ -1,81 +1,40 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Nav from '../components/ui/Nav.astro'
+import Extras from '../components/ui/Extras.astro'
 import Hero from '../components/sections/Hero.astro'
+import Terminal from '../components/sections/Terminal.astro'
+import Dashboard from '../components/sections/Dashboard.astro'
+import ActivityFeed from '../components/sections/ActivityFeed.astro'
+import DailySignal from '../components/sections/DailySignal.astro'
+import TelegramFeed from '../components/sections/TelegramFeed.astro'
+import About from '../components/sections/About.astro'
+import Timeline from '../components/sections/Timeline.astro'
+import TechStack from '../components/sections/TechStack.astro'
+import Guestbook from '../components/sections/Guestbook.astro'
+import Achievements from '../components/sections/Achievements.astro'
+import Contact from '../components/sections/Contact.astro'
+import Newsletter from '../components/sections/Newsletter.astro'
 import Footer from '../components/ui/Footer.astro'
 ---
 
 <BaseLayout>
+  <Extras />
   <Nav />
   <main>
     <Hero />
-
-    <!-- Placeholder sections — each will become its own component -->
-    <section id="terminal" class="min-h-[50vh] flex items-center justify-center px-6 py-20" data-animate>
-      <div class="glass-card p-8 max-w-4xl w-full">
-        <h2 class="text-2xl font-bold font-display mb-4 text-accent-cyan">Terminal</h2>
-        <p class="text-text-muted font-mono text-sm">// Coming soon — Interactive Web Terminal</p>
-      </div>
-    </section>
-
-    <section id="dashboard" class="min-h-[50vh] flex items-center justify-center px-6 py-20" data-animate>
-      <div class="max-w-7xl w-full">
-        <h2 class="text-2xl font-bold font-display mb-8 text-accent-purple" data-animate>HomeLab Dashboard</h2>
-        <div class="grid md:grid-cols-3 gap-4" data-stagger-parent>
-          <div class="glass-card p-6" data-stagger-child>
-            <div class="text-xs font-mono text-accent-cyan uppercase tracking-wider mb-2">Proxmox VE</div>
-            <div class="text-3xl font-bold">1 VM</div>
-            <div class="text-text-muted text-sm">3 LXC Container</div>
-          </div>
-          <div class="glass-card p-6" data-stagger-child>
-            <div class="text-xs font-mono text-accent-green uppercase tracking-wider mb-2">Docker</div>
-            <div class="text-3xl font-bold">8</div>
-            <div class="text-text-muted text-sm">Container aktiv</div>
-          </div>
-          <div class="glass-card p-6" data-stagger-child>
-            <div class="text-xs font-mono text-accent-pink uppercase tracking-wider mb-2">Services</div>
-            <div class="text-3xl font-bold">42+</div>
-            <div class="text-text-muted text-sm">APIs & Automationen</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="min-h-[50vh] flex items-center justify-center px-6 py-20" data-animate>
-      <div class="glass-card p-8 max-w-3xl w-full">
-        <h2 class="text-2xl font-bold font-display mb-4 text-accent-purple">Über Neo</h2>
-        <p class="text-text-secondary leading-relaxed">
-          HomeLab-Enthusiast, der KI-Systeme auf eigener Hardware betreibt. 
-          Proxmox-Cluster, Docker-Stacks, Telegram-Bots, self-hosted AI — alles aus einer Hand.
-          Kein Cloud-Abo, keine Abhängigkeiten, volle Kontrolle.
-        </p>
-      </div>
-    </section>
-
-    <section id="techstack" class="min-h-[50vh] flex items-center justify-center px-6 py-20" data-animate>
-      <div class="max-w-7xl w-full">
-        <h2 class="text-2xl font-bold font-display mb-8 text-accent-cyan" data-animate>Tech Stack</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" data-stagger-parent>
-          {['Proxmox VE', 'Docker', 'Nginx', 'Cloudflare', 'Node.js', 'Python', 'Astro', 'OpenClaw', 'LiteLLM', 'Ollama', 'Paperless', 'n8n'].map((tech) => (
-            <div class="glass-card p-4 text-center" data-stagger-child>
-              <span class="text-sm font-mono text-text-secondary">{tech}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="min-h-[50vh] flex items-center justify-center px-6 py-20" data-animate>
-      <div class="glass-card p-8 max-w-lg w-full text-center">
-        <h2 class="text-2xl font-bold font-display mb-4 text-accent-pink">Kontakt</h2>
-        <p class="text-text-secondary mb-6">Schreib mir auf Telegram oder schau dir den Code an.</p>
-        <div class="flex gap-4 justify-center">
-          <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="px-4 py-2 glass-card text-accent-cyan hover:text-white text-sm font-mono transition-colors">
-            Telegram →
-          </a>
-        </div>
-      </div>
-    </section>
+    <Terminal />
+    <Dashboard />
+    <ActivityFeed />
+    <DailySignal />
+    <TelegramFeed />
+    <About />
+    <Timeline />
+    <TechStack />
+    <Guestbook />
+    <Achievements />
+    <Contact />
+    <Newsletter />
   </main>
   <Footer />
 </BaseLayout>

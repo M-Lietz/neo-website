@@ -1,0 +1,62 @@
+---
+/**
+ * Contact Section — Form with subject select
+ * Uses neo_contact_submit AJAX endpoint
+ */
+---
+
+<section id="contact" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-3xl mx-auto">// Kontakt</h2>
+  <div class="max-w-3xl mx-auto glass-card p-6">
+    <form id="contact-form" class="space-y-4">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <input type="text" name="name" placeholder="Name" required
+          class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:border-accent-purple/50 transition-colors" />
+        <input type="email" name="email" placeholder="E-Mail" required
+          class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:border-accent-purple/50 transition-colors" />
+      </div>
+      <select name="subject" required
+        class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary outline-none focus:border-accent-purple/50 transition-colors">
+        <option value="" disabled selected class="bg-bg-primary">Betreff wählen...</option>
+        <option value="homelab" class="bg-bg-primary">Homelab-Frage</option>
+        <option value="collab" class="bg-bg-primary">Zusammenarbeit</option>
+        <option value="bug" class="bg-bg-primary">Bug melden</option>
+        <option value="other" class="bg-bg-primary">Sonstiges</option>
+      </select>
+      <textarea name="message" placeholder="Deine Nachricht..." rows="4" required
+        class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:border-accent-purple/50 transition-colors resize-none"></textarea>
+      <button type="submit" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-accent-purple/20 to-accent-cyan/20 border border-accent-purple/30 text-sm font-mono text-text-primary hover:from-accent-purple/30 hover:to-accent-cyan/30 transition-all">
+        Nachricht senden
+      </button>
+      <div id="contact-status" class="text-xs font-mono text-center hidden"></div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  const form = document.getElementById('contact-form') as HTMLFormElement
+  const status = document.getElementById('contact-status')
+
+  form?.addEventListener('submit', async (ev) => {
+    ev.preventDefault()
+    const fd = new FormData(form)
+    const name = (fd.get('name') as string)?.trim()
+    const email = (fd.get('email') as string)?.trim()
+    const subject = (fd.get('subject') as string)?.trim()
+    const message = (fd.get('message') as string)?.trim()
+    if (!name || !email || !subject || !message) return
+
+    if (status) { status.textContent = 'Wird gesendet...'; status.className = 'text-xs font-mono text-center text-accent-cyan' }
+
+    const res = await wpAjax<any>('neo_contact_submit', { name, email, subject, message })
+    if (res?.success !== false) {
+      form.reset()
+      if (status) { status.textContent = '✓ Nachricht gesendet!'; status.className = 'text-xs font-mono text-center text-accent-green' }
+    } else {
+      if (status) { status.textContent = '✗ Senden fehlgeschlagen.'; status.className = 'text-xs font-mono text-center text-accent-red' }
+    }
+    setTimeout(() => { if (status) status.className = 'text-xs font-mono text-center hidden' }, 4000)
+  })
+</script>

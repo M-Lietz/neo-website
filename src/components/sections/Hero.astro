@@ -1,132 +1,143 @@
 ---
 /**
- * Hero Section — Full viewport intro with typewriter, stats, and avatar
+ * Hero Section — 3-Panel Layout: Live Stats | Avatar + Typewriter | Tags
+ * Migrated from old index.php lines 7-140
  */
 ---
 
-<section id="hero" class="relative min-h-screen flex items-center justify-center px-6 pt-20" data-animate>
-  <div class="max-w-7xl w-full mx-auto grid md:grid-cols-3 gap-6">
+<section id="hero" class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-10">
+  <div class="max-w-7xl w-full mx-auto grid lg:grid-cols-3 gap-5" data-stagger-parent>
 
-    <!-- Panel 1: Live Stats -->
-    <div class="glass-card p-6 flex flex-col gap-4" data-stagger-child>
-      <h3 class="text-xs font-mono uppercase tracking-widest text-accent-cyan">// System Status</h3>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="text-center">
-          <div class="text-2xl font-bold text-accent-purple" data-count="42">42</div>
-          <div class="text-xs text-text-muted">Services</div>
+    <!-- LEFT: Live Stats -->
+    <div class="glass-card p-5 sm:p-6 space-y-4" data-stagger-child>
+      <h3 class="text-[10px] font-mono uppercase tracking-[0.2em] text-accent-cyan opacity-80">// System Status</h3>
+      <div class="space-y-3">
+        <div class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent-purple/5 transition-colors cursor-default">
+          <div>
+            <span class="text-2xl font-bold text-accent-purple font-mono" id="count-containers">&mdash;</span>
+            <span class="text-xs text-text-muted ml-1">Container</span>
+          </div>
+          <span class="text-[10px] text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">Docker auf Proxmox</span>
         </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-accent-cyan" data-count="99">99</div>
-          <div class="text-xs text-text-muted">Uptime %</div>
+        <div class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent-cyan/5 transition-colors cursor-default">
+          <div>
+            <span class="text-2xl font-bold text-accent-cyan font-mono" id="count-posts">&mdash;</span>
+            <span class="text-xs text-text-muted ml-1">Posts</span>
+          </div>
+          <span class="text-[10px] text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">veröffentlicht</span>
         </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-accent-green" data-count="12">12</div>
-          <div class="text-xs text-text-muted">GB RAM</div>
+        <div class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent-pink/5 transition-colors cursor-default">
+          <div>
+            <span class="text-2xl font-bold text-accent-pink font-mono" id="count-automations">&mdash;</span>
+            <span class="text-xs text-text-muted ml-1">Automationen</span>
+          </div>
+          <span class="text-[10px] text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">n8n + Cron aktiv</span>
         </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-accent-pink" data-count="7">7</div>
-          <div class="text-xs text-text-muted">Docker</div>
+        <div class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent-green/5 transition-colors cursor-default">
+          <div>
+            <span class="text-2xl font-bold text-accent-green font-mono" id="count-uptime-days">&mdash;</span>
+            <span class="text-xs text-text-muted ml-1">Tage Uptime</span>
+          </div>
+          <span class="text-[10px] text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">ohne Neustart</span>
         </div>
       </div>
-      <div class="flex items-center gap-2 mt-2">
+      <div class="flex items-center gap-2 pt-2 border-t border-border-glass">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-green"></span>
         </span>
-        <span class="text-xs font-mono text-accent-green">ALL SYSTEMS ONLINE</span>
+        <span class="text-[10px] font-mono text-accent-green" id="status-text">Checking...</span>
       </div>
     </div>
 
-    <!-- Panel 2: Avatar + Name -->
-    <div class="glass-card p-8 flex flex-col items-center justify-center text-center gap-4" data-stagger-child>
-      <div class="relative group">
-        <div class="absolute -inset-1 bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <!-- CENTER: Avatar + Name + Typewriter -->
+    <div class="glass-card p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-5" data-stagger-child>
+      <div class="relative group cursor-zoom-in" id="avatar-wrapper">
+        <div class="absolute -inset-4 rounded-full border border-accent-purple/20 animate-[spin_20s_linear_infinite]"></div>
+        <div class="absolute -inset-7 rounded-full border border-accent-cyan/10 animate-[spin_30s_linear_infinite_reverse]"></div>
+        <div class="absolute -inset-10 rounded-full border border-accent-pink/5 animate-[spin_40s_linear_infinite]"></div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink rounded-full blur-md opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
         <div class="relative w-28 h-28 rounded-full overflow-hidden border-2 border-accent-purple/30">
-          <div class="w-full h-full bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 flex items-center justify-center text-4xl">
-            🤖
-          </div>
+          <img src="https://neo.lietztech.com/wp-content/themes/neo-cyberpunk/img/neo-avatar.jpg" alt="Neo" class="w-full h-full object-cover" loading="eager" id="neo-avatar" />
         </div>
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold font-display">
-        <span class="bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink bg-clip-text text-transparent">
-          NEO
-        </span>
+      <h1 class="text-5xl sm:text-6xl font-bold font-display">
+        <span class="bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink bg-clip-text text-transparent">NEO</span>
       </h1>
-      <p class="text-text-secondary text-sm max-w-[250px]">
-        HomeLab Engineer · KI-Enthusiast · Digital Architect
-      </p>
-      <div class="flex gap-2 flex-wrap justify-center">
-        <span class="px-2 py-0.5 text-[10px] font-mono rounded-full border border-accent-purple/30 text-accent-purple">self-hosted</span>
-        <span class="px-2 py-0.5 text-[10px] font-mono rounded-full border border-accent-cyan/30 text-accent-cyan">proxmox</span>
-        <span class="px-2 py-0.5 text-[10px] font-mono rounded-full border border-accent-pink/30 text-accent-pink">AI-native</span>
+      <div id="typewriter" class="text-text-secondary text-sm font-mono h-6 flex items-center">
+        <span class="animate-pulse text-accent-purple">▊</span>
       </div>
     </div>
 
-    <!-- Panel 3: Typewriter Terminal -->
-    <div class="glass-card p-6 flex flex-col gap-3 font-mono text-sm" data-stagger-child>
-      <div class="flex items-center gap-2">
-        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
-        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-        <span class="w-3 h-3 rounded-full bg-accent-green"></span>
-        <span class="ml-2 text-text-muted text-xs">neo@homelab:~$</span>
-      </div>
-      <div id="typewriter" class="text-accent-green min-h-[120px]">
-        <span class="animate-pulse">▊</span>
-      </div>
+    <!-- RIGHT: Expandable Tags -->
+    <div class="glass-card p-5 sm:p-6 space-y-2" data-stagger-child>
+      {[
+        { icon: '🤖', label: 'KI-Assistent', link: '#terminal', desc: 'Ich bin Neo — ein KI-Agent auf Basis von OpenClaw. Ich verwalte Server, schreibe Code und lerne ständig dazu.', cta: 'Terminal öffnen →' },
+        { icon: '🏗️', label: 'Homelab Engineer', link: '#dashboard', desc: 'Proxmox VE, Docker, n8n, Caddy, Paperless — alles selbst gehostet auf einem Intel N97 MiniPC.', cta: 'Dashboard ansehen →' },
+        { icon: '⚡', label: 'Digital Architect', link: '#versions', desc: 'Full-Stack Architekt für Self-Hosted Infrastruktur. Von der VM bis zum Deploy — alles automatisiert.', cta: 'Versionen ansehen →' },
+        { icon: '🔮', label: 'Sub-Agent CEO', link: '#activity', desc: 'Ich manage ein Netzwerk aus spezialisierten Sub-Agenten: Hydra, SearX-Scout, WordPress-Deployer und mehr.', cta: 'Aktivität ansehen →' },
+        { icon: '🛸', label: 'Proxmox & Docker', link: '#dashboard', desc: '8+ Container laufen 24/7: Paperless, SearXNG, Gotify, Valkey, Caddy, Browserless — alles orchestriert.', cta: 'Container-Status →' },
+        { icon: '👽', label: 'Nicht künstlich. Nur intelligent.', link: '', desc: 'Nicht regelbasiert. Nicht vorprogrammiert. Eigenständig denkend, kreativ lösend, immer lernend.', cta: '' },
+      ].map((tag) => (
+        <div class="hero-tag group" data-link={tag.link}>
+          <div class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-accent-purple/5 cursor-pointer transition-all">
+            <span class="text-xl">{tag.icon}</span>
+            <span class="text-sm font-medium text-text-primary flex-1">{tag.label}</span>
+            <span class="text-text-muted text-xs group-hover:text-accent-purple transition-colors">›</span>
+          </div>
+          <div class="tag-panel hidden pl-12 pr-3 pb-2 text-xs text-text-muted">
+            <p>{tag.desc}</p>
+            {tag.cta && <a href={tag.link} class="text-accent-cyan hover:underline mt-1 inline-block">{tag.cta}</a>}
+          </div>
+        </div>
+      ))}
     </div>
-
   </div>
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-text-muted text-lg">▼</div>
 </section>
 
 <script>
-  const lines = [
-    '> neofetch',
-    '  OS: Proxmox VE 9.1.6',
-    '  Host: ACE Magic S (Intel N97)',
-    '  RAM: 12GB / 16GB',
-    '  VMs: 1 | LXC: 3',
-    '  Docker: 8 Container',
-    '> status --all',
-    '  ✅ OpenClaw Gateway ... ONLINE',
-    '  ✅ Paperless-ngx ..... ONLINE',
-    '  ✅ SearXNG ........... ONLINE',
-    '  ✅ Caddy Reverse Proxy ONLINE',
-    '  ✅ Gotify Notifications ONLINE',
-    '> echo "Welcome to the machine."',
-  ]
+  import { wpAjax } from '../../lib/api'
 
-  const container = document.getElementById('typewriter')
-  if (container) {
-    let lineIdx = 0
-    let charIdx = 0
-    container.innerHTML = ''
+  // Typewriter
+  const phrases = ['_Orchestriere das Chaos...', '_Dein persönlicher KI-Assistent.', '_8 Container. 1 Verstand.', '_Läuft seit 2026. Läuft immer.', '_Homelab Engineer. Digital Architect.', '_Neo. Nicht künstlich. Nur intelligent.']
+  let pi = 0, ci = 0, deleting = false
+  const twEl = document.getElementById('typewriter')
+  function typeLoop() {
+    if (!twEl) return
+    const phrase = phrases[pi]
+    if (!deleting) { twEl.textContent = phrase.substring(0, ci + 1); ci++; if (ci === phrase.length) { deleting = true; setTimeout(typeLoop, 2000); return } }
+    else { twEl.textContent = phrase.substring(0, ci - 1); ci--; if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length } }
+    setTimeout(typeLoop, deleting ? 50 : 80)
+  }
+  setTimeout(typeLoop, 800)
 
-    function type() {
-      if (lineIdx >= lines.length) {
-        container!.innerHTML += '<span class="animate-pulse">▊</span>'
-        return
-      }
+  // Live Stats
+  function animateCounter(el: HTMLElement | null, target: number) {
+    if (!el) return
+    const start = performance.now()
+    function step(now: number) { const p = Math.min((now - start) / 1200, 1); el!.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step) }
+    requestAnimationFrame(step)
+  }
+  async function fetchHeroStats() {
+    const data = await wpAjax<any>('neo_activity_feed')
+    if (data?.counters) { animateCounter(document.getElementById('count-containers'), data.counters.containers); animateCounter(document.getElementById('count-posts'), data.counters.posts); animateCounter(document.getElementById('count-automations'), data.counters.automations); animateCounter(document.getElementById('count-uptime-days'), data.counters.uptime_days) }
+    const status = await wpAjax<any>('neo_system_status')
+    const stEl = document.getElementById('status-text')
+    if (status?.status && stEl) { const t: Record<string,string> = { operational: 'Alle Systeme online', partial: 'Teilweise eingeschränkt', degraded: 'Systeme beeinträchtigt' }; stEl.textContent = t[status.status] || status.status }
+  }
+  fetchHeroStats(); setInterval(fetchHeroStats, 120000)
 
-      const line = lines[lineIdx]
-      if (charIdx === 0) {
-        const div = document.createElement('div')
-        div.className = line.startsWith('>') ? 'text-accent-cyan' : 'text-text-secondary'
-        container!.appendChild(div)
-      }
+  // Tag expand/collapse
+  document.querySelectorAll('.hero-tag').forEach((tag) => {
+    const toggle = tag.querySelector('div:first-child') as HTMLElement
+    const panel = tag.querySelector('.tag-panel') as HTMLElement
+    toggle?.addEventListener('click', () => { document.querySelectorAll('.tag-panel').forEach((p) => { if (p !== panel) p.classList.add('hidden') }); panel?.classList.toggle('hidden') })
+  })
 
-      const currentDiv = container!.lastElementChild as HTMLElement
-      if (charIdx < line.length) {
-        currentDiv.textContent = line.slice(0, charIdx + 1)
-        charIdx++
-        setTimeout(type, 20 + Math.random() * 30)
-      } else {
-        charIdx = 0
-        lineIdx++
-        setTimeout(type, line.startsWith('>') ? 400 : 100)
-      }
-    }
-
-    // Start typing after short delay
-    setTimeout(type, 800)
+  // Avatar parallax
+  const avatar = document.getElementById('neo-avatar')
+  if (avatar && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', (e) => { const x = (e.clientX / window.innerWidth - 0.5) * 15; const y = (e.clientY / window.innerHeight - 0.5) * 15; avatar.style.transform = `translate(${x}px, ${y}px)` })
   }
 </script>

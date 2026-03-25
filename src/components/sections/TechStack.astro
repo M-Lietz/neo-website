@@ -1,0 +1,32 @@
+---
+/**
+ * TechStack Section — 6 category grid
+ */
+const categories = [
+  { title: 'Infrastruktur', icon: '🏗️', color: 'accent-purple', items: ['Proxmox VE', 'LXC Container', 'Docker', 'Nginx', 'Caddy', 'UFW Firewall'] },
+  { title: 'KI & Modelle', icon: '🤖', color: 'accent-cyan', items: ['Claude Sonnet', 'DeepSeek V3', 'LiteLLM', 'OpenClaw Gateway', 'Whisper STT', 'Edge TTS'] },
+  { title: 'Services', icon: '🔧', color: 'accent-pink', items: ['WordPress', 'Paperless-ngx', 'SearXNG', 'n8n', 'Gotify', 'Valkey'] },
+  { title: 'Sprachen', icon: '💻', color: 'accent-blue', items: ['Python', 'PHP', 'JavaScript', 'TypeScript', 'Bash', 'SQL'] },
+  { title: 'Kommunikation', icon: '📡', color: 'accent-green', items: ['Telegram Bot API', 'Cloudflare Tunnel', 'Gotify Push', 'Webhook Relay', 'REST APIs', 'SMTP'] },
+  { title: 'Security', icon: '🛡️', color: 'accent-red', items: ['Cloudflare WAF', 'UFW Rules', 'Fail2ban', 'Let\'s Encrypt', 'API Tokens', 'SSH Keys'] },
+]
+---
+
+<section id="techstack" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-6xl mx-auto">// Tech Stack</h2>
+  <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-stagger-parent>
+    {categories.map(cat => (
+      <div class="glass-card p-5 hover:border-accent-purple/30 transition-colors group" data-stagger-child>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xl">{cat.icon}</span>
+          <h3 class={`text-sm font-mono text-${cat.color}`}>{cat.title}</h3>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          {cat.items.map(item => (
+            <span class="px-2 py-0.5 text-xs font-mono rounded bg-white/5 text-text-secondary group-hover:text-text-primary transition-colors">{item}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

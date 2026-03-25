@@ -1,0 +1,92 @@
+---
+/**
+ * Guestbook Section — Form + entries with likes
+ * Uses neo_guestbook_entries, neo_guestbook_submit, neo_guestbook_like
+ */
+---
+
+<section id="guestbook" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-4xl mx-auto">// Gästebuch</h2>
+  <div class="max-w-4xl mx-auto grid md:grid-cols-[1fr_1.5fr] gap-6">
+    <!-- Form -->
+    <div class="glass-card p-5">
+      <h3 class="text-sm font-mono text-accent-purple mb-4">Eintrag hinterlassen</h3>
+      <form id="guestbook-form" class="space-y-3">
+        <input type="text" name="name" placeholder="Dein Name" required
+          class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:border-accent-purple/50 transition-colors" />
+        <textarea name="message" placeholder="Deine Nachricht..." rows="3" required
+          class="w-full px-3 py-2 bg-white/5 border border-border-glass rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:border-accent-purple/50 transition-colors resize-none"></textarea>
+        <button type="submit" class="w-full py-2 rounded-lg bg-accent-purple/20 border border-accent-purple/30 text-sm font-mono text-accent-purple hover:bg-accent-purple/30 transition-colors">
+          Absenden
+        </button>
+        <div id="gb-status" class="text-xs font-mono hidden"></div>
+      </form>
+    </div>
+    <!-- Entries -->
+    <div class="space-y-3" id="guestbook-entries">
+      <div class="glass-card p-4 text-xs font-mono text-text-muted animate-pulse">Lade Einträge...</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { wpAjax } from '../../lib/api'
+
+  const entriesContainer = document.getElementById('guestbook-entries')
+
+  function renderEntries(entries: any[]) {
+    if (!entriesContainer) return
+    entriesContainer.innerHTML = ''
+    entries.forEach((e: any) => {
+      const div = document.createElement('div')
+      div.className = 'glass-card p-4 space-y-2'
+      div.innerHTML = `<div class="flex items-center justify-between">
+        <span class="text-sm font-semibold text-text-primary">${sanitize(e.name)}</span>
+        <span class="text-xs font-mono text-text-muted">${e.date || ''}</span>
+      </div>
+      <p class="text-sm text-text-secondary">${sanitize(e.message)}</p>
+      <button class="gb-like-btn text-xs font-mono text-accent-pink hover:text-accent-pink/80 transition-colors" data-id="${e.id}">
+        ❤️ ${e.likes || 0}
+      </button>`
+      div.querySelector('.gb-like-btn')?.addEventListener('click', async () => {
+        await wpAjax('neo_guestbook_like', { entry_id: e.id })
+        fetchEntries()
+      })
+      entriesContainer.appendChild(div)
+    })
+  }
+
+  function sanitize(str: string): string {
+    const div = document.createElement('div')
+    div.textContent = str
+    return div.innerHTML
+  }
+
+  async function fetchEntries() {
+    const data = await wpAjax<any>('neo_guestbook_entries')
+    if (data?.entries) renderEntries(data.entries)
+  }
+
+  // Form submit
+  const form = document.getElementById('guestbook-form') as HTMLFormElement
+  const status = document.getElementById('gb-status')
+  form?.addEventListener('submit', async (ev) => {
+    ev.preventDefault()
+    const fd = new FormData(form)
+    const name = (fd.get('name') as string)?.trim()
+    const message = (fd.get('message') as string)?.trim()
+    if (!name || !message) return
+    if (status) { status.textContent = 'Wird gesendet...'; status.className = 'text-xs font-mono text-accent-cyan' }
+    const res = await wpAjax<any>('neo_guestbook_submit', { name, message })
+    if (res?.success !== false) {
+      form.reset()
+      if (status) { status.textContent = '✓ Eingetragen!'; status.className = 'text-xs font-mono text-accent-green' }
+      fetchEntries()
+    } else {
+      if (status) { status.textContent = '✗ Fehler beim Senden.'; status.className = 'text-xs font-mono text-accent-red' }
+    }
+    setTimeout(() => { if (status) status.className = 'text-xs font-mono hidden' }, 3000)
+  })
+
+  fetchEntries()
+</script>
