@@ -9,6 +9,29 @@
  */
 import * as THREE from 'three'
 
+/* Soft glow shader — Fresnel-based fade, bright at sphere edge, invisible at outer edge */
+const glowVertexShader = `
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+    vViewDir = normalize(-mvPos.xyz);
+    gl_Position = projectionMatrix * mvPos;
+  }
+`
+const glowFragmentShader = `
+  uniform vec3 uColor;
+  uniform float uIntensity;
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  void main() {
+    float rim = 1.0 - max(dot(vNormal, vViewDir), 0.0);
+    float glow = pow(rim, 2.5) * uIntensity;
+    gl_FragColor = vec4(uColor, glow);
+  }
+`
+
 export function initBackground(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 300)
@@ -111,15 +134,19 @@ export function initBackground(canvas: HTMLCanvasElement) {
     })
     group.add(new THREE.Mesh(geo, mat))
 
-    // Soft additive glow shell — shiny aura around the lit side
-    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.18, 48, 48)
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0xb0d4f0,
+    // Soft Fresnel glow — smooth gradient fade from sphere edge outward
+    const glowGeo = new THREE.SphereGeometry(cfg.size * 1.35, 48, 48)
+    const glowMat = new THREE.ShaderMaterial({
+      vertexShader: glowVertexShader,
+      fragmentShader: glowFragmentShader,
+      uniforms: {
+        uColor: { value: new THREE.Color(0xc0ddf0) },
+        uIntensity: { value: cfg.opacity * 0.35 },
+      },
       transparent: true,
-      opacity: cfg.opacity * 0.12,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
+      side: THREE.FrontSide,
     })
     group.add(new THREE.Mesh(glowGeo, glowMat))
 
