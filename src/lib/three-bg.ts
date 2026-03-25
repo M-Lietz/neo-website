@@ -15,14 +15,14 @@ export function initBackground(canvas: HTMLCanvasElement) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.2
 
-  // Large luminous orbs — the key visual (big, soft, glowing through glass)
+  // Large luminous orbs — white/silver/icy blue (Shutterstock glassmorphism style)
   const spheres: THREE.Mesh[] = []
   const sphereData = [
-    { color: 0x22d3ee, size: 12, pos: [14, 8, -20], speed: 0.15, opacity: 0.18 },   // cyan - large, dominant
-    { color: 0xa855f7, size: 10, pos: [-12, -6, -15], speed: 0.12, opacity: 0.15 },  // purple
-    { color: 0x60a5fa, size: 8, pos: [-18, 10, -25], speed: 0.18, opacity: 0.12 },   // blue - deep
-    { color: 0xf472b6, size: 7, pos: [8, -14, -18], speed: 0.2, opacity: 0.1 },      // pink - accent
-    { color: 0x22d3ee, size: 15, pos: [0, 0, -35], speed: 0.08, opacity: 0.08 },     // mega cyan - very far back
+    { color: 0xd4e5f7, size: 14, pos: [15, 8, -18], speed: 0.12, opacity: 0.20 },   // silver-white - dominant
+    { color: 0xbdd4ed, size: 11, pos: [-14, -5, -14], speed: 0.10, opacity: 0.16 },  // icy blue
+    { color: 0xe8f0f8, size: 9, pos: [-18, 12, -22], speed: 0.15, opacity: 0.13 },   // near-white
+    { color: 0xc8ddf0, size: 8, pos: [10, -12, -16], speed: 0.17, opacity: 0.11 },   // cool blue
+    { color: 0xdce8f3, size: 18, pos: [0, 2, -32], speed: 0.06, opacity: 0.09 },     // mega white - far back
   ]
 
   sphereData.forEach((data) => {
@@ -64,7 +64,7 @@ export function initBackground(canvas: HTMLCanvasElement) {
   const particleGeo = new THREE.BufferGeometry()
   particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
   const particleMat = new THREE.PointsMaterial({
-    color: 0x8b9dc3,
+    color: 0xc8d8e8,
     size: 0.08,
     transparent: true,
     opacity: 0.5,

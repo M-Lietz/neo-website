@@ -1,34 +1,36 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════
-   NEO — Premium Glassmorphism Design System
+   NEO — Frosted Glass Design System
+   Weiß · Blau · Silber · Kühler Frost
    ═══════════════════════════════════════════ */
 
 @theme {
-  /* Color Palette — Deep space tones */
-  --color-bg-primary: #030306;
-  --color-bg-secondary: #080812;
-  --color-bg-glass: rgba(12, 14, 28, 0.55);
-  --color-bg-glass-hover: rgba(18, 20, 40, 0.7);
+  /* Color Palette — Cool icy tones */
+  --color-bg-primary: #060a14;
+  --color-bg-secondary: #0a0f1e;
+  --color-bg-glass: rgba(15, 20, 40, 0.45);
+  --color-bg-glass-hover: rgba(20, 28, 55, 0.55);
 
-  --color-accent-purple: #a855f7;
-  --color-accent-cyan: #22d3ee;
-  --color-accent-pink: #f472b6;
-  --color-accent-blue: #60a5fa;
-  --color-accent-green: #34d399;
-  --color-accent-red: #f87171;
+  /* Monochrome blue-white accent system */
+  --color-accent-purple: #7eb4f5;
+  --color-accent-cyan: #a8d4f0;
+  --color-accent-pink: #8ec5e8;
+  --color-accent-blue: #6ba3e8;
+  --color-accent-green: #7ecfc0;
+  --color-accent-red: #e8a8a8;
 
-  --color-text-primary: #e8edf5;
-  --color-text-secondary: #a0aec0;
-  --color-text-muted: #4a5568;
+  --color-text-primary: #e4eaf5;
+  --color-text-secondary: #9eb3cf;
+  --color-text-muted: #4e6382;
 
-  --color-border-glass: rgba(255, 255, 255, 0.08);
-  --color-border-glass-hover: rgba(255, 255, 255, 0.18);
+  --color-border-glass: rgba(255, 255, 255, 0.10);
+  --color-border-glass-hover: rgba(255, 255, 255, 0.22);
 
-  /* Glow Effects */
-  --glow-purple: 0 0 30px rgba(168, 85, 247, 0.25), 0 0 80px rgba(168, 85, 247, 0.08);
-  --glow-cyan: 0 0 30px rgba(34, 211, 238, 0.25), 0 0 80px rgba(34, 211, 238, 0.08);
-  --glow-pink: 0 0 30px rgba(244, 114, 182, 0.25), 0 0 80px rgba(244, 114, 182, 0.08);
+  /* Glow Effects — soft white/blue */
+  --glow-purple: 0 0 30px rgba(140, 180, 240, 0.15), 0 0 80px rgba(140, 180, 240, 0.06);
+  --glow-cyan: 0 0 30px rgba(170, 210, 240, 0.15), 0 0 80px rgba(170, 210, 240, 0.06);
+  --glow-pink: 0 0 30px rgba(160, 200, 235, 0.15), 0 0 80px rgba(160, 200, 235, 0.06);
 
   /* Typography */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -45,7 +47,7 @@
   html {
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-accent-purple) transparent;
+    scrollbar-color: rgba(120, 160, 220, 0.4) transparent;
   }
 
   body {
@@ -55,21 +57,21 @@
     overflow-x: hidden;
   }
 
-  /* Subtle grid overlay like Shutterstock references */
+  /* Subtle grid overlay */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: -5;
     background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      linear-gradient(rgba(120, 170, 230, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120, 170, 230, 0.02) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
   }
 
   ::selection {
-    background: rgba(168, 85, 247, 0.3);
+    background: rgba(120, 170, 230, 0.3);
     color: #fff;
   }
 
@@ -77,12 +79,12 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-accent-purple);
+    background: rgba(120, 160, 220, 0.4);
     border-radius: 3px;
   }
 }
 
-/* Premium Glassmorphism Card */
+/* Premium Frosted Glass Card */
 @layer components {
   .glass-card {
     background: var(--color-bg-glass);
@@ -93,18 +95,17 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
     position: relative;
   }
 
-  /* Top-edge highlight (frosted glass shine) */
   .glass-card::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.12) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.04) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -116,22 +117,22 @@
     background: var(--color-bg-glass-hover);
     border-color: var(--color-border-glass-hover);
     box-shadow:
-      0 12px 48px rgba(0, 0, 0, 0.4),
-      0 0 30px rgba(168, 85, 247, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      0 12px 48px rgba(0, 0, 0, 0.35),
+      0 0 40px rgba(140, 190, 240, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
   }
 
-  /* Section glass — larger panels with more depth */
+  /* Large frosted panel */
   .glass-panel {
-    background: rgba(8, 10, 22, 0.65);
+    background: rgba(12, 18, 35, 0.5);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
     box-shadow:
-      0 16px 64px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      0 16px 64px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
     position: relative;
   }
 
@@ -141,7 +142,7 @@
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.1) 0%, transparent 50%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -149,12 +150,12 @@
     pointer-events: none;
   }
 
-  /* Neon text glow utility */
+  /* Text glow — soft white */
   .neon-text {
     text-shadow: 0 0 10px currentColor, 0 0 40px currentColor;
   }
 
-  /* Ambient glow behind key elements */
+  /* Ambient glow — soft blue-white */
   .glow-ambient {
     position: relative;
   }
@@ -162,7 +163,7 @@
     content: '';
     position: absolute;
     inset: -20%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(130, 180, 240, 0.07) 0%, transparent 70%);
     z-index: -1;
     pointer-events: none;
     filter: blur(40px);
