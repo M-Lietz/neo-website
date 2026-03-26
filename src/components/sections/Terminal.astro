@@ -1,9 +1,47 @@
 ---
 /**
- * Dual Terminal Section — Real Chat (left) + Fake Bot (right)
- * Left: Interactive LLM chat
+ * Dual Terminal Section — Telegram Preview (left) + Fake Bot (right)
+ * Left: Telegram chat mockup showing real bot interactions
  * Right: 8 automated showcase scenarios with typing animation
  */
+const conversations = [
+  {
+    id: 'status',
+    label: '📊 Status',
+    messages: [
+      { from: 'user', text: 'Wie läuft das Homelab?', time: '09:14' },
+      { from: 'bot', text: '📊 System Status — 26. März 2026\n\n🖥️ CPU: 12% · RAM: 5.1/12GB (42%)\n💾 Disk: 34% belegt (48GB frei)\n🐳 8/8 Container: ✅ healthy\n⏰ Uptime: 183 Tage\n🌡️ Temperatur: 41°C\n\n✅ Alles läuft einwandfrei.', time: '09:14' },
+      { from: 'bot', type: 'buttons', buttons: ['📊 Details', '🐳 Docker', '🔄 Refresh'] },
+    ],
+  },
+  {
+    id: 'docker',
+    label: '🐳 Docker',
+    messages: [
+      { from: 'user', text: '/docker status', time: '14:22' },
+      { from: 'bot', text: '🐳 Docker — 8 Container aktiv\n\n✅ caddy (128MB) — 0.3% CPU\n✅ searxng (412MB) — 1.2% CPU\n✅ paperless (680MB) — 0.5% CPU\n✅ gotify (64MB) — 0.1% CPU\n✅ browserless (320MB) — 0.4% CPU\n✅ valkey (48MB) — 0.1% CPU\n✅ n8n (256MB) — 0.8% CPU\n✅ wordpress (180MB) — 0.3% CPU\n\n📈 Gesamt: 2.1GB RAM · 3.7% CPU', time: '14:22' },
+      { from: 'bot', type: 'buttons', buttons: ['🔄 Restart All', '📋 Logs', '🗑️ Prune'] },
+    ],
+  },
+  {
+    id: 'creative',
+    label: '🎨 Content',
+    messages: [
+      { from: 'user', text: 'Erstell mir einen Post über Self-Hosting', time: '18:30' },
+      { from: 'bot', text: '🎨 Content generiert!\n\n📝 Text: \"5 Gründe warum du 2026 self-hosten solltest\" (847 Wörter)\n🖼️ Bild: Generiert mit Flux Schnell (CF Workers AI)\n🔊 Audio: TTS mit edge-tts (2:14 min)\n\n📤 Veröffentlichen?', time: '18:31' },
+      { from: 'bot', type: 'buttons', buttons: ['📤 Senden', '✏️ Bearbeiten', '🔄 Neu'] },
+    ],
+  },
+  {
+    id: 'search',
+    label: '🔍 Suche',
+    messages: [
+      { from: 'user', text: 'Such mir die besten MiniPC Alternativen 2026', time: '11:05' },
+      { from: 'bot', text: '🔍 SearXNG — 12 Ergebnisse\n\n1. Beelink SER8 — Ryzen 8845HS, ab €349\n2. Minisforum UM890 — Ryzen 9 8945HS, ab €429\n3. GMKtec N150 — Intel N150, ab €129\n4. ACEMAGIC S1 — Intel N97, ab €169\n5. Geekom A8 — Ryzen 8945HS, ab €459\n\n💡 Für Homelab-Use: N150 oder N97 reichen. Für Heavy AI: Ryzen 8845HS.', time: '11:06' },
+      { from: 'bot', type: 'buttons', buttons: ['📄 Mehr Details', '💾 Speichern', '📊 Vergleich'] },
+    ],
+  },
+]
 ---
 
 <section id="terminal" class="px-4 sm:px-6 py-20" data-animate>
@@ -11,40 +49,49 @@
     <span class="title-glow-line"></span>// Live Terminal
   </h2>
   <p class="text-text-secondary text-sm max-w-6xl mx-auto mb-8 pl-[52px]">
-    Links: Stell Neo eine Frage. Rechts: Was Neo automatisch erledigt.
+    Links: Echte Telegram-Interaktion. Rechts: Was Neo automatisch erledigt.
   </p>
 
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
 
-    <!-- LEFT: Real Chat Terminal -->
+    <!-- LEFT: Telegram Preview -->
     <div class="glass-panel overflow-hidden glow-ambient">
-      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-        <span class="w-3 h-3 rounded-full bg-accent-cyan"></span>
-        <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-        <span class="w-3 h-3 rounded-full bg-accent-red"></span>
-        <span class="ml-3 text-xs font-mono text-text-muted">neo-chat · interaktiv</span>
+      <!-- Header -->
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-white/5" style="background: rgba(30,40,60,0.6);">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-sm font-bold text-white">N</div>
+        <div class="flex-1">
+          <div class="text-sm font-semibold text-text-primary">Neo ⚡</div>
+          <div class="text-[10px] text-accent-green font-mono">online · KI-Agent</div>
+        </div>
+        <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="text-accent-cyan text-xs font-mono hover:text-accent-purple transition-colors">@merlin_neo_ai_bot</a>
       </div>
-      <div id="chat-output" class="p-4 font-mono text-xs h-[320px] overflow-y-auto space-y-2">
-        <div class="text-accent-cyan">Neo KI-Chat</div>
-        <div class="text-text-muted">Stell mir eine Frage über dieses Projekt, die Technik oder Self-Hosting.</div>
-        <div class="text-text-muted text-[10px] mt-2">5 Nachrichten pro Session · Powered by lokale KI</div>
+
+      <!-- Scenario Tabs -->
+      <div class="flex gap-1 px-3 py-2 border-b border-white/5 overflow-x-auto scrollbar-none">
+        {conversations.map((c, i) => (
+          <button
+            class={`tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 ${
+              i === 0
+                ? 'bg-accent-purple/15 text-accent-purple border border-accent-purple/20'
+                : 'text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10'
+            }`}
+            data-convo={c.id}
+          >
+            {c.label}
+          </button>
+        ))}
       </div>
-      <div class="flex items-center px-4 py-3 border-t border-white/5">
-        <span class="font-mono text-xs text-accent-cyan mr-2">du →</span>
-        <input
-          type="text"
-          id="chat-input"
-          autocomplete="off"
-          spellcheck="false"
-          maxlength="200"
-          placeholder="Frag mich etwas..."
-          class="flex-1 bg-transparent outline-none font-mono text-xs text-text-primary placeholder-text-muted"
-        />
-        <button id="chat-send" class="ml-2 text-xs font-mono text-accent-cyan hover:text-accent-purple transition-colors">↵</button>
+
+      <!-- Chat Messages -->
+      <div id="tg-messages" class="p-4 h-[340px] overflow-y-auto space-y-3" style="background: rgba(12,18,35,0.4);">
+        <!-- Filled by JS -->
       </div>
-      <div class="px-4 py-1 border-t border-white/5 flex items-center justify-between">
-        <span class="text-[10px] font-mono text-text-muted" id="chat-counter">5 Nachrichten übrig</span>
-        <span class="text-[10px] font-mono text-text-muted" id="chat-model">Model: local-llm</span>
+
+      <!-- Input Bar -->
+      <div class="flex items-center gap-2 px-3 py-2.5 border-t border-white/5">
+        <span class="text-text-muted">😊</span>
+        <div class="flex-1 bg-white/5 rounded-full px-3 py-1.5 text-xs text-text-muted font-mono">Nachricht schreiben...</div>
+        <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="text-accent-purple hover:text-accent-cyan transition-colors text-xs font-mono">Probier's aus →</a>
       </div>
     </div>
 
@@ -300,100 +347,179 @@
   setTimeout(() => playScenario(0), 500)
 
   // ═══════════════════════════════════
-  // REAL CHAT — LLM Integration
+  // TELEGRAM PREVIEW — Left Panel
   // ═══════════════════════════════════
 
-  const chatOutput = document.getElementById('chat-output')
-  const chatInput = document.getElementById('chat-input') as HTMLInputElement
-  const chatSend = document.getElementById('chat-send')
-  const chatCounter = document.getElementById('chat-counter')
-  let messagesRemaining = 5
-
-  function addChatMessage(text: string, sender: 'user' | 'neo') {
-    if (!chatOutput) return
-    const div = document.createElement('div')
-    if (sender === 'user') {
-      div.className = 'text-accent-purple'
-      div.textContent = `du → ${text}`
-    } else {
-      div.className = 'text-text-secondary'
-      div.innerHTML = `<span class="text-accent-cyan">neo →</span> ${text}`
-    }
-    chatOutput.appendChild(div)
-    chatOutput.scrollTop = chatOutput.scrollHeight
+  const tgConversations: Record<string, Array<{from?: string; text?: string; time?: string; type?: string; buttons?: string[]}>> = {
+    status: [
+      { from: 'user', text: 'Wie läuft das Homelab?', time: '09:14' },
+      { from: 'bot', text: '📊 System Status — 26. März 2026\n\n🖥️ CPU: 12% · RAM: 5.1/12GB (42%)\n💾 Disk: 34% belegt (48GB frei)\n🐳 8/8 Container: ✅ healthy\n⏰ Uptime: 183 Tage\n🌡️ Temperatur: 41°C\n\n✅ Alles läuft einwandfrei.', time: '09:14' },
+      { type: 'buttons', buttons: ['📊 Details', '🐳 Docker', '🔄 Refresh'] },
+    ],
+    docker: [
+      { from: 'user', text: '/docker status', time: '14:22' },
+      { from: 'bot', text: '🐳 Docker — 8 Container aktiv\n\n✅ caddy (128MB) — 0.3% CPU\n✅ searxng (412MB) — 1.2% CPU\n✅ paperless (680MB) — 0.5% CPU\n✅ gotify (64MB) — 0.1% CPU\n✅ browserless (320MB) — 0.4% CPU\n✅ valkey (48MB) — 0.1% CPU\n✅ n8n (256MB) — 0.8% CPU\n✅ wordpress (180MB) — 0.3% CPU\n\n📈 Gesamt: 2.1GB RAM · 3.7% CPU', time: '14:22' },
+      { type: 'buttons', buttons: ['🔄 Restart All', '📋 Logs', '🗑️ Prune'] },
+    ],
+    creative: [
+      { from: 'user', text: 'Erstell mir einen Post über Self-Hosting', time: '18:30' },
+      { from: 'bot', text: '🎨 Content generiert!\n\n📝 Text: \"5 Gründe warum du 2026 self-hosten solltest\" (847 Wörter)\n🖼️ Bild: Generiert mit Flux Schnell (CF Workers AI)\n🔊 Audio: TTS mit edge-tts (2:14 min)\n\n📤 Veröffentlichen?', time: '18:31' },
+      { type: 'buttons', buttons: ['📤 Senden', '✏️ Bearbeiten', '🔄 Neu'] },
+    ],
+    search: [
+      { from: 'user', text: 'Such mir die besten MiniPC Alternativen 2026', time: '11:05' },
+      { from: 'bot', text: '🔍 SearXNG — 12 Ergebnisse\n\n1. Beelink SER8 — Ryzen 8845HS, ab €349\n2. Minisforum UM890 — Ryzen 9 8945HS, ab €429\n3. GMKtec N150 — Intel N150, ab €129\n4. ACEMAGIC S1 — Intel N97, ab €169\n5. Geekom A8 — Ryzen 8945HS, ab €459\n\n💡 Für Homelab-Use: N150 oder N97 reichen.', time: '11:06' },
+      { type: 'buttons', buttons: ['📄 Mehr Details', '💾 Speichern', '📊 Vergleich'] },
+    ],
   }
 
-  function addTypingIndicator(): HTMLElement {
-    if (!chatOutput) return document.createElement('div')
-    const div = document.createElement('div')
-    div.className = 'text-accent-cyan typing-indicator'
-    div.innerHTML = 'neo → <span class="animate-pulse">▊</span>'
-    chatOutput.appendChild(div)
-    chatOutput.scrollTop = chatOutput.scrollHeight
-    return div
+  const msgContainer = document.getElementById('tg-messages')!
+  const tgTabs = document.querySelectorAll<HTMLElement>('.tg-tab')
+  let currentConvo = 'status'
+  let tgAnimationTimeout: ReturnType<typeof setTimeout>[] = []
+
+  function escapeHtml(text: string): string {
+    const el = document.createElement('span')
+    el.textContent = text
+    return el.innerHTML
   }
 
-  // Predefined responses for offline mode (when LLM not available)
-  const offlineResponses: Record<string, string> = {
-    'default': 'Ich bin Neo — ein Self-Hosted KI-Agent auf einem MiniPC. Frag mich über das Projekt, die Technik oder Self-Hosting!',
-    'projekt': 'Neo ist ein Homelab-Projekt von Merlin Lietz. Ein KI-Agent auf einem Intel N97 MiniPC — komplett self-hosted, ohne Cloud. Schau dir das Dashboard an für Live-Daten!',
-    'technik': 'Diese Seite läuft auf einem Intel N97 MiniPC mit 16GB RAM. Stack: Proxmox VE, Docker, Astro, Three.js, Caddy, Cloudflare Tunnel.',
-    'hosting': 'Self-Hosting bedeutet: Deine Daten auf deinem Server. Kein Drittanbieter, keine monatlichen Cloud-Kosten. Alles unter deiner Kontrolle.',
-    'merlin': 'Merlin Lietz ist IT-Quereinsteiger und hat dieses gesamte System in einem Jahr aufgebaut. Portfolio: merlinlietz.com',
-  }
+  function renderConversation(id: string) {
+    tgAnimationTimeout.forEach(clearTimeout)
+    tgAnimationTimeout = []
+    msgContainer.innerHTML = ''
+    currentConvo = id
 
-  function getOfflineResponse(input: string): string {
-    const lower = input.toLowerCase()
-    if (lower.includes('projekt') || lower.includes('neo') || lower.includes('was')) return offlineResponses['projekt']
-    if (lower.includes('technik') || lower.includes('stack') || lower.includes('server')) return offlineResponses['technik']
-    if (lower.includes('hosting') || lower.includes('self') || lower.includes('cloud')) return offlineResponses['hosting']
-    if (lower.includes('merlin') || lower.includes('wer') || lower.includes('du')) return offlineResponses['merlin']
-    return offlineResponses['default']
-  }
-
-  async function sendMessage() {
-    if (!chatInput || messagesRemaining <= 0) return
-    const text = chatInput.value.trim()
-    if (!text) return
-
-    chatInput.value = ''
-    messagesRemaining--
-    if (chatCounter) chatCounter.textContent = `${messagesRemaining} Nachrichten übrig`
-
-    addChatMessage(text, 'user')
-
-    const typing = addTypingIndicator()
-
-    // Try LLM endpoint, fallback to offline
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text }),
-      })
-      if (res.ok) {
-        const data = await res.json()
-        typing.remove()
-        addChatMessage(data.response || 'Keine Antwort erhalten.', 'neo')
+    tgTabs.forEach(t => {
+      if (t.dataset.convo === id) {
+        t.className = 'tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 bg-accent-purple/15 text-accent-purple border border-accent-purple/20'
       } else {
-        throw new Error('API not available')
+        t.className = 'tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10'
       }
-    } catch {
-      // Offline fallback with simulated delay
-      await new Promise(r => setTimeout(r, 800 + Math.random() * 600))
-      typing.remove()
-      addChatMessage(getOfflineResponse(text), 'neo')
+    })
+
+    const msgs = tgConversations[id]
+    if (!msgs) return
+
+    function showTyping(): HTMLElement {
+      const typing = document.createElement('div')
+      typing.className = 'flex items-end gap-2'
+      typing.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-[10px] font-bold text-white shrink-0">N</div>
+        <div class="glass-card px-3 py-2 rounded-tl-sm max-w-[80%]">
+          <div class="flex gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:0ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:150ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:300ms"></span>
+          </div>
+        </div>
+      `
+      msgContainer.appendChild(typing)
+      msgContainer.scrollTop = msgContainer.scrollHeight
+      return typing
     }
 
-    if (messagesRemaining <= 0) {
-      chatInput.disabled = true
-      chatInput.placeholder = 'Session-Limit erreicht'
-      if (chatCounter) chatCounter.textContent = 'Session beendet'
-    }
+    let delay = 0
+    msgs.forEach((msg) => {
+      if (msg.from === 'user') {
+        tgAnimationTimeout.push(setTimeout(() => {
+          const el = document.createElement('div')
+          el.className = 'flex justify-end'
+          el.innerHTML = `
+            <div class="max-w-[80%] rounded-2xl rounded-br-sm px-3 py-2 text-xs" style="background: rgba(126,180,245,0.15); border: 1px solid rgba(126,180,245,0.1);">
+              <span class="text-text-primary">${escapeHtml(msg.text || '')}</span>
+              <div class="text-[9px] text-text-muted text-right mt-0.5">${msg.time} ✓✓</div>
+            </div>
+          `
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(8px)'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'all 0.3s ease-out'
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 600
+      } else if (msg.from === 'bot') {
+        let typingEl: HTMLElement | null = null
+        tgAnimationTimeout.push(setTimeout(() => {
+          typingEl = showTyping()
+        }, delay))
+        delay += 1200
+
+        tgAnimationTimeout.push(setTimeout(() => {
+          if (typingEl) typingEl.remove()
+          const el = document.createElement('div')
+          el.className = 'flex items-end gap-2'
+          const lines = (msg.text || '').split('\n').map(l => escapeHtml(l)).join('<br>')
+          el.innerHTML = `
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-[10px] font-bold text-white shrink-0">N</div>
+            <div class="glass-card px-3 py-2 rounded-tl-sm max-w-[80%]">
+              <div class="text-xs text-text-primary leading-relaxed">${lines}</div>
+              <div class="text-[9px] text-text-muted mt-1">${msg.time}</div>
+            </div>
+          `
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(8px)'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'all 0.3s ease-out'
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 400
+      } else if (msg.type === 'buttons') {
+        tgAnimationTimeout.push(setTimeout(() => {
+          const el = document.createElement('div')
+          el.className = 'flex gap-1.5 pl-9 flex-wrap'
+          msg.buttons?.forEach(label => {
+            const btn = document.createElement('button')
+            btn.className = 'text-[10px] font-mono px-2.5 py-1 rounded glass-card text-accent-cyan hover:text-accent-purple hover:border-accent-purple/30 transition-all duration-200'
+            btn.textContent = label
+            btn.addEventListener('click', () => {
+              btn.classList.add('border-accent-green/40', 'text-accent-green')
+              btn.textContent = '✓ ' + label
+              setTimeout(() => {
+                btn.classList.remove('border-accent-green/40', 'text-accent-green')
+                btn.textContent = label
+              }, 1500)
+            })
+            el.appendChild(btn)
+          })
+          el.style.opacity = '0'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'opacity 0.3s ease-out'
+            el.style.opacity = '1'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 300
+      }
+    })
   }
 
-  chatInput?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendMessage()
+  // Tab click handlers
+  tgTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.convo
+      if (id && id !== currentConvo) renderConversation(id)
+    })
   })
-  chatSend?.addEventListener('click', sendMessage)
+
+  // Auto-start first conversation when in view
+  const tgObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        renderConversation('status')
+        tgObserver.disconnect()
+      }
+    })
+  }, { threshold: 0.2 })
+
+  tgObserver.observe(msgContainer.closest('section')!)
 </script>
