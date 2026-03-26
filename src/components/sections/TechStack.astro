@@ -1,19 +1,64 @@
 ---
 /**
- * TechStack Section — 6 category grid
+ * TechStack Section — 6 category grid mit Hover-Tooltips
  */
 const categories = [
-  { title: 'Infrastruktur', icon: '🏗️', color: 'accent-purple', items: ['Proxmox VE', 'LXC Container', 'Docker', 'Nginx', 'Caddy', 'UFW Firewall'] },
-  { title: 'KI & Modelle', icon: '🤖', color: 'accent-cyan', items: ['Claude Sonnet', 'DeepSeek V3', 'LiteLLM', 'OpenClaw Gateway', 'Whisper STT', 'Edge TTS'] },
-  { title: 'Services', icon: '🔧', color: 'accent-pink', items: ['WordPress', 'Paperless-ngx', 'SearXNG', 'n8n', 'Gotify', 'Valkey'] },
-  { title: 'Sprachen', icon: '💻', color: 'accent-blue', items: ['Python', 'PHP', 'JavaScript', 'TypeScript', 'Bash', 'SQL'] },
-  { title: 'Kommunikation', icon: '📡', color: 'accent-green', items: ['Telegram Bot API', 'Cloudflare Tunnel', 'Gotify Push', 'Webhook Relay', 'REST APIs', 'SMTP'] },
-  { title: 'Security', icon: '🛡️', color: 'accent-red', items: ['Cloudflare WAF', 'UFW Rules', 'Fail2ban', 'Let\'s Encrypt', 'API Tokens', 'SSH Keys'] },
+  { title: 'Infrastruktur', icon: '🏗️', color: 'accent-purple', items: [
+    { name: 'Proxmox VE', tip: 'Hypervisor — 1 VM + 4 LXC Container orchestriert' },
+    { name: 'LXC Container', tip: '4 Container: n8n, s1panel, neo-website, dev' },
+    { name: 'Docker', tip: '8+ Services: Paperless, SearXNG, Caddy, Gotify...' },
+    { name: 'Nginx', tip: 'Reverse Proxy für neo.lietztech.com + Security Headers' },
+    { name: 'Caddy', tip: 'HTTPS Proxy + Auto-TLS für interne Services' },
+    { name: 'UFW Firewall', tip: 'Alle Ports gesperrt — nur Cloudflare Tunnel offen' },
+  ]},
+  { title: 'KI & Modelle', icon: '🤖', color: 'accent-cyan', items: [
+    { name: 'Claude Sonnet', tip: 'Haupt-LLM via LiteLLM — Chat + Code + Analyse' },
+    { name: 'DeepSeek V3', tip: 'Fallback-Modell — schnell + günstig für Routine' },
+    { name: 'LiteLLM', tip: 'Proxy für 11 Modelle — einheitliche API, Load Balancing' },
+    { name: 'OpenClaw Gateway', tip: 'Selbst geschriebener Python-Agent — 190d uptime' },
+    { name: 'Whisper STT', tip: 'Spracherkennung — Telegram Voice → Text' },
+    { name: 'Edge TTS', tip: 'Text-to-Speech — Neo antwortet mit Stimme' },
+  ]},
+  { title: 'Services', icon: '🔧', color: 'accent-pink', items: [
+    { name: 'WordPress', tip: 'merlinlietz.com — Portfolio + Blog + Kontakt' },
+    { name: 'Paperless-ngx', tip: 'OCR + Archiv — 200+ Dokumente durchsuchbar' },
+    { name: 'SearXNG', tip: 'Privacy-Suchmaschine — 60+ Backends aggregiert' },
+    { name: 'n8n', tip: '14 Workflows — Telegram, E-Mail, Monitoring' },
+    { name: 'Gotify', tip: 'Push-Server — System-Alerts auf\'s Handy' },
+    { name: 'Valkey', tip: 'Redis-Fork — Cache für SearXNG Queries' },
+  ]},
+  { title: 'Sprachen', icon: '💻', color: 'accent-blue', items: [
+    { name: 'Python', tip: 'OpenClaw Gateway, Callback-Daemon, Scripts' },
+    { name: 'PHP', tip: 'WordPress Customization + REST API Endpoints' },
+    { name: 'JavaScript', tip: 'Three.js Orbs, GSAP Animationen, Interaktivität' },
+    { name: 'TypeScript', tip: 'Astro Components + Type-safe Build-Pipeline' },
+    { name: 'Bash', tip: '20+ Scripts: Maintenance, Watchdog, Deploy' },
+    { name: 'SQL', tip: 'WordPress DB, Paperless-ngx PostgreSQL' },
+  ]},
+  { title: 'Kommunikation', icon: '📡', color: 'accent-green', items: [
+    { name: 'Telegram Bot API', tip: '@merlin_neo_ai_bot — 24/7 Chat + Kanal-Automation' },
+    { name: 'Cloudflare Tunnel', tip: 'Zero-Trust Zugang — kein offener Port nötig' },
+    { name: 'Gotify Push', tip: 'Echtzeit-Alerts: Container down, Backup fertig' },
+    { name: 'Webhook Relay', tip: 'n8n + GitHub + Cloudflare Event-Chain' },
+    { name: 'REST APIs', tip: 'Proxmox, WordPress, Paperless, Docker — alle via API' },
+    { name: 'SMTP', tip: 'himalaya CLI — E-Mail senden + empfangen' },
+  ]},
+  { title: 'Security', icon: '🛡️', color: 'accent-red', items: [
+    { name: 'Cloudflare WAF', tip: 'Web Application Firewall + DDoS Protection' },
+    { name: 'UFW Rules', tip: 'Nur SSH + Cloudflare IPs erlaubt' },
+    { name: 'Fail2ban', tip: 'Brute-Force-Schutz — nach 3 Versuchen gesperrt' },
+    { name: 'Let\'s Encrypt', tip: 'Auto-TLS via Caddy — 0 manuelle Zertifikate' },
+    { name: 'API Tokens', tip: 'Jeder Service eigener Scope — kein Shared Secret' },
+    { name: 'SSH Keys', tip: 'Ed25519 — Passwort-Auth deaktiviert' },
+  ]},
 ]
 ---
 
 <section id="techstack" class="px-4 sm:px-6 py-20" data-animate>
-  <h2 class="text-lg font-mono text-accent-cyan mb-6 max-w-6xl mx-auto title-glow"><span class="title-glow-line"></span>// Tech Stack</h2>
+  <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-6xl mx-auto title-glow"><span class="title-glow-line"></span>// Tech Stack</h2>
+  <p class="text-text-secondary text-sm max-w-6xl mx-auto mb-6 pl-[52px]">
+    36 Tools, 6 Kategorien — hover für Details.
+  </p>
   <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-stagger-parent>
     {categories.map(cat => (
       <div class="glass-card p-5 hover:border-accent-purple/30 transition-colors group" data-stagger-child>
@@ -23,7 +68,10 @@ const categories = [
         </div>
         <div class="flex flex-wrap gap-1.5">
           {cat.items.map(item => (
-            <span class="px-2 py-0.5 text-xs font-mono rounded bg-white/5 text-text-secondary group-hover:text-text-primary transition-colors">{item}</span>
+            <span class="skill-tag px-2 py-0.5 text-xs font-mono rounded bg-white/5 text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors">
+              {item.name}
+              <span class="skill-tooltip">{item.tip}</span>
+            </span>
           ))}
         </div>
       </div>

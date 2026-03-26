@@ -176,9 +176,9 @@ const tagStyles: Record<string, { bg: string; text: string; label: string }> = {
     <div class="absolute left-[11px] top-0 bottom-0 w-px bg-gradient-to-b from-accent-green via-accent-purple to-accent-cyan/30"></div>
 
     <div class="space-y-6">
-      {releases.map((release, i) => (
+      {/* Neueste 3 Releases immer sichtbar */}
+      {releases.slice(0, 3).map((release, i) => (
         <div class="relative pl-8" data-animate>
-          <!-- Version dot -->
           <div class={`absolute left-0 w-[23px] h-[23px] rounded-full border-2 border-bg-primary flex items-center justify-center z-10 ${
             release.tag === 'current' ? 'bg-accent-green shadow-[0_0_12px_rgba(126,207,192,0.5)]' :
             release.tag === 'major' ? 'bg-accent-purple shadow-[0_0_12px_rgba(126,180,245,0.3)]' :
@@ -190,7 +190,6 @@ const tagStyles: Record<string, { bg: string; text: string; label: string }> = {
           </div>
 
           <div class="glass-card p-4 hover:border-accent-purple/30 transition-all duration-300 group">
-            <!-- Header -->
             <div class="flex flex-wrap items-center gap-3 mb-3">
               <span class="text-sm font-mono font-bold text-text-primary">{release.version}</span>
               {release.tag && tagStyles[release.tag] && (
@@ -201,8 +200,6 @@ const tagStyles: Record<string, { bg: string; text: string; label: string }> = {
               <span class="text-xs font-mono text-text-muted ml-auto">{release.date}</span>
             </div>
             <h3 class="text-sm font-semibold text-accent-cyan mb-3">{release.title}</h3>
-
-            <!-- Changes -->
             <div class="space-y-1.5">
               {release.changes.map((change) => {
                 const style = typeColors[change.type] || typeColors.feat
@@ -220,6 +217,64 @@ const tagStyles: Record<string, { bg: string; text: string; label: string }> = {
         </div>
       ))}
     </div>
+
+    {/* Ältere Releases hinter Expand */}
+    {releases.length > 3 && (
+      <details class="glass-expand mt-6" id="changelog-older">
+        <summary class="flex items-center justify-center gap-2 py-3 px-6 text-xs font-mono text-accent-purple hover:text-accent-cyan transition-colors cursor-pointer group">
+          <svg class="expand-chevron w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          <span>{releases.length - 3} ältere Releases anzeigen</span>
+          <span class="text-text-muted">({releases[3].version} — {releases[releases.length - 1].version})</span>
+        </summary>
+        <div class="expand-content">
+          <div class="expand-inner space-y-6 pt-4">
+            {releases.slice(3).map((release, i) => {
+              const idx = i + 3
+              return (
+                <div class="relative pl-8" data-animate>
+                  <div class={`absolute left-0 w-[23px] h-[23px] rounded-full border-2 border-bg-primary flex items-center justify-center z-10 ${
+                    release.tag === 'major' ? 'bg-accent-purple shadow-[0_0_12px_rgba(126,180,245,0.3)]' :
+                    'bg-bg-secondary border-border-glass'
+                  }`}>
+                    <span class="text-[8px] font-bold text-bg-primary">
+                      {release.tag === 'major' ? '★' : (releases.length - idx).toString()}
+                    </span>
+                  </div>
+
+                  <div class="glass-card p-4 hover:border-accent-purple/30 transition-all duration-300 group">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                      <span class="text-sm font-mono font-bold text-text-primary">{release.version}</span>
+                      {release.tag && tagStyles[release.tag] && (
+                        <span class={`text-[10px] font-mono px-2 py-0.5 rounded-full ${tagStyles[release.tag].bg} ${tagStyles[release.tag].text}`}>
+                          {tagStyles[release.tag].label}
+                        </span>
+                      )}
+                      <span class="text-xs font-mono text-text-muted ml-auto">{release.date}</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-accent-cyan mb-3">{release.title}</h3>
+                    <div class="space-y-1.5">
+                      {release.changes.map((change) => {
+                        const style = typeColors[change.type] || typeColors.feat
+                        return (
+                          <div class="flex items-start gap-2 text-xs">
+                            <span class={`${style.bg} ${style.text} text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shrink-0 mt-px`}>
+                              {style.label}
+                            </span>
+                            <span class="text-text-secondary">{change.text}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </details>
+    )}
 
     <!-- End marker -->
     <div class="relative pl-8 pt-4">

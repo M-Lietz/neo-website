@@ -352,3 +352,88 @@
   a { color: #333 !important; text-decoration: underline !important; }
   a[href]:after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
 }
+
+/* ═══════════════════════════════════════════
+   Progressive Disclosure — Expand/Collapse
+   ═══════════════════════════════════════════ */
+
+@layer components {
+  /* Glass-styled details/summary accordion */
+  details.glass-expand {
+    border-radius: var(--glass-border-radius);
+    overflow: hidden;
+  }
+  details.glass-expand summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  details.glass-expand summary::-webkit-details-marker { display: none; }
+  details.glass-expand summary::marker { display: none; content: ''; }
+
+  /* Chevron icon rotation */
+  details.glass-expand .expand-chevron {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+  details.glass-expand[open] .expand-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Content slide animation via grid trick */
+  details.glass-expand .expand-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  details.glass-expand[open] .expand-content {
+    grid-template-rows: 1fr;
+  }
+  details.glass-expand .expand-content > .expand-inner {
+    overflow: hidden;
+  }
+
+  /* Skill tooltip on hover */
+  .skill-tag {
+    position: relative;
+    cursor: default;
+  }
+  .skill-tag .skill-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    z-index: 50;
+    background: rgba(12, 18, 36, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+  .skill-tag .skill-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(255, 255, 255, 0.15);
+  }
+  .skill-tag:hover .skill-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+  }
+}

@@ -1,64 +1,71 @@
 ---
 /**
  * About Section — Warum Self-Hosted + Philosophie
+ * Jeder Punkt expandierbar mit konkreten Beispielen
  */
+const points = [
+  {
+    title: '100% Datenkontrolle',
+    summary: 'Alle Daten bleiben auf dem eigenen Server. Kein Drittanbieter, keine Cloud.',
+    detail: 'Paperless-ngx archiviert Dokumente lokal, SearXNG sucht ohne Tracking, Gotify pusht Benachrichtigungen ohne Google FCM. Selbst E-Mails laufen über himalaya CLI statt Webmail.',
+  },
+  {
+    title: 'Keine monatlichen SaaS-Kosten',
+    summary: 'Ein MiniPC für €200 ersetzt Tools, die einzeln €50+ im Monat kosten.',
+    detail: 'Vergleich: n8n Cloud = $45/Mo, Paperless Cloud = $29/Mo, SearXNG = unbezahlbar (gibt es nicht als SaaS). Self-Hosted: alles für ~€4 Strom/Monat. Hardware amortisiert in unter einem Monat.',
+  },
+  {
+    title: 'Unbegrenzt erweiterbar',
+    summary: 'Neuer Service? Neuer Container. Das System wächst mit den Anforderungen.',
+    detail: 'Im letzten Jahr: von 2 auf 8 Container, von 0 auf 14 Automationen, von WordPress auf Astro. Nächstes Ziel: Matrix-Chat, Vaultwarden, eigener DNS mit Pi-hole.',
+  },
+  {
+    title: 'DSGVO-konform by Design',
+    summary: 'Server steht in Deutschland. Datenschutz ohne Extra-Aufwand.',
+    detail: 'Keine Google Fonts, keine externen Analytics, keine Drittanbieter-Cookies. Fonts lokal gehostet, Security Headers konfiguriert, Impressum §5 DDG. Die Infrastruktur IST der Datenschutz.',
+  },
+  {
+    title: 'Maximales Lerntempo',
+    summary: 'Jedes Problem ist eine Lektion. Jeder Fix ein Skill. Learning by Doing.',
+    detail: 'Linux, Docker, Nginx, Python, APIs, Proxmox, Cloudflare, Three.js, Astro — alles in unter 2 Jahren gelernt. Nicht durch Tutorials sondern durch echte Probleme und deren Lösungen.',
+  },
+  {
+    title: 'Diese Seite ist der Beweis',
+    summary: 'Alles was du hier siehst — Dashboard, Terminal, die Seite selbst — läuft auf einem €200-MiniPC.',
+    detail: 'Live-Dashboard mit Echtzeit-Daten via Cron + JSON API. Telegram-Preview mit echten Bot-Szenarien. Three.js Orbs mit Custom Shader. 10 Releases in 10 Tagen. Alles Open Source auf GitHub.',
+  },
+]
 ---
 
 <section id="about" class="px-4 sm:px-6 py-20" data-animate>
   <h2 class="text-lg font-mono text-accent-cyan mb-3 max-w-5xl mx-auto title-glow"><span class="title-glow-line"></span>// Warum Self-Hosted?</h2>
   <p class="text-text-secondary text-sm max-w-5xl mx-auto mb-8 pl-[52px]">
-    Die Philosophie hinter diesem Projekt.
+    Die Philosophie hinter diesem Projekt. <span class="text-text-muted text-xs">Klick für Details.</span>
   </p>
 
-  <!-- Why Self-Hosted -->
   <div class="max-w-5xl mx-auto glass-panel p-8 glow-ambient">
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="space-y-3">
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">100% Datenkontrolle</span>
-            <p class="text-xs text-text-muted">Alle Daten bleiben auf dem eigenen Server. Kein Drittanbieter, keine Cloud.</p>
+    <div class="grid md:grid-cols-2 gap-4">
+      {points.map(p => (
+        <details class="glass-expand">
+          <summary class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors cursor-pointer">
+            <span class="text-accent-green mt-0.5 shrink-0">✓</span>
+            <div class="flex-1 min-w-0">
+              <span class="text-sm font-medium text-text-primary">{p.title}</span>
+              <p class="text-xs text-text-muted mt-0.5">{p.summary}</p>
+            </div>
+            <svg class="expand-chevron w-3.5 h-3.5 text-text-muted mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="expand-content">
+            <div class="expand-inner">
+              <div class="ml-8 mr-3 mb-3 p-3 rounded-lg bg-white/[0.03] border border-white/5">
+                <p class="text-xs text-text-secondary leading-relaxed">{p.detail}</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">Keine monatlichen SaaS-Kosten</span>
-            <p class="text-xs text-text-muted">Ein MiniPC für €200 ersetzt Tools, die einzeln €50+ im Monat kosten.</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">Unbegrenzt erweiterbar</span>
-            <p class="text-xs text-text-muted">Neuer Service? Neuer Container. Das System wächst mit den Anforderungen.</p>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-3">
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">DSGVO-konform by Design</span>
-            <p class="text-xs text-text-muted">Server steht in Deutschland. Datenschutz ohne Extra-Aufwand.</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">Maximales Lerntempo</span>
-            <p class="text-xs text-text-muted">Jedes Problem ist eine Lektion. Jeder Fix ein Skill. Learning by Doing.</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-accent-green mt-0.5">✓</span>
-          <div>
-            <span class="text-sm font-medium text-text-primary">Diese Seite ist der Beweis</span>
-            <p class="text-xs text-text-muted">Alles was du hier siehst — Dashboard, Terminal, die Seite selbst — läuft auf einem €200-MiniPC.</p>
-          </div>
-        </div>
-      </div>
+        </details>
+      ))}
     </div>
   </div>
 </section>

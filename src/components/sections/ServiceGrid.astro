@@ -1,25 +1,41 @@
 ---
 /**
  * ServiceGrid — Alle laufenden Services als Status-Grid
- * Zeigt die Breite des Homelabs
+ * Klick auf Karte → expandiert Details
  */
 const services = [
-  { name: 'OpenClaw Gateway', desc: 'KI-Agent Core — LLM-Router + Tool-System', status: 'online', icon: '🦞', port: '18789', uptime: '180d' },
-  { name: 'Telegram Bot', desc: '@merlin_neo_ai_bot — 24/7 interaktiv', status: 'online', icon: '💬', port: 'API', uptime: '180d' },
-  { name: 'SearXNG', desc: 'Meta-Suchmaschine — 60+ Backends', status: 'online', icon: '🔍', port: '8080', uptime: '90d' },
-  { name: 'Paperless-ngx', desc: 'Dokumenten-OCR & Archiv', status: 'online', icon: '📄', port: '8010', uptime: '120d' },
-  { name: 'Caddy', desc: 'HTTPS Reverse Proxy + Auto-TLS', status: 'online', icon: '🌐', port: '443', uptime: '180d' },
-  { name: 'Gotify', desc: 'Push-Notification Server', status: 'online', icon: '🔔', port: '8090', uptime: '150d' },
-  { name: 'n8n', desc: 'Workflow-Automation (LXC 101)', status: 'online', icon: '⚡', port: '5678', uptime: '90d' },
-  { name: 'Browserless', desc: 'Headless Chrome API — Scraping & Screenshots', status: 'online', icon: '🖥️', port: '3000', uptime: '60d' },
-  { name: 'Valkey', desc: 'Redis-kompatibler Cache für SearXNG', status: 'online', icon: '💾', port: '6379', uptime: '90d' },
-  { name: 'Cloudflare Tunnel', desc: 'Sichere Extern-Anbindung — kein offener Port', status: 'connected', icon: '☁️', port: '—', uptime: '180d' },
-  { name: 'Gmail Integration', desc: 'himalaya CLI — E-Mail senden & empfangen', status: 'connected', icon: '📧', port: 'IMAP', uptime: '—' },
-  { name: 'Google Calendar', desc: 'Kalender-Sync via gog CLI', status: 'synced', icon: '📅', port: 'API', uptime: '—' },
-  { name: 'GitHub', desc: 'gh CLI — Repos, Issues, PRs', status: 'connected', icon: '🐙', port: 'API', uptime: '—' },
-  { name: 'ElevenLabs TTS', desc: 'Text-to-Speech (Deutsch, Conrad)', status: 'connected', icon: '🔊', port: 'API', uptime: '—' },
-  { name: 'Whisper STT', desc: 'Speech-to-Text via OpenAI', status: 'connected', icon: '🎤', port: 'API', uptime: '—' },
-  { name: 'WordPress', desc: 'merlinlietz.com Portfolio-Site', status: 'online', icon: '📰', port: '80', uptime: '120d' },
+  { name: 'OpenClaw Gateway', desc: 'KI-Agent Core — LLM-Router + Tool-System', status: 'online', icon: '🦞', port: '18789', uptime: '180d',
+    detail: 'Selbst geschriebener Python-Agent. Routet Anfragen an 11 KI-Modelle via LiteLLM. Tool-System für Dateien, Suche, APIs. Gateway-Port 18789.' },
+  { name: 'Telegram Bot', desc: '@merlin_neo_ai_bot — 24/7 interaktiv', status: 'online', icon: '💬', port: 'API', uptime: '180d',
+    detail: 'Inline Keyboards, Callback-Handling, Voice-Messages, Kanal-Automatisierung. 7 Automationen + Content-Pipeline für tägliche Posts.' },
+  { name: 'SearXNG', desc: 'Meta-Suchmaschine — 60+ Backends', status: 'online', icon: '🔍', port: '8080', uptime: '90d',
+    detail: 'Privacy-Suchmaschine ohne Tracking. Aggregiert Google, Bing, DuckDuckGo und 60+ weitere Quellen. Gecacht via Valkey/Redis.' },
+  { name: 'Paperless-ngx', desc: 'Dokumenten-OCR & Archiv', status: 'online', icon: '📄', port: '8010', uptime: '120d',
+    detail: 'Automatische OCR-Texterkennung, Tag-basierte Organisation, Volltextsuche über 200+ Dokumente. API-Zugriff via Token.' },
+  { name: 'Caddy', desc: 'HTTPS Reverse Proxy + Auto-TLS', status: 'online', icon: '🌐', port: '443', uptime: '180d',
+    detail: 'Automatische Let\'s Encrypt Zertifikate, Zero-Config HTTPS für alle internen Services. Caddyfile mit 8 Proxy-Regeln.' },
+  { name: 'Gotify', desc: 'Push-Notification Server', status: 'online', icon: '🔔', port: '8090', uptime: '150d',
+    detail: 'Self-hosted Push-Server. Sendet System-Alerts (Container down, Backup fertig, Mail empfangen) direkt aufs Handy.' },
+  { name: 'n8n', desc: 'Workflow-Automation (LXC 101)', status: 'online', icon: '⚡', port: '5678', uptime: '90d',
+    detail: 'Läuft in eigenem LXC Container. 14 Workflows: Telegram-Callbacks, E-Mail-Monitoring, Maintenance-Scripts, Cron-Jobs.' },
+  { name: 'Browserless', desc: 'Headless Chrome API — Scraping & Screenshots', status: 'online', icon: '🖥️', port: '3000', uptime: '60d',
+    detail: 'Headless Chrome als Docker-Service. Neo nutzt es für Web-Scraping, Screenshot-Generierung und PDF-Rendering.' },
+  { name: 'Valkey', desc: 'Redis-kompatibler Cache für SearXNG', status: 'online', icon: '💾', port: '6379', uptime: '90d',
+    detail: 'Open-Source Redis-Fork. Cached SearXNG-Queries und Session-Daten. Kein Datenverlust bei Restart dank AOF.' },
+  { name: 'Cloudflare Tunnel', desc: 'Sichere Extern-Anbindung — kein offener Port', status: 'connected', icon: '☁️', port: '—', uptime: '180d',
+    detail: 'Zero-Trust Tunnel: Kein einziger Port muss geöffnet werden. Cloudflare routet Traffic verschlüsselt direkt zum Server.' },
+  { name: 'Gmail Integration', desc: 'himalaya CLI — E-Mail senden & empfangen', status: 'connected', icon: '📧', port: 'IMAP', uptime: '—',
+    detail: 'himalaya CLI für IMAP/SMTP. Neo kann E-Mails lesen, filtern und antworten — alles über die Kommandozeile.' },
+  { name: 'Google Calendar', desc: 'Kalender-Sync via gog CLI', status: 'synced', icon: '📅', port: 'API', uptime: '—',
+    detail: 'gog CLI synchronisiert Google Calendar Events. Neo kann Termine anlegen, löschen und als Reminder versenden.' },
+  { name: 'GitHub', desc: 'gh CLI — Repos, Issues, PRs', status: 'connected', icon: '🐙', port: 'API', uptime: '—',
+    detail: 'GitHub CLI für alles: Repos erstellen, Issues bearbeiten, PRs mergen, Releases taggen. Alles automatisierbar.' },
+  { name: 'ElevenLabs TTS', desc: 'Text-to-Speech (Deutsch, Conrad)', status: 'connected', icon: '🔊', port: 'API', uptime: '—',
+    detail: 'Text-to-Speech API mit deutscher Stimme "Conrad". Generiert Audio-Nachrichten für den Telegram-Kanal.' },
+  { name: 'Whisper STT', desc: 'Speech-to-Text via OpenAI', status: 'connected', icon: '🎤', port: 'API', uptime: '—',
+    detail: 'OpenAI Whisper transkribiert Voice-Messages in Text. Merlin spricht, Neo versteht — ohne manuelles Tippen.' },
+  { name: 'WordPress', desc: 'merlinlietz.com Portfolio-Site', status: 'online', icon: '📰', port: '80', uptime: '120d',
+    detail: 'Läuft in LXC 113. Portfolio + Blog mit Custom Theme. REST API für automatisierte Blog-Posts via n8n.' },
 ]
 
 const statusStyles: Record<string, { color: string; label: string }> = {
@@ -44,20 +60,32 @@ const statusStyles: Record<string, { color: string; label: string }> = {
     {services.map((s) => {
       const st = statusStyles[s.status]
       return (
-        <div class="glass-card p-3 hover:border-accent-cyan/20 transition-all duration-300 group cursor-default service-tile" data-stagger-child>
-          <div class="flex items-start gap-2 mb-2">
-            <span class="text-lg group-hover:scale-110 transition-transform">{s.icon}</span>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-xs font-semibold text-text-primary truncate">{s.name}</h3>
-              <span class={`text-[9px] font-mono ${st.color}`}>{st.label}</span>
+        <details class="glass-expand service-tile" data-stagger-child>
+          <summary class="glass-card p-3 hover:border-accent-cyan/20 transition-all duration-300 group cursor-pointer list-none">
+            <div class="flex items-start gap-2 mb-2">
+              <span class="text-lg group-hover:scale-110 transition-transform">{s.icon}</span>
+              <div class="flex-1 min-w-0">
+                <h3 class="text-xs font-semibold text-text-primary truncate">{s.name}</h3>
+                <span class={`text-[9px] font-mono ${st.color}`}>{st.label}</span>
+              </div>
+              <svg class="expand-chevron w-3 h-3 text-text-muted mt-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+            <p class="text-[10px] text-text-muted mb-2">{s.desc}</p>
+            <div class="flex items-center justify-between text-[9px] font-mono text-text-muted border-t border-white/5 pt-1.5">
+              <span>:{s.port}</span>
+              {s.uptime !== '—' && <span class="text-accent-green">⬆ {s.uptime}</span>}
+            </div>
+          </summary>
+          <div class="expand-content">
+            <div class="expand-inner">
+              <div class="px-3 pb-3 pt-1">
+                <p class="text-[10px] text-text-secondary leading-relaxed">{s.detail}</p>
+              </div>
             </div>
           </div>
-          <p class="text-[10px] text-text-muted mb-2">{s.desc}</p>
-          <div class="flex items-center justify-between text-[9px] font-mono text-text-muted border-t border-white/5 pt-1.5">
-            <span>:{s.port}</span>
-            {s.uptime !== '—' && <span class="text-accent-green">⬆ {s.uptime}</span>}
-          </div>
-        </div>
+        </details>
       )
     })}
   </div>
