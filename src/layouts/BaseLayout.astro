@@ -42,11 +42,14 @@ const canonicalUrl = Astro.url.href
     <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="image" href="/img/neo-avatar.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
 
     <!-- Schema.org Structured Data -->
@@ -91,9 +94,11 @@ const canonicalUrl = Astro.url.href
 
     <!-- GSAP + Three.js init -->
     <script>
-      import { initScrollAnimations } from '../lib/animations'
-
       document.addEventListener('DOMContentLoaded', async () => {
+        // GSAP lazy laden
+        const { initScrollAnimations } = await import('../lib/animations')
+        initScrollAnimations()
+
         // Three.js nur auf Desktop laden (hover-fähig + breiter Screen)
         const isDesktop = window.matchMedia('(hover: hover) and (min-width: 768px)').matches
         const bgCanvas = document.getElementById('bg-canvas') as HTMLCanvasElement
@@ -107,8 +112,6 @@ const canonicalUrl = Astro.url.href
           bgCanvas?.remove()
           fgCanvas?.remove()
         }
-
-        initScrollAnimations()
 
         // Scroll progress bar
         window.addEventListener('scroll', () => {
