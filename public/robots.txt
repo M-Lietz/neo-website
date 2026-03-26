@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://neo.lietztech.com/sitemap.xml
+Sitemap: https://neo.lietztech.com/sitemap-index.xml

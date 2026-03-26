@@ -31,6 +31,8 @@ const canonicalUrl = Astro.url.href
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content="de_DE" />
     <meta property="og:site_name" content="NEO — Self-Hosted AI" />
@@ -42,15 +44,11 @@ const canonicalUrl = Astro.url.href
     <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="preload" as="image" href="/img/neo-avatar.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -64,7 +62,7 @@ const canonicalUrl = Astro.url.href
         "name": "Merlin Lietz",
         "url": "https://merlinlietz.com",
         "sameAs": [
-          "https://github.com/merlinlietz",
+          "https://github.com/M-Lietz",
           "https://www.fiverr.com/merlinlietz"
         ]
       }
@@ -72,6 +70,17 @@ const canonicalUrl = Astro.url.href
     <title>{title}</title>
   </head>
   <body class="bg-bg-primary text-text-primary antialiased">
+    <!-- Skip to Content (Accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:bg-accent-purple focus:text-white focus:px-4 focus:py-2 focus:rounded focus:text-sm">Zum Inhalt springen</a>
+
+    <noscript>
+      <div style="background:#081020;color:#e4eaf5;text-align:center;padding:2rem;font-family:system-ui">
+        <h1>NEO — Self-Hosted AI</h1>
+        <p>Diese Website benötigt JavaScript für 3D-Effekte und Animationen.</p>
+        <p>Bitte aktivieren Sie JavaScript für das beste Erlebnis.</p>
+      </div>
+    </noscript>
+
     <!-- 3D Background Canvas (Three.js) — hinter HTML -->
     <canvas id="bg-canvas" class="fixed inset-0 -z-10"></canvas>
     <!-- 3D Foreground Canvas — über HTML, transparent, keine Mausevents -->
@@ -90,7 +99,9 @@ const canonicalUrl = Astro.url.href
     <div id="scroll-progress" class="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-accent-purple via-accent-cyan to-accent-pink z-50 transition-[width] duration-150"></div>
 
     <!-- Main Content -->
-    <slot />
+    <div id="main-content">
+      <slot />
+    </div>
 
     <!-- GSAP + Three.js init -->
     <script>
@@ -120,6 +131,33 @@ const canonicalUrl = Astro.url.href
           const bar = document.getElementById('scroll-progress')
           if (bar) bar.style.width = `${pct}%`
         }, { passive: true })
+
+        // Web Vitals — lightweight RUM logging
+        if ('PerformanceObserver' in window) {
+          try {
+            // LCP
+            new PerformanceObserver((list) => {
+              const entries = list.getEntries()
+              const lcp = entries[entries.length - 1]
+              console.log('[Vitals] LCP:', Math.round(lcp.startTime), 'ms')
+            }).observe({ type: 'largest-contentful-paint', buffered: true })
+
+            // CLS
+            let clsValue = 0
+            new PerformanceObserver((list) => {
+              for (const entry of list.getEntries()) {
+                if (!(entry as any).hadRecentInput) clsValue += (entry as any).value
+              }
+              console.log('[Vitals] CLS:', clsValue.toFixed(3))
+            }).observe({ type: 'layout-shift', buffered: true })
+
+            // FCP
+            new PerformanceObserver((list) => {
+              const fcp = list.getEntries().find(e => e.name === 'first-contentful-paint')
+              if (fcp) console.log('[Vitals] FCP:', Math.round(fcp.startTime), 'ms')
+            }).observe({ type: 'paint', buffered: true })
+          } catch {}
+        }
       })
     </script>
   </body>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 /* ═══════════════════════════════════════════
    NEO — Frosted Glass Design System
@@ -328,4 +329,26 @@
     pointer-events: none;
     filter: blur(40px);
   }
+}
+
+/* ═══════════════════════════════════════════
+   Print Stylesheet
+   ═══════════════════════════════════════════ */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  canvas, .chromatic-aberration, .film-grain, .god-rays,
+  #scroll-progress, nav, .glass-card, [data-animate] {
+    display: none !important;
+  }
+  .glass-panel, .terminal-box {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  a { color: #333 !important; text-decoration: underline !important; }
+  a[href]:after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
 }

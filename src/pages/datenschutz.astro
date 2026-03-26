@@ -21,50 +21,89 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">2. Hosting</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">2. Überblick der Verarbeitungen</h2>
+          <p>
+            Die nachfolgende Übersicht fasst die Arten der verarbeiteten Daten und die Zwecke zusammen.
+            Diese Website ist eine rein informative, persönliche Projektseite ohne Login, Shop oder Nutzerkonto.
+            Es werden <strong class="text-text-primary">keine Cookies</strong> gesetzt und
+            <strong class="text-text-primary">kein Tracking</strong> (Google Analytics o.ä.) eingesetzt.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">3. Hosting</h2>
           <p>
             Diese Website wird auf eigener Hardware (Self-Hosted) betrieben. Der Zugriff erfolgt über
-            Cloudflare Tunnel. Cloudflare kann dabei technische Daten wie IP-Adressen verarbeiten.
+            einen Cloudflare Tunnel. Cloudflare verarbeitet dabei als Auftragsverarbeiter technische Verbindungsdaten
+            (z.B. IP-Adresse, TLS-Version, HTTP-Header).
+          </p>
+          <p class="mt-2">
+            <strong class="text-text-primary">Rechtsgrundlage:</strong> Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO) —
+            Bereitstellung und Absicherung der Website.
+          </p>
+          <p class="mt-2">
             Weitere Informationen: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" class="text-accent-purple hover:text-accent-cyan transition-colors">Cloudflare Privacy Policy</a>.
           </p>
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">3. Zugriffsdaten / Server-Logs</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">4. Zugriffsdaten / Server-Logs</h2>
           <p>
             Beim Besuch dieser Website werden automatisch technische Daten erhoben (z.B. IP-Adresse,
-            Browsertyp, Zeitstempel). Diese Daten werden ausschließlich zur Sicherstellung des Betriebs
-            verwendet und nicht mit anderen Daten zusammengeführt.
+            Browsertyp, Zeitstempel, aufgerufene URL). Diese Daten werden ausschließlich zur Sicherstellung des Betriebs
+            und zur Fehlerbehebung verwendet und nicht mit anderen Daten zusammengeführt.
+            Die Speicherung erfolgt für maximal 7 Tage.
+          </p>
+          <p class="mt-2">
+            <strong class="text-text-primary">Rechtsgrundlage:</strong> Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">4. Cookies</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">5. Cookies</h2>
           <p>
-            Diese Website verwendet keine Cookies und kein Tracking. Es werden keine Analyse-Tools wie
-            Google Analytics eingesetzt.
+            Diese Website verwendet <strong class="text-text-primary">keine Cookies</strong> und kein Tracking.
+            Es werden keine Analyse-Tools wie Google Analytics eingesetzt. Ein Cookie-Consent-Banner ist daher nicht erforderlich.
           </p>
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">5. Externe Dienste</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">6. Schriftarten (lokal gehostet)</h2>
           <p>
-            <strong class="text-text-primary">Google Fonts:</strong> Diese Website lädt Schriftarten von Google Fonts.
-            Dabei wird eine Verbindung zu Servern von Google hergestellt. Weitere Informationen:
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="text-accent-purple hover:text-accent-cyan transition-colors">Google Datenschutzerklärung</a>.
+            Diese Website verwendet die Schriftarten Inter, JetBrains Mono und Space Grotesk.
+            Die Schriftdateien werden <strong class="text-text-primary">lokal auf dem eigenen Server</strong> gehostet.
+            Es wird <strong class="text-text-primary">keine Verbindung</strong> zu Google-Servern oder anderen
+            externen Diensten hergestellt.
           </p>
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">6. Betroffenenrechte</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">7. Betroffenenrechte</h2>
           <p>
-            Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung
-            Ihrer personenbezogenen Daten. Kontaktieren Sie mich hierfür per E-Mail.
+            Sie haben nach der DSGVO folgende Rechte:
+          </p>
+          <ul class="list-disc list-inside mt-2 space-y-1 text-text-secondary">
+            <li><strong class="text-text-primary">Auskunftsrecht</strong> (Art. 15 DSGVO)</li>
+            <li><strong class="text-text-primary">Berichtigungsrecht</strong> (Art. 16 DSGVO)</li>
+            <li><strong class="text-text-primary">Löschungsrecht</strong> (Art. 17 DSGVO)</li>
+            <li><strong class="text-text-primary">Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO)</li>
+            <li><strong class="text-text-primary">Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>
+            <li><strong class="text-text-primary">Widerspruchsrecht</strong> (Art. 21 DSGVO)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">8. Beschwerderecht bei einer Aufsichtsbehörde</h2>
+          <p>
+            Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen die DSGVO verstößt,
+            haben Sie nach Art. 77 DSGVO das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.
+            Eine Liste der Aufsichtsbehörden finden Sie unter:
+            <a href="https://www.bfdi.bund.de/DE/Service/Anschriften/Laender/Laender-node.html" target="_blank" rel="noopener" class="text-accent-purple hover:text-accent-cyan transition-colors">bfdi.bund.de</a>.
           </p>
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">7. Kontakt</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">9. Kontakt</h2>
           <p>
             Bei Fragen zum Datenschutz erreichen Sie mich unter:
             <a href="mailto:merlin@lietztech.com" class="text-accent-purple hover:text-accent-cyan transition-colors">merlin@lietztech.com</a>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="404 — Seite nicht gefunden" description="Die angeforderte Seite existiert nicht.">
+  <main class="min-h-screen flex items-center justify-center px-4 sm:px-6">
+    <div class="glass-panel max-w-lg w-full p-8 sm:p-12 text-center space-y-6">
+      <div class="text-8xl font-display font-bold bg-gradient-to-r from-accent-purple to-accent-cyan bg-clip-text text-transparent">
+        404
+      </div>
+
+      <h1 class="text-2xl font-display font-semibold text-text-primary">
+        Seite nicht gefunden
+      </h1>
+
+      <p class="text-text-secondary text-sm leading-relaxed">
+        Die angeforderte Seite existiert leider nicht.<br />
+        Vielleicht wurde sie verschoben oder gelöscht.
+      </p>
+
+      <div class="terminal-box text-left">
+        <div class="terminal-header">
+          <div class="terminal-dot" style="background:#ff5f57"></div>
+          <div class="terminal-dot" style="background:#ffbd2e"></div>
+          <div class="terminal-dot" style="background:#28ca41"></div>
+          <span class="text-text-muted text-xs ml-2 font-mono">neo@error</span>
+        </div>
+        <div class="p-4 font-mono text-xs space-y-1">
+          <p><span class="text-accent-cyan">$</span> find / -name "page" 2>/dev/null</p>
+          <p class="text-accent-red">Error: No such file or directory</p>
+          <p><span class="text-accent-cyan">$</span> echo "Zurück zur Startseite? ↩"</p>
+        </div>
+      </div>
+
+      <a href="/" class="inline-block px-6 py-3 bg-gradient-to-r from-accent-purple to-accent-cyan text-bg-primary font-semibold rounded-lg hover:opacity-90 transition-opacity text-sm">
+        ← Zur Startseite
+      </a>
+    </div>
+  </main>
+</BaseLayout>

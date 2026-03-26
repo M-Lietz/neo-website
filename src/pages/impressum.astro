@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
-<BaseLayout title="Impressum — NEO" description="Impressum gemäß §5 TMG für neo.lietztech.com">
+<BaseLayout title="Impressum — NEO" description="Impressum gemäß §5 DDG für neo.lietztech.com">
   <main class="min-h-screen flex items-start justify-center px-4 sm:px-6 pt-24 pb-16">
     <div class="glass-panel max-w-3xl w-full p-8 sm:p-12 space-y-6">
       <a href="/" class="text-accent-cyan text-xs font-mono hover:text-accent-purple transition-colors">← Zurück zur Startseite</a>
@@ -13,11 +13,11 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
       <div class="space-y-4 text-text-secondary text-sm leading-relaxed">
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">Angaben gemäß § 5 TMG</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">Angaben gemäß § 5 DDG</h2>
           <p>
             Merlin Lietz<br />
-            <!-- Postanschrift bitte manuell ergänzen -->
-            <span class="text-text-muted italic">[Anschrift bitte ergänzen]</span>
+            <!-- TODO: Postanschrift manuell ergänzen (Pflichtangabe nach § 5 DDG!) -->
+            <span class="text-accent-red font-semibold">[Anschrift bitte ergänzen — Pflichtangabe nach § 5 DDG]</span>
           </p>
         </section>
 
@@ -29,7 +29,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         </section>
 
         <section>
-          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">Verantwortlich für den Inhalt</h2>
+          <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
           <p>Merlin Lietz (Anschrift wie oben)</p>
         </section>
 
@@ -38,7 +38,9 @@ import BaseLayout from '../layouts/BaseLayout.astro'
           <p>
             Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und
             Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Als Diensteanbieter bin ich gemäß § 7 Abs. 1
-            TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
+            DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG
+            bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen
+            zu überwachen.
           </p>
         </section>
 
@@ -46,7 +48,8 @@ import BaseLayout from '../layouts/BaseLayout.astro'
           <h2 class="text-accent-cyan font-mono text-xs uppercase tracking-widest mb-2">Haftung für Links</h2>
           <p>
             Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe.
-            Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.
+            Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich. Bei Bekanntwerden
+            von Rechtsverletzungen werde ich derartige Links umgehend entfernen.
           </p>
         </section>
 

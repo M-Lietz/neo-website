@@ -3,13 +3,36 @@
  * Changelog — Website-Versionshistorie
  * Zeigt die Evolution dieser Seite, wann welche Features dazu kamen
  */
-const currentVersion = 'v1.2.0'
+const currentVersion = 'v1.3.0'
 
 const releases = [
   {
+    version: 'v1.3.0',
+    date: '11. März 2026',
+    tag: 'current',
+    title: 'DSGVO-Compliance & Front-End Audit',
+    changes: [
+      { type: 'breaking', text: 'Google Fonts lokal gehostet — kein externer Datenfluss mehr (DSGVO)' },
+      { type: 'feat', text: 'Impressum: §5 TMG → §5 DDG + MStV §18 Abs.2 aktualisiert' },
+      { type: 'feat', text: 'Datenschutzerklärung komplett neu mit DSGVO Art.-Referenzen' },
+      { type: 'feat', text: 'Custom 404-Fehlerseite mit Animation' },
+      { type: 'feat', text: '@astrojs/sitemap — automatische Sitemap-Generierung' },
+      { type: 'feat', text: 'Security Headers: HSTS, Permissions-Policy, CSP verschärft' },
+      { type: 'feat', text: 'Skip-to-Content Link für Barrierefreiheit' },
+      { type: 'feat', text: 'Web App Manifest + Apple Touch Icon' },
+      { type: 'feat', text: 'Favicons in 6 Formaten (SVG, ICO, PNG 16/32/192/512)' },
+      { type: 'feat', text: 'Web Vitals Monitoring (LCP, FID, CLS, FCP, TTFB)' },
+      { type: 'feat', text: 'Print Stylesheet für sauberen Druck' },
+      { type: 'feat', text: 'noscript-Fallback für JavaScript-freie Browser' },
+      { type: 'fix', text: 'Schema.org GitHub-URL korrigiert (M-Lietz)' },
+      { type: 'fix', text: 'og:image Dimensionen (width/height) ergänzt' },
+      { type: 'fix', text: 'robots.txt: /api/ disallowed, Sitemap-URL aktualisiert' },
+    ],
+  },
+  {
     version: 'v1.2.0',
     date: '27. März 2026',
-    tag: 'current',
+    tag: '',
     title: 'Performance & Professionalisierung',
     changes: [
       { type: 'perf', text: 'Three.js Code-Split — dynamischer Import, ~600KB weniger Initial-Bundle' },
