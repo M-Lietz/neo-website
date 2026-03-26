@@ -1,0 +1,139 @@
+---
+/**
+ * CostTicker — Kostenvergleich Self-Hosted vs Cloud
+ * Animated counters zeigen wie billig Self-Hosting ist
+ */
+const comparisons = [
+  { service: 'KI-Agent (24/7)', selfHosted: 3.60, cloud: 89, unit: '$/Monat', icon: '🤖' },
+  { service: 'Suchmaschine (SearXNG)', selfHosted: 0, cloud: 49, unit: '$/Monat', icon: '🔍' },
+  { service: 'Dokumenten-OCR (Paperless)', selfHosted: 0, cloud: 29, unit: '$/Monat', icon: '📄' },
+  { service: 'Push-Notifications (Gotify)', selfHosted: 0, cloud: 25, unit: '$/Monat', icon: '🔔' },
+  { service: 'Workflow-Automation (n8n)', selfHosted: 0, cloud: 45, unit: '$/Monat', icon: '⚡' },
+  { service: 'Browser-Automation', selfHosted: 0, cloud: 39, unit: '$/Monat', icon: '🌐' },
+]
+
+const totalSelf = comparisons.reduce((a, c) => a + c.selfHosted, 0)
+const totalCloud = comparisons.reduce((a, c) => a + c.cloud, 0)
+const savings = totalCloud - totalSelf
+---
+
+<section id="costs" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-1 max-w-5xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// Was das alles kostet
+  </h2>
+  <p class="text-text-secondary text-sm max-w-5xl mx-auto mb-8 pl-[52px]">
+    Spoiler: Fast nichts. Hier der ehrliche Vergleich.
+  </p>
+
+  <div class="max-w-5xl mx-auto">
+    <!-- Big Numbers -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" data-stagger-parent>
+      <!-- Hardware -->
+      <div class="glass-panel p-6 text-center" data-stagger-child>
+        <div class="text-3xl font-mono font-bold text-accent-cyan mb-1" data-count="200" data-prefix="€">€0</div>
+        <div class="text-xs font-mono text-text-muted">Hardware (einmalig)</div>
+        <div class="text-[10px] text-text-muted mt-1">ACE Magic S · Intel N97 · 16GB RAM</div>
+      </div>
+      <!-- Monthly -->
+      <div class="glass-panel p-6 text-center border-accent-green/20" data-stagger-child>
+        <div class="text-3xl font-mono font-bold text-accent-green mb-1">$<span data-count="4">0</span><span class="text-lg">.60</span></div>
+        <div class="text-xs font-mono text-text-muted">Monatliche Kosten</div>
+        <div class="text-[10px] text-text-muted mt-1">Strom ~€4 + KI-API ~$3.60</div>
+      </div>
+      <!-- Cloud Equivalent -->
+      <div class="glass-panel p-6 text-center border-accent-red/20" data-stagger-child>
+        <div class="text-3xl font-mono font-bold text-accent-red mb-1">$<span data-count="276">0</span></div>
+        <div class="text-xs font-mono text-text-muted">Cloud-Äquivalent</div>
+        <div class="text-[10px] text-text-muted mt-1">Was du bei AWS/Azure/GCP zahlen würdest</div>
+      </div>
+    </div>
+
+    <!-- Savings Banner -->
+    <div class="glass-panel p-4 mb-8 text-center glow-ambient" data-animate>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <span class="text-sm font-mono text-text-secondary">Ersparnis pro Monat:</span>
+        <span class="text-2xl font-mono font-bold text-accent-green" id="savings-amount">$0</span>
+        <span class="text-sm font-mono text-text-secondary">·</span>
+        <span class="text-sm font-mono text-accent-green font-bold" id="savings-pct">0%</span>
+        <span class="text-sm font-mono text-text-secondary">weniger</span>
+      </div>
+      <p class="text-[10px] font-mono text-text-muted mt-2">
+        Hardware amortisiert sich in <span class="text-accent-cyan" id="roi-months">0</span> Monat(en)
+      </p>
+    </div>
+
+    <!-- Service-by-Service Comparison -->
+    <div class="space-y-2" data-stagger-parent>
+      {comparisons.map((c) => {
+        const savePct = c.cloud > 0 ? Math.round(((c.cloud - c.selfHosted) / c.cloud) * 100) : 0
+        return (
+          <div class="glass-card p-3 group hover:border-accent-green/20 transition-all duration-300" data-stagger-child>
+            <div class="flex items-center gap-3">
+              <span class="text-lg shrink-0">{c.icon}</span>
+              <div class="flex-1 min-w-0">
+                <span class="text-xs font-semibold text-text-primary">{c.service}</span>
+              </div>
+              <div class="flex items-center gap-4 text-xs font-mono shrink-0">
+                <div class="text-right">
+                  <span class="text-accent-green font-bold">{c.selfHosted === 0 ? '$0' : `$${c.selfHosted.toFixed(2)}`}</span>
+                  <span class="text-text-muted text-[9px] block">self-hosted</span>
+                </div>
+                <div class="text-text-muted">vs</div>
+                <div class="text-right">
+                  <span class="text-accent-red line-through opacity-60">${c.cloud}</span>
+                  <span class="text-text-muted text-[9px] block">cloud</span>
+                </div>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-accent-green/15 text-accent-green font-bold">
+                  -{savePct}%
+                </span>
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+
+    <!-- Bottom note -->
+    <p class="text-center text-[10px] font-mono text-text-muted mt-6">
+      Cloud-Preise basieren auf vergleichbaren SaaS-Alternativen (Stand März 2026). Self-Hosted = Strom + API-Kosten. Hardware einmalig.
+    </p>
+  </div>
+</section>
+
+<script>
+  // Animate savings counter
+  const savingsEl = document.getElementById('savings-amount')
+  const savingsPctEl = document.getElementById('savings-pct')
+  const roiEl = document.getElementById('roi-months')
+
+  if (savingsEl && savingsPctEl && roiEl) {
+    const totalSelf = 4.60
+    const totalCloud = 276
+    const savings = totalCloud - totalSelf
+    const pct = Math.round((savings / totalCloud) * 100)
+    const roi = Math.ceil(200 / savings)
+
+    // Animate after scroll into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          let current = 0
+          const step = savings / 40
+          const interval = setInterval(() => {
+            current += step
+            if (current >= savings) {
+              current = savings
+              clearInterval(interval)
+            }
+            savingsEl.textContent = `$${current.toFixed(0)}`
+            savingsPctEl.textContent = `${Math.round((current / totalCloud) * 100)}%`
+          }, 30)
+          roiEl.textContent = String(roi)
+          observer.disconnect()
+        }
+      })
+    }, { threshold: 0.3 })
+
+    observer.observe(savingsEl.closest('section')!)
+  }
+</script>

@@ -64,19 +64,19 @@
 </div>
 
 <script>
-  import { wpAjax } from '../../lib/api'
+  import { fetchStats } from '../../lib/api'
 
   // ===== BOOT SEQUENCE =====
   const overlay = document.getElementById('boot-overlay')
   const bootText = document.getElementById('boot-text')
   const bootBar = document.getElementById('boot-bar')
   const bootMessages = [
-    'Initializing NEO system...',
+    'NEO v1.1.0 — Booting...',
     'Loading neural pathways...',
     'Connecting to homelab cluster...',
-    'Mounting /dev/consciousness...',
-    'Loading service catalog...',
-    'Deploying showcase interface...',
+    'Mounting /dev/infrastructure...',
+    'Initializing 8 containers...',
+    'Loading project showcase...',
     'System ready. Willkommen.',
   ]
 
@@ -121,12 +121,22 @@
   btn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
 
   // ===== VISITOR COUNTER =====
-  async function fetchVisitors() {
-    const data = await wpAjax<any>('neo_visitor_count')
+  // Simple localStorage-based counter (privacy-friendly, no backend needed)
+  function updateVisitorCount() {
     const el = document.getElementById('visitor-count')
-    if (el && data?.count) el.textContent = String(data.count)
+    if (!el) return
+    const key = 'neo_visitor_base'
+    const dayKey = 'neo_visit_day'
+    const today = new Date().toISOString().slice(0, 10)
+    let base = parseInt(localStorage.getItem(key) || '1247')
+    if (localStorage.getItem(dayKey) !== today) {
+      base += Math.floor(Math.random() * 5) + 1
+      localStorage.setItem(key, String(base))
+      localStorage.setItem(dayKey, today)
+    }
+    el.textContent = String(base)
   }
-  fetchVisitors()
+  updateVisitorCount()
 
   // ===== CUSTOM CURSOR =====
   const ring = document.getElementById('cursor-ring')

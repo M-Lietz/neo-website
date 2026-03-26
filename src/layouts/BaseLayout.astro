@@ -7,9 +7,12 @@ interface Props {
 }
 
 const {
-  title = 'NEO — Self-Hosted AI auf Custom Hardware | LietzTech',
-  description = 'Websites, Automatisierung, Chatbots, Server-Pakete — alles self-hosted auf Custom Hardware. Von der Idee zum Deploy.',
+  title = 'NEO — Self-Hosted AI auf Custom Hardware | Merlin Lietz',
+  description = 'Ein KI-Agent auf einem MiniPC. Self-Hosted, Open Source, Null Cloud. 16 Services, 15 Automationen, 11 KI-Modelle. Gebaut von Merlin Lietz.',
 } = Astro.props
+
+const ogImage = `${Astro.url.origin}/img/og-image.svg`
+const canonicalUrl = Astro.url.href
 ---
 
 <!doctype html>
@@ -18,7 +21,26 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#050508" />
+    <meta name="theme-color" content="#081020" />
+    <meta name="author" content="Merlin Lietz" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="NEO — Self-Hosted AI" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

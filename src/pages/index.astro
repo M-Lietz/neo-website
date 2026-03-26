@@ -6,15 +6,21 @@ import Ticker from '../components/ui/Ticker.astro'
 import Hero from '../components/sections/Hero.astro'
 import WasIstNeo from '../components/sections/WasIstNeo.astro'
 import Dashboard from '../components/sections/Dashboard.astro'
+import ServiceGrid from '../components/sections/ServiceGrid.astro'
 import Terminal from '../components/sections/Terminal.astro'
+import TelegramPreview from '../components/sections/TelegramPreview.astro'
+import AIModelRoster from '../components/sections/AIModelRoster.astro'
+import AutomationTimeline from '../components/sections/AutomationTimeline.astro'
+import CostTicker from '../components/sections/CostTicker.astro'
 import TechStack from '../components/sections/TechStack.astro'
 import Timeline from '../components/sections/Timeline.astro'
 import About from '../components/sections/About.astro'
+import Changelog from '../components/sections/Changelog.astro'
 import Connect from '../components/sections/Connect.astro'
 import Footer from '../components/ui/Footer.astro'
 ---
 
-<BaseLayout title="NEO — Self-Hosted AI auf Custom Hardware | Merlin Lietz" description="Ein KI-Agent auf einem MiniPC. Self-Hosted, Open Source, Null Cloud. Gebaut von Merlin Lietz.">
+<BaseLayout title="NEO — Self-Hosted AI auf Custom Hardware | Merlin Lietz" description="Ein KI-Agent auf einem MiniPC. Self-Hosted, Open Source, Null Cloud. 16 Services, 15 Automationen, 11 KI-Modelle. Gebaut von Merlin Lietz.">
   <Extras />
   <Nav />
   <main>
@@ -25,13 +31,25 @@ import Footer from '../components/ui/Footer.astro'
     <div class="section-divider"></div>
     <Dashboard />
     <div class="section-divider"></div>
+    <ServiceGrid />
+    <div class="section-divider"></div>
     <Terminal />
+    <div class="section-divider"></div>
+    <TelegramPreview />
+    <div class="section-divider"></div>
+    <AIModelRoster />
+    <div class="section-divider"></div>
+    <AutomationTimeline />
+    <div class="section-divider"></div>
+    <CostTicker />
     <div class="section-divider"></div>
     <TechStack />
     <div class="section-divider"></div>
     <Timeline />
     <div class="section-divider"></div>
     <About />
+    <div class="section-divider"></div>
+    <Changelog />
     <div class="section-divider"></div>
     <Connect />
   </main>

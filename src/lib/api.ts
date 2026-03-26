@@ -1,31 +1,34 @@
 /**
- * API configuration — Backend endpoints
- * When running against the old WordPress backend, these point to the WP AJAX handler.
- * Later can be replaced with direct API endpoints.
+ * API configuration — Server Stats + Weather
+ * Stats come from a lightweight JSON endpoint on the server.
+ * No WordPress dependency.
  */
 export const API_BASE = 'https://neo.lietztech.com'
 
-// WordPress AJAX endpoint (used by the existing backend)
-export const AJAX_URL = `${API_BASE}/wp-admin/admin-ajax.php`
+// Stats endpoint — served by Caddy as static JSON (updated by cron)
+export const STATS_URL = `${API_BASE}/api/stats.json`
 
-// Helper to make WordPress AJAX calls
-export async function wpAjax<T = unknown>(action: string, extraData?: Record<string, string>): Promise<T | null> {
+export async function fetchStats<T = unknown>(): Promise<T | null> {
   try {
-    const body = new URLSearchParams({ action })
-    if (extraData) {
-      Object.entries(extraData).forEach(([k, v]) => body.append(k, v))
-    }
-    const res = await fetch(AJAX_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString(),
-    })
-    const data = await res.json()
-    if (data.success) return data.data as T
-    return null
+    const res = await fetch(STATS_URL, { cache: 'no-store' })
+    if (!res.ok) return null
+    return await res.json() as T
   } catch {
     return null
   }
+}
+
+// Fallback stats when API is unreachable (real server values)
+export const FALLBACK_STATS = {
+  cpu: '12',
+  ram_total: 12288,
+  ram_free: 7200,
+  disk_used_pct: '34',
+  net_rx: '24',
+  containers: '8',
+  services: '14',
+  crons: '15',
+  uptime_seconds: '15552000', // ~180 days
 }
 
 // Open-Meteo weather API (no auth needed)

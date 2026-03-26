@@ -1,0 +1,189 @@
+---
+/**
+ * Changelog — Website-Versionshistorie
+ * Zeigt die Evolution dieser Seite, wann welche Features dazu kamen
+ */
+const currentVersion = 'v1.1.0'
+
+const releases = [
+  {
+    version: 'v1.1.0',
+    date: '26. März 2026',
+    tag: 'current',
+    title: 'Changelog & Versionierung',
+    changes: [
+      { type: 'feat', text: 'Website-Changelog als eigene Section' },
+      { type: 'feat', text: 'Versionsnummer im Footer + Boot-Sequence' },
+      { type: 'fix', text: 'Boot-Messages aktualisiert' },
+    ],
+  },
+  {
+    version: 'v1.0.0',
+    date: '26. März 2026',
+    tag: 'major',
+    title: 'Project Showcase Redesign',
+    changes: [
+      { type: 'breaking', text: 'Kein Sales-Content mehr — reines Projekt-Showcase' },
+      { type: 'feat', text: '"Was ist Neo?" Erklär-Section' },
+      { type: 'feat', text: '"Connect" Section mit GitHub, Fiverr, Portfolio, Telegram' },
+      { type: 'refactor', text: 'Hero komplett project-oriented umgebaut' },
+      { type: 'refactor', text: 'Timeline: Merlins persönlicher Weg statt Neo-Versionen' },
+      { type: 'refactor', text: 'About: Self-Hosting-Philosophie statt Sales-Funnel' },
+      { type: 'remove', text: 'Services, Preisrechner, Kontakt, Newsletter entfernt' },
+    ],
+  },
+  {
+    version: 'v0.9.0',
+    date: '25. März 2026',
+    title: 'Massive Feature-Expansion',
+    changes: [
+      { type: 'feat', text: 'Dual Terminal — Echtzeit LLM-Chat + simulierter Bot' },
+      { type: 'feat', text: 'Activity Ticker mit scrollenden Events' },
+      { type: 'feat', text: 'Built-with Badge mit Hover-Tech-Details' },
+      { type: 'feat', text: '4 Easter Eggs inkl. Konami Code' },
+      { type: 'feat', text: 'Statement Card im Hero mit Typewriter' },
+    ],
+  },
+  {
+    version: 'v0.8.0',
+    date: '24. März 2026',
+    title: 'Design-Feinschliff',
+    changes: [
+      { type: 'feat', text: 'Section Dividers mit Gradient-Lines' },
+      { type: 'feat', text: 'Title-Glow Effekt für Überschriften' },
+      { type: 'feat', text: 'GSAP Scroll-Entrance-Animationen' },
+      { type: 'feat', text: 'Avatar mit animiertem Glow-Ring' },
+      { type: 'feat', text: 'Skeleton-Loader für Daten-Sections' },
+    ],
+  },
+  {
+    version: 'v0.7.0',
+    date: '23. März 2026',
+    title: 'Cinematic Post-Processing',
+    changes: [
+      { type: 'feat', text: 'Vignette, Film Grain, Chromatic Aberration' },
+      { type: 'feat', text: 'God Rays aus oberer Ecke' },
+      { type: 'feat', text: 'ACES Filmic Tone Mapping' },
+      { type: 'fix', text: 'EffectComposer entfernt (milky wash Bug)' },
+      { type: 'perf', text: 'Alle Effekte in reinem CSS statt WebGL' },
+    ],
+  },
+  {
+    version: 'v0.6.0',
+    date: '21. März 2026',
+    title: 'Volumetric Shader Orbs',
+    changes: [
+      { type: 'feat', text: '8 PBR-Orbs mit Fresnel-Glow-Shader' },
+      { type: 'feat', text: 'Dual Canvas — Hintergrund + Overlay-Orb' },
+      { type: 'feat', text: 'Parallax-Float-Animation mit Noise' },
+      { type: 'refactor', text: '12+ Iterationen bis zum finalen Look' },
+    ],
+  },
+  {
+    version: 'v0.5.0',
+    date: '19. März 2026',
+    title: 'Frosted Glass Design-System',
+    changes: [
+      { type: 'feat', text: 'Frosted White-Blue-Silver Farbpalette' },
+      { type: 'feat', text: 'Glassmorphism mit backdrop-blur(40px)' },
+      { type: 'feat', text: 'Custom Scrollbar, Neon-Text, Glass-Panels' },
+      { type: 'feat', text: '3 Fonts: Space Grotesk, JetBrains Mono, Inter' },
+    ],
+  },
+  {
+    version: 'v0.1.0',
+    date: '16. März 2026',
+    title: 'Projekt-Init',
+    changes: [
+      { type: 'feat', text: 'Astro v6 + Tailwind v4 + Three.js + GSAP Setup' },
+      { type: 'feat', text: 'Basis-Layout, Navigation, Hero, Footer' },
+      { type: 'feat', text: 'Alle WordPress-Sections nach Astro portiert' },
+    ],
+  },
+]
+
+const typeColors: Record<string, { bg: string; text: string; label: string }> = {
+  feat:     { bg: 'bg-accent-green/15', text: 'text-accent-green', label: 'NEU' },
+  fix:      { bg: 'bg-accent-cyan/15', text: 'text-accent-cyan', label: 'FIX' },
+  refactor: { bg: 'bg-accent-purple/15', text: 'text-accent-purple', label: 'REFACTOR' },
+  perf:     { bg: 'bg-accent-blue/15', text: 'text-accent-blue', label: 'PERF' },
+  breaking: { bg: 'bg-accent-red/15', text: 'text-accent-red', label: 'BREAKING' },
+  remove:   { bg: 'bg-accent-red/10', text: 'text-accent-red', label: 'ENTFERNT' },
+}
+
+const tagStyles: Record<string, { bg: string; text: string; label: string }> = {
+  current: { bg: 'bg-accent-green/20', text: 'text-accent-green', label: '● AKTUELL' },
+  major:   { bg: 'bg-accent-purple/20', text: 'text-accent-purple', label: '★ MAJOR' },
+}
+---
+
+<section id="changelog" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-1 max-w-4xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// Changelog
+  </h2>
+  <p class="text-text-secondary text-sm max-w-4xl mx-auto mb-2 pl-[52px]">
+    Die Evolution dieser Website — jede Version dokumentiert.
+  </p>
+  <p class="text-text-muted text-xs max-w-4xl mx-auto mb-8 pl-[52px] font-mono">
+    Aktuelle Version: <span class="text-accent-green">{currentVersion}</span> · {releases.length} Releases · Seit März 2026
+  </p>
+
+  <div class="max-w-4xl mx-auto relative">
+    <!-- Vertical line -->
+    <div class="absolute left-[11px] top-0 bottom-0 w-px bg-gradient-to-b from-accent-green via-accent-purple to-accent-cyan/30"></div>
+
+    <div class="space-y-6">
+      {releases.map((release, i) => (
+        <div class="relative pl-8" data-animate>
+          <!-- Version dot -->
+          <div class={`absolute left-0 w-[23px] h-[23px] rounded-full border-2 border-bg-primary flex items-center justify-center z-10 ${
+            release.tag === 'current' ? 'bg-accent-green shadow-[0_0_12px_rgba(126,207,192,0.5)]' :
+            release.tag === 'major' ? 'bg-accent-purple shadow-[0_0_12px_rgba(126,180,245,0.3)]' :
+            'bg-bg-secondary border-border-glass'
+          }`}>
+            <span class="text-[8px] font-bold text-bg-primary">
+              {release.tag === 'current' ? '✓' : release.tag === 'major' ? '★' : (releases.length - i).toString()}
+            </span>
+          </div>
+
+          <div class="glass-card p-4 hover:border-accent-purple/30 transition-all duration-300 group">
+            <!-- Header -->
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <span class="text-sm font-mono font-bold text-text-primary">{release.version}</span>
+              {release.tag && tagStyles[release.tag] && (
+                <span class={`text-[10px] font-mono px-2 py-0.5 rounded-full ${tagStyles[release.tag].bg} ${tagStyles[release.tag].text}`}>
+                  {tagStyles[release.tag].label}
+                </span>
+              )}
+              <span class="text-xs font-mono text-text-muted ml-auto">{release.date}</span>
+            </div>
+            <h3 class="text-sm font-semibold text-accent-cyan mb-3">{release.title}</h3>
+
+            <!-- Changes -->
+            <div class="space-y-1.5">
+              {release.changes.map((change) => {
+                const style = typeColors[change.type] || typeColors.feat
+                return (
+                  <div class="flex items-start gap-2 text-xs">
+                    <span class={`${style.bg} ${style.text} text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shrink-0 mt-px`}>
+                      {style.label}
+                    </span>
+                    <span class="text-text-secondary">{change.text}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- End marker -->
+    <div class="relative pl-8 pt-4">
+      <div class="absolute left-0 w-[23px] h-[23px] rounded-full border border-border-glass bg-bg-primary flex items-center justify-center">
+        <span class="text-[8px] text-text-muted">🚀</span>
+      </div>
+      <p class="text-xs font-mono text-text-muted pt-0.5">Weitere Updates folgen...</p>
+    </div>
+  </div>
+</section>

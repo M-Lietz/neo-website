@@ -77,7 +77,7 @@
 </section>
 
 <script>
-  import { wpAjax } from '../../lib/api'
+  import { fetchStats, FALLBACK_STATS } from '../../lib/api'
 
   const CIRC = 2 * Math.PI * 42 // 263.89
 
@@ -112,9 +112,8 @@
     setInterval(tick, 1000)
   }
 
-  async function fetchStats() {
-    const s = await wpAjax<any>('neo_get_stats')
-    if (!s) return
+  async function fetchDashboardStats() {
+    const s = await fetchStats<any>() || FALLBACK_STATS
 
     // Gauges
     const cpuPct = parseInt(s.cpu) || 0
@@ -143,6 +142,6 @@
     if (s.uptime_seconds) startUptimeCounter(parseInt(s.uptime_seconds))
   }
 
-  fetchStats()
-  setInterval(fetchStats, 30_000)
+  fetchDashboardStats()
+  setInterval(fetchDashboardStats, 30_000)
 </script>

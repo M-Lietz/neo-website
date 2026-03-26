@@ -1,0 +1,283 @@
+---
+/**
+ * TelegramPreview — Mockup einer echten Telegram-Bot-Interaktion
+ * Zeigt wie man mit Neo interagiert
+ */
+const conversations = [
+  {
+    id: 'status',
+    label: '📊 Status',
+    messages: [
+      { from: 'user', text: 'Wie läuft das Homelab?', time: '09:14' },
+      { from: 'bot', text: '📊 **System Status — 26. März 2026**\n\n🖥️ CPU: 12% · RAM: 5.1/12GB (42%)\n💾 Disk: 34% belegt (48GB frei)\n🐳 8/8 Container: ✅ healthy\n⏰ Uptime: 183 Tage\n🌡️ Temperatur: 41°C\n\n✅ Alles läuft einwandfrei.', time: '09:14' },
+      { from: 'bot', type: 'buttons', buttons: ['📊 Details', '🐳 Docker', '🔄 Refresh'] },
+    ],
+  },
+  {
+    id: 'docker',
+    label: '🐳 Docker',
+    messages: [
+      { from: 'user', text: '/docker status', time: '14:22' },
+      { from: 'bot', text: '🐳 **Docker — 8 Container aktiv**\n\n✅ caddy (128MB) — 0.3% CPU\n✅ searxng (412MB) — 1.2% CPU\n✅ paperless (680MB) — 0.5% CPU\n✅ gotify (64MB) — 0.1% CPU\n✅ browserless (320MB) — 0.4% CPU\n✅ valkey (48MB) — 0.1% CPU\n✅ n8n (256MB) — 0.8% CPU\n✅ wordpress (180MB) — 0.3% CPU\n\n📈 Gesamt: 2.1GB RAM · 3.7% CPU', time: '14:22' },
+      { from: 'bot', type: 'buttons', buttons: ['🔄 Restart All', '📋 Logs', '🗑️ Prune'] },
+    ],
+  },
+  {
+    id: 'creative',
+    label: '🎨 Content',
+    messages: [
+      { from: 'user', text: 'Erstell mir einen Post über Self-Hosting', time: '18:30' },
+      { from: 'bot', text: '🎨 **Content generiert!**\n\n📝 Text: \"5 Gründe warum du 2026 self-hosten solltest\" (847 Wörter)\n🖼️ Bild: Generiert mit Flux Schnell (CF Workers AI)\n🔊 Audio: TTS mit edge-tts (2:14 min)\n\n📤 Veröffentlichen?', time: '18:31' },
+      { from: 'bot', type: 'buttons', buttons: ['📤 Senden', '✏️ Bearbeiten', '🔄 Neu'] },
+    ],
+  },
+  {
+    id: 'search',
+    label: '🔍 Suche',
+    messages: [
+      { from: 'user', text: 'Such mir die besten MiniPC Alternativen 2026', time: '11:05' },
+      { from: 'bot', text: '🔍 **SearXNG — 12 Ergebnisse**\n\n1. **Beelink SER8** — Ryzen 8845HS, ab €349\n2. **Minisforum UM890** — Ryzen 9 8945HS, ab €429\n3. **GMKtec N150** — Intel N150, ab €129\n4. **ACEMAGIC S1** — Intel N97, ab €169\n5. **Geekom A8** — Ryzen 8945HS, ab €459\n\n💡 Für Homelab-Use: N150 oder N97 reichen. Für Heavy AI: Ryzen 8845HS.', time: '11:06' },
+      { from: 'bot', type: 'buttons', buttons: ['📄 Mehr Details', '💾 Speichern', '📊 Vergleich'] },
+    ],
+  },
+]
+---
+
+<section id="telegram-preview" class="px-4 sm:px-6 py-16" data-animate>
+  <h2 class="text-lg font-mono text-accent-cyan mb-1 max-w-4xl mx-auto title-glow">
+    <span class="title-glow-line"></span>// So sieht's in Aktion aus
+  </h2>
+  <p class="text-text-secondary text-sm max-w-4xl mx-auto mb-8 pl-[52px]">
+    Echte Gespräche mit Neo — direkt über Telegram, jederzeit.
+  </p>
+
+  <div class="max-w-md mx-auto" data-animate>
+    <!-- Telegram Window Frame -->
+    <div class="glass-panel overflow-hidden">
+      <!-- Header -->
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-white/5" style="background: rgba(30,40,60,0.6);">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-sm font-bold text-white">N</div>
+        <div class="flex-1">
+          <div class="text-sm font-semibold text-text-primary">Neo ⚡</div>
+          <div class="text-[10px] text-accent-green font-mono">online · KI-Agent</div>
+        </div>
+        <div class="flex gap-1">
+          <span class="text-text-muted text-sm">📞</span>
+          <span class="text-text-muted text-sm">⋮</span>
+        </div>
+      </div>
+
+      <!-- Scenario Tabs -->
+      <div class="flex gap-1 px-3 py-2 border-b border-white/5 overflow-x-auto scrollbar-none">
+        {conversations.map((c, i) => (
+          <button
+            class={`tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 ${
+              i === 0
+                ? 'bg-accent-purple/15 text-accent-purple border border-accent-purple/20'
+                : 'text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10'
+            }`}
+            data-convo={c.id}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="tg-messages" class="p-4 h-[380px] overflow-y-auto space-y-3" style="background: rgba(12,18,35,0.4);">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Input Bar -->
+      <div class="flex items-center gap-2 px-3 py-2.5 border-t border-white/5">
+        <span class="text-text-muted">😊</span>
+        <div class="flex-1 bg-white/5 rounded-full px-3 py-1.5 text-xs text-text-muted font-mono">Nachricht schreiben...</div>
+        <span class="text-accent-purple">🎤</span>
+      </div>
+    </div>
+
+    <!-- Caption -->
+    <p class="text-center text-[10px] font-mono text-text-muted mt-3">
+      Live-Bot: <a href="https://t.me/merlin_neo_ai_bot" target="_blank" rel="noopener" class="text-accent-cyan hover:underline">@merlin_neo_ai_bot</a> · Probier's aus
+    </p>
+  </div>
+</section>
+
+<script>
+  const conversations: Record<string, Array<{from?: string; text?: string; time?: string; type?: string; buttons?: string[]}>> = {
+    status: [
+      { from: 'user', text: 'Wie läuft das Homelab?', time: '09:14' },
+      { from: 'bot', text: '📊 System Status — 26. März 2026\n\n🖥️ CPU: 12% · RAM: 5.1/12GB (42%)\n💾 Disk: 34% belegt (48GB frei)\n🐳 8/8 Container: ✅ healthy\n⏰ Uptime: 183 Tage\n🌡️ Temperatur: 41°C\n\n✅ Alles läuft einwandfrei.', time: '09:14' },
+      { type: 'buttons', buttons: ['📊 Details', '🐳 Docker', '🔄 Refresh'] },
+    ],
+    docker: [
+      { from: 'user', text: '/docker status', time: '14:22' },
+      { from: 'bot', text: '🐳 Docker — 8 Container aktiv\n\n✅ caddy (128MB) — 0.3% CPU\n✅ searxng (412MB) — 1.2% CPU\n✅ paperless (680MB) — 0.5% CPU\n✅ gotify (64MB) — 0.1% CPU\n✅ browserless (320MB) — 0.4% CPU\n✅ valkey (48MB) — 0.1% CPU\n✅ n8n (256MB) — 0.8% CPU\n✅ wordpress (180MB) — 0.3% CPU\n\n📈 Gesamt: 2.1GB RAM · 3.7% CPU', time: '14:22' },
+      { type: 'buttons', buttons: ['🔄 Restart All', '📋 Logs', '🗑️ Prune'] },
+    ],
+    creative: [
+      { from: 'user', text: 'Erstell mir einen Post über Self-Hosting', time: '18:30' },
+      { from: 'bot', text: '🎨 Content generiert!\n\n📝 Text: \"5 Gründe warum du 2026 self-hosten solltest\" (847 Wörter)\n🖼️ Bild: Generiert mit Flux Schnell (CF Workers AI)\n🔊 Audio: TTS mit edge-tts (2:14 min)\n\n📤 Veröffentlichen?', time: '18:31' },
+      { type: 'buttons', buttons: ['📤 Senden', '✏️ Bearbeiten', '🔄 Neu'] },
+    ],
+    search: [
+      { from: 'user', text: 'Such mir die besten MiniPC Alternativen 2026', time: '11:05' },
+      { from: 'bot', text: '🔍 SearXNG — 12 Ergebnisse\n\n1. Beelink SER8 — Ryzen 8845HS, ab €349\n2. Minisforum UM890 — Ryzen 9 8945HS, ab €429\n3. GMKtec N150 — Intel N150, ab €129\n4. ACEMAGIC S1 — Intel N97, ab €169\n5. Geekom A8 — Ryzen 8945HS, ab €459\n\n💡 Für Homelab-Use: N150 oder N97 reichen.', time: '11:06' },
+      { type: 'buttons', buttons: ['📄 Mehr Details', '💾 Speichern', '📊 Vergleich'] },
+    ],
+  }
+
+  const msgContainer = document.getElementById('tg-messages')!
+  const tabs = document.querySelectorAll<HTMLElement>('.tg-tab')
+  let currentConvo = 'status'
+  let animationTimeout: ReturnType<typeof setTimeout>[] = []
+
+  function renderConversation(id: string) {
+    // Clear previous
+    animationTimeout.forEach(clearTimeout)
+    animationTimeout = []
+    msgContainer.innerHTML = ''
+    currentConvo = id
+
+    // Update tabs
+    tabs.forEach(t => {
+      if (t.dataset.convo === id) {
+        t.className = 'tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 bg-accent-purple/15 text-accent-purple border border-accent-purple/20'
+      } else {
+        t.className = 'tg-tab text-[10px] font-mono px-2.5 py-1 rounded whitespace-nowrap transition-all duration-200 text-text-muted hover:text-text-secondary border border-transparent hover:border-white/10'
+      }
+    })
+
+    const msgs = conversations[id]
+    if (!msgs) return
+
+    // Typing indicator
+    function showTyping(): HTMLElement {
+      const typing = document.createElement('div')
+      typing.className = 'flex items-end gap-2'
+      typing.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-[10px] font-bold text-white shrink-0">N</div>
+        <div class="glass-card px-3 py-2 rounded-tl-sm max-w-[80%]">
+          <div class="flex gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:0ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:150ms"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-bounce" style="animation-delay:300ms"></span>
+          </div>
+        </div>
+      `
+      msgContainer.appendChild(typing)
+      msgContainer.scrollTop = msgContainer.scrollHeight
+      return typing
+    }
+
+    let delay = 0
+    msgs.forEach((msg) => {
+      if (msg.from === 'user') {
+        animationTimeout.push(setTimeout(() => {
+          const el = document.createElement('div')
+          el.className = 'flex justify-end'
+          el.innerHTML = `
+            <div class="max-w-[80%] rounded-2xl rounded-br-sm px-3 py-2 text-xs" style="background: rgba(126,180,245,0.15); border: 1px solid rgba(126,180,245,0.1);">
+              <span class="text-text-primary">${escapeHtml(msg.text || '')}</span>
+              <div class="text-[9px] text-text-muted text-right mt-0.5">${msg.time} ✓✓</div>
+            </div>
+          `
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(8px)'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'all 0.3s ease-out'
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 600
+      } else if (msg.from === 'bot') {
+        // Show typing first
+        let typingEl: HTMLElement | null = null
+        animationTimeout.push(setTimeout(() => {
+          typingEl = showTyping()
+        }, delay))
+        delay += 1200
+
+        animationTimeout.push(setTimeout(() => {
+          if (typingEl) typingEl.remove()
+          const el = document.createElement('div')
+          el.className = 'flex items-end gap-2'
+          const lines = (msg.text || '').split('\n').map(l => escapeHtml(l)).join('<br>')
+          el.innerHTML = `
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-[10px] font-bold text-white shrink-0">N</div>
+            <div class="glass-card px-3 py-2 rounded-tl-sm max-w-[80%]">
+              <div class="text-xs text-text-primary leading-relaxed">${lines}</div>
+              <div class="text-[9px] text-text-muted mt-1">${msg.time}</div>
+            </div>
+          `
+          el.style.opacity = '0'
+          el.style.transform = 'translateY(8px)'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'all 0.3s ease-out'
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 400
+      } else if (msg.type === 'buttons') {
+        animationTimeout.push(setTimeout(() => {
+          const el = document.createElement('div')
+          el.className = 'flex gap-1.5 pl-9 flex-wrap'
+          msg.buttons?.forEach(label => {
+            const btn = document.createElement('button')
+            btn.className = 'text-[10px] font-mono px-2.5 py-1 rounded glass-card text-accent-cyan hover:text-accent-purple hover:border-accent-purple/30 transition-all duration-200'
+            btn.textContent = label
+            btn.addEventListener('click', () => {
+              btn.classList.add('border-accent-green/40', 'text-accent-green')
+              btn.textContent = '✓ ' + label
+              setTimeout(() => {
+                btn.classList.remove('border-accent-green/40', 'text-accent-green')
+                btn.textContent = label
+              }, 1500)
+            })
+            el.appendChild(btn)
+          })
+          el.style.opacity = '0'
+          msgContainer.appendChild(el)
+          requestAnimationFrame(() => {
+            el.style.transition = 'opacity 0.3s ease-out'
+            el.style.opacity = '1'
+          })
+          msgContainer.scrollTop = msgContainer.scrollHeight
+        }, delay))
+        delay += 300
+      }
+    })
+  }
+
+  function escapeHtml(text: string): string {
+    const el = document.createElement('span')
+    el.textContent = text
+    return el.innerHTML
+  }
+
+  // Tab click handlers
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.convo
+      if (id && id !== currentConvo) renderConversation(id)
+    })
+  })
+
+  // Auto-start first conversation when in view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        renderConversation('status')
+        observer.disconnect()
+      }
+    })
+  }, { threshold: 0.2 })
+
+  observer.observe(msgContainer.closest('section')!)
+</script>
