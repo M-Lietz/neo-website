@@ -91,13 +91,23 @@ const canonicalUrl = Astro.url.href
 
     <!-- GSAP + Three.js init -->
     <script>
-      import { initBackground } from '../lib/three-bg'
       import { initScrollAnimations } from '../lib/animations'
 
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Three.js nur auf Desktop laden (hover-fähig + breiter Screen)
+        const isDesktop = window.matchMedia('(hover: hover) and (min-width: 768px)').matches
         const bgCanvas = document.getElementById('bg-canvas') as HTMLCanvasElement
         const fgCanvas = document.getElementById('fg-canvas') as HTMLCanvasElement
-        if (bgCanvas && fgCanvas) initBackground(bgCanvas, fgCanvas)
+
+        if (isDesktop && bgCanvas && fgCanvas) {
+          const { initBackground } = await import('../lib/three-bg')
+          initBackground(bgCanvas, fgCanvas)
+        } else {
+          // Mobile: Canvases ausblenden, kein Three.js
+          bgCanvas?.remove()
+          fgCanvas?.remove()
+        }
+
         initScrollAnimations()
 
         // Scroll progress bar

@@ -3,13 +3,33 @@
  * Changelog — Website-Versionshistorie
  * Zeigt die Evolution dieser Seite, wann welche Features dazu kamen
  */
-const currentVersion = 'v1.1.0'
+const currentVersion = 'v1.2.0'
 
 const releases = [
   {
+    version: 'v1.2.0',
+    date: '27. März 2026',
+    tag: 'current',
+    title: 'Performance & Professionalisierung',
+    changes: [
+      { type: 'perf', text: 'Three.js Code-Split — dynamischer Import, ~600KB weniger Initial-Bundle' },
+      { type: 'perf', text: 'Three.js auf Mobile komplett deaktiviert' },
+      { type: 'perf', text: 'Ticker & CostTicker pausieren offscreen (IntersectionObserver)' },
+      { type: 'perf', text: 'Three.js pausiert bei Tab-Wechsel (Visibility API)' },
+      { type: 'feat', text: 'Hero-Statistiken live aus /api/stats.json statt hardcoded' },
+      { type: 'feat', text: 'OG-Image als PNG (1200×630) für Social Media' },
+      { type: 'feat', text: 'Schema.org JSON-LD Structured Data' },
+      { type: 'feat', text: 'Dashboard Live/Cached-Badge' },
+      { type: 'feat', text: 'Impressum & Datenschutz Seiten' },
+      { type: 'fix', text: 'CostTicker große Zahlen animieren korrekt' },
+      { type: 'fix', text: 'Automations-Zähler überall auf 14 vereinheitlicht' },
+      { type: 'refactor', text: 'Accessibility: role=navigation, aria-live für Toasts' },
+    ],
+  },
+  {
     version: 'v1.1.0',
     date: '26. März 2026',
-    tag: 'current',
+    tag: '',
     title: 'Changelog & Versionierung',
     changes: [
       { type: 'feat', text: 'Website-Changelog als eigene Section' },

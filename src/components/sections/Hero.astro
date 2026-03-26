@@ -153,19 +153,32 @@
   }
   setTimeout(typeLoop, 800)
 
-  // Live Stats — static fallback values (no WP dependency)
+  // Live Stats — fetch from stats.json, fallback to known values
   function animateCounter(el: HTMLElement | null, target: number) {
     if (!el) return
     const start = performance.now()
     function step(now: number) { const p = Math.min((now - start) / 1200, 1); el!.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step) }
     requestAnimationFrame(step)
   }
-  // Set known values directly — these are real stats from the server
-  animateCounter(document.getElementById('count-containers'), 8)
-  animateCounter(document.getElementById('count-automations'), 14)
-  animateCounter(document.getElementById('count-uptime-days'), 180)
-  const stEl = document.getElementById('status-text')
-  if (stEl) stEl.textContent = 'Alle Systeme online'
+
+  async function loadHeroStats() {
+    let containers = 8, automations = 14, uptimeDays = 180
+    try {
+      const res = await fetch('/api/stats.json')
+      if (res.ok) {
+        const data = await res.json()
+        if (data.docker_containers) containers = data.docker_containers
+        if (data.cron_jobs) automations = data.cron_jobs
+        if (data.uptime_days) uptimeDays = data.uptime_days
+      }
+    } catch { /* fallback values */ }
+    animateCounter(document.getElementById('count-containers'), containers)
+    animateCounter(document.getElementById('count-automations'), automations)
+    animateCounter(document.getElementById('count-uptime-days'), uptimeDays)
+    const stEl = document.getElementById('status-text')
+    if (stEl) stEl.textContent = 'Alle Systeme online'
+  }
+  loadHeroStats()
 
   // Live Proof — measure actual response time to this server
   async function measureResponseTime() {

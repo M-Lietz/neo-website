@@ -1,43 +1,64 @@
-# Astro Starter Kit: Minimal
+# NEO — Self-Hosted AI auf Custom Hardware
 
-```sh
-npm create astro@latest -- --template minimal
+<p align="center">
+  <img src="public/img/og-image.png" alt="NEO — Self-Hosted AI" width="600" />
+</p>
+
+> Ein KI-Agent. Ein MiniPC. Null Cloud. Gebaut von Merlin Lietz.
+
+**[🌐 Live ansehen → neo.lietztech.com](https://neo.lietztech.com)**
+
+---
+
+## Was ist NEO?
+
+NEO ist mein persönliches Homelab-Projekt: ein vollständig self-hosted KI-System auf einem €200-MiniPC.
+Kein Cloud-Abo, kein Vendor Lock-in — alles läuft auf eigener Hardware.
+
+Diese Website dokumentiert das Projekt als interaktives Showcase mit Live-Dashboard, Terminal-Demo und System-Statistiken in Echtzeit.
+
+## Tech Stack
+
+| Kategorie | Technologie |
+|-----------|------------|
+| **Frontend** | Astro v6, Tailwind CSS v4, Three.js, GSAP |
+| **Hardware** | ACE Magic S (Intel N97, 16GB RAM) |
+| **Virtualisierung** | Proxmox VE 9 |
+| **Container** | Docker (8+ Services) |
+| **Reverse Proxy** | Caddy + Cloudflare Tunnel |
+| **KI** | LiteLLM, Ollama (11 Modelle) |
+| **Automatisierung** | n8n, Cron, OpenClaw Agent |
+| **DMS** | Paperless-ngx |
+| **Benachrichtigungen** | Gotify, Telegram Bot |
+
+## Features
+
+- 🎨 **Cinematic 3D Background** — PBR-Orbs mit Fresnel-Shader (Three.js)
+- 📊 **Live Dashboard** — CPU, RAM, Disk, Docker-Stats in Echtzeit
+- 💻 **Terminal Demo** — Interaktiver Chat + 8 Bot-Szenarien
+- 📱 **Telegram Preview** — Echte Bot-Konversation als Mockup
+- 🤖 **AI Model Roster** — Alle 11 KI-Modelle mit Benchmarks
+- ⚡ **Automation Timeline** — 14 Automatisierungen visualisiert
+- 💰 **Cost Ticker** — Self-Hosted vs. Cloud Kostenvergleich
+- 🎯 **Performance** — Three.js Code-Split, Mobile-Disable, IntersectionObserver
+
+## Entwicklung
+
+```bash
+npm install    # Dependencies
+npm run dev    # Dev-Server (localhost:4321)
+npm run build  # Produktions-Build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Deployment
 
-## 🚀 Project Structure
+Build via rsync auf Nginx-Server (LXC 113). Cloudflare Tunnel routet neo.lietztech.com.
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm run build
+rsync -avz dist/ root@192.168.8.113:/var/www/neo-website/
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Lizenz
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT © Merlin Lietz
