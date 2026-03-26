@@ -11,7 +11,7 @@ const {
   description = 'Ein KI-Agent auf einem MiniPC. Self-Hosted, Open Source, Null Cloud. 16 Services, 15 Automationen, 11 KI-Modelle. Gebaut von Merlin Lietz.',
 } = Astro.props
 
-const ogImage = `${Astro.url.origin}/img/og-image.svg`
+const ogImage = `${Astro.url.origin}/img/og-image.png`
 const canonicalUrl = Astro.url.href
 ---
 
@@ -48,6 +48,24 @@ const canonicalUrl = Astro.url.href
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NEO — Self-Hosted AI",
+      "url": "https://neo.lietztech.com",
+      "description": description,
+      "author": {
+        "@type": "Person",
+        "name": "Merlin Lietz",
+        "url": "https://merlinlietz.com",
+        "sameAs": [
+          "https://github.com/merlinlietz",
+          "https://www.fiverr.com/merlinlietz"
+        ]
+      }
+    })} />
     <title>{title}</title>
   </head>
   <body class="bg-bg-primary text-text-primary antialiased">

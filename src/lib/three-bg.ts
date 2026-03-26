@@ -275,8 +275,14 @@ export function initBackground(bgCanvas: HTMLCanvasElement, fgCanvas: HTMLCanvas
 
   // Animation loop
   const clock = new THREE.Clock()
+  let isVisible = true
+  document.addEventListener('visibilitychange', () => {
+    isVisible = !document.hidden
+    if (isVisible) clock.getDelta() // discard elapsed time while hidden
+  })
   function animate() {
     requestAnimationFrame(animate)
+    if (!isVisible) return
     const t = clock.getElapsedTime()
 
     // Orb float + breathe + EFFEKT #8: Depth of Field (roughness shifts based on distance)

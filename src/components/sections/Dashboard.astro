@@ -7,6 +7,9 @@
 
 <section id="dashboard" class="px-4 sm:px-6 py-20" data-animate>
   <h2 class="text-lg font-mono text-accent-cyan mb-8 max-w-5xl mx-auto title-glow"><span class="title-glow-line"></span>// HomeLab Dashboard</h2>
+  <div class="flex justify-end max-w-5xl mx-auto mb-2">
+    <span id="dashboard-source" class="text-[10px] font-mono px-2 py-0.5 rounded border border-border-glass text-text-muted">⏳ laden...</span>
+  </div>
   <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-5 mb-8" data-stagger-parent>
     <!-- SVG Ring Gauges -->
     <div class="glass-card p-4 flex flex-col items-center gap-2" data-stagger-child>
@@ -113,7 +116,18 @@
   }
 
   async function fetchDashboardStats() {
-    const s = await fetchStats<any>() || FALLBACK_STATS
+    const sourceEl = document.getElementById('dashboard-source')
+    const live = await fetchStats<any>()
+    const s = live || FALLBACK_STATS
+    if (sourceEl) {
+      if (live) {
+        sourceEl.textContent = '● live'
+        sourceEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded border border-accent-green/30 text-accent-green'
+      } else {
+        sourceEl.textContent = '○ cached'
+        sourceEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded border border-yellow-500/30 text-yellow-400'
+      }
+    }
 
     // Gauges
     const cpuPct = parseInt(s.cpu) || 0

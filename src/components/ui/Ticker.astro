@@ -40,6 +40,9 @@
   .ticker-scroll:hover {
     animation-play-state: paused;
   }
+  .ticker-scroll.paused {
+    animation-play-state: paused;
+  }
   @keyframes ticker-slide {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -73,5 +76,14 @@
       </span>`
     ).join('')
     track.innerHTML = html + html
+
+    // Pause animation when not visible
+    const wrapper = track.closest('.ticker-wrapper')
+    if (wrapper) {
+      const obs = new IntersectionObserver(([entry]) => {
+        track.classList.toggle('paused', !entry.isIntersecting)
+      })
+      obs.observe(wrapper)
+    }
   }
 </script>

@@ -53,7 +53,7 @@
 <div id="cursor-dot" class="fixed w-1.5 h-1.5 rounded-full bg-accent-purple pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block" style="top:-100px;left:-100px"></div>
 
 <!-- Easter Egg Notification -->
-<div id="easter-egg-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-4">
+<div id="easter-egg-toast" role="status" aria-live="polite" class="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-4">
   <div class="glass-card px-6 py-3 flex items-center gap-3">
     <span class="text-2xl" id="egg-icon">🥚</span>
     <div>
@@ -184,6 +184,7 @@
   // ===== KONAMI CODE =====
   const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
   let konamiIdx = 0
+
   document.addEventListener('keydown', (e) => {
     if (e.key === konamiSequence[konamiIdx]) {
       konamiIdx++

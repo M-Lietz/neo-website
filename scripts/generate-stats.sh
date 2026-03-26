@@ -1,14 +1,13 @@
 #!/bin/bash
-# generate-stats.sh — Erzeugt /var/www/neo-website/api/stats.json
-# Wird von cron alle 30s oder 1min aufgerufen
-# Auf LXC 113 (oder VM 100) ausführen
+# generate-stats.sh — Erzeugt stats.json und pusht sie zum Webserver
+# Läuft auf VM 100 (192.168.8.11) per cron jede Minute
+# Ziel: LXC 113 /var/www/neo-website/api/stats.json
 
 set -euo pipefail
 
-OUTPUT_DIR="/var/www/neo-website/api"
-OUTPUT_FILE="$OUTPUT_DIR/stats.json"
-
-mkdir -p "$OUTPUT_DIR"
+REMOTE="root@192.168.8.113"
+REMOTE_DIR="/var/www/neo-website/api"
+TMP="/tmp/neo-stats.json"
 
 # CPU usage (1-second sample)
 CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print int($2)}')
@@ -20,8 +19,8 @@ RAM_FREE=$(free -m | awk '/Mem:/ {print $7}')
 # Disk
 DISK_PCT=$(df -h / | awk 'NR==2 {gsub(/%/,""); print $5}')
 
-# Network RX (KB/s rough estimate)
-NET_RX=$(cat /proc/net/dev | grep -E 'eth0|ens' | head -1 | awk '{print int($2/1024/1024)}')
+# Network RX (rough KB)
+NET_RX=$(cat /proc/net/dev | grep -v 'lo:' | grep ':' | head -1 | awk '{print int($2/1024/1024)}')
 
 # Docker containers
 CONTAINERS=$(docker ps -q 2>/dev/null | wc -l || echo "8")
@@ -35,7 +34,7 @@ CRONS="15"
 # Uptime in seconds
 UPTIME=$(cat /proc/uptime | awk '{print int($1)}')
 
-cat > "$OUTPUT_FILE" <<EOF
+cat > "$TMP" <<EOF
 {
   "cpu": "$CPU",
   "ram_total": $RAM_TOTAL,
@@ -50,4 +49,7 @@ cat > "$OUTPUT_FILE" <<EOF
 }
 EOF
 
-chmod 644 "$OUTPUT_FILE"
+# Push to web server
+ssh "$REMOTE" "mkdir -p $REMOTE_DIR"
+scp -q "$TMP" "$REMOTE:$REMOTE_DIR/stats.json"
+ssh "$REMOTE" "chmod 644 $REMOTE_DIR/stats.json"

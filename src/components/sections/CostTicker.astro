@@ -101,39 +101,71 @@ const savings = totalCloud - totalSelf
 </section>
 
 <script>
+  // Animate big number counters ([data-count] elements)
+  function animateCount(el: HTMLElement, target: number, prefix = '', suffix = '') {
+    let current = 0
+    const step = target / 40
+    const interval = setInterval(() => {
+      current += step
+      if (current >= target) {
+        current = target
+        clearInterval(interval)
+      }
+      el.textContent = `${prefix}${Math.round(current)}${suffix}`
+    }, 30)
+  }
+
   // Animate savings counter
   const savingsEl = document.getElementById('savings-amount')
   const savingsPctEl = document.getElementById('savings-pct')
   const roiEl = document.getElementById('roi-months')
 
-  if (savingsEl && savingsPctEl && roiEl) {
-    const totalSelf = 4.60
-    const totalCloud = 276
-    const savings = totalCloud - totalSelf
-    const pct = Math.round((savings / totalCloud) * 100)
-    const roi = Math.ceil(200 / savings)
+  const totalSelf = 4.60
+  const totalCloud = 276
+  const savings = totalCloud - totalSelf
+  const pct = Math.round((savings / totalCloud) * 100)
+  const roi = Math.ceil(200 / savings)
 
-    // Animate after scroll into view
+  const section = document.getElementById('costs')
+  if (section) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          let current = 0
-          const step = savings / 40
-          const interval = setInterval(() => {
-            current += step
-            if (current >= savings) {
-              current = savings
-              clearInterval(interval)
-            }
-            savingsEl.textContent = `$${current.toFixed(0)}`
-            savingsPctEl.textContent = `${Math.round((current / totalCloud) * 100)}%`
-          }, 30)
-          roiEl.textContent = String(roi)
+          // Animate big number cards
+          section.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
+            const target = parseInt(el.dataset.count || '0')
+            const prefix = el.dataset.prefix || ''
+            animateCount(el, target, prefix)
+          })
+          // Fix the monthly cost card (special: $4.60)
+          const monthlySpan = section.querySelector<HTMLElement>('[data-count="4"]')
+          if (monthlySpan) {
+            let c = 0
+            const interval = setInterval(() => {
+              c += 0.1
+              if (c >= 4) { c = 4; clearInterval(interval) }
+              monthlySpan.textContent = String(Math.round(c))
+            }, 30)
+          }
+          // Animate savings banner
+          if (savingsEl && savingsPctEl && roiEl) {
+            let current = 0
+            const step = savings / 40
+            const interval = setInterval(() => {
+              current += step
+              if (current >= savings) {
+                current = savings
+                clearInterval(interval)
+              }
+              savingsEl.textContent = `$${current.toFixed(0)}`
+              savingsPctEl.textContent = `${Math.round((current / totalCloud) * 100)}%`
+            }, 30)
+            roiEl.textContent = String(roi)
+          }
           observer.disconnect()
         }
       })
     }, { threshold: 0.3 })
-
-    observer.observe(savingsEl.closest('section')!)
+    observer.observe(section)
   }
 </script>
